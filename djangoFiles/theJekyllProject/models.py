@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 
 from django.db import models
 
-from tinymce.models import HTMLField
+from ckeditor.fields import RichTextField
 
 class Post(models.Model):
     author = models.CharField(max_length=100, null=True, blank=True)
@@ -13,9 +13,14 @@ class Post(models.Model):
         ('post', 'post'),
         ('page', 'page')
     )
-    layout = models.CharField(max_length=100, choices=layouts, null=True, blank=True)
+    layout = models.CharField(
+        max_length=100,
+        choices=layouts,
+        null=True,
+        blank=True
+    )
     title = models.CharField(max_length=2000)
-    content = HTMLField()
+    content = RichTextField()
 
     def __str__(self):
         return self.title + self.date
