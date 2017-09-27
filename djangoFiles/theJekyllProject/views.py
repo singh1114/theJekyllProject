@@ -2,9 +2,19 @@
 from __future__ import unicode_literals
 
 from django.shortcuts import render
+from django.views.generic.edit import FormView
+
+from markdown2 import Markdown
 
 from theJekyllProject.forms import AddPostForm
-from django.views.generic.edit import FormView
+from theJekyllProject.functions import assign_boolean_to_comments
+from theJekyllProject.functions import save_post_database
+from theJekyllProject.functions import create_file_name
+from theJekyllProject.functions import header_content
+from theJekyllProject.functions import convert_content
+
+from theJekyllProject.models import Post
+
 
 class AddPostView(FormView):
     """AddPostView to add post
@@ -28,9 +38,30 @@ class AddPostView(FormView):
         if form.is_valid():
             author = request.POST['author']
             comments = request.POST['comments']
+            date = request.POST['date']
             layout = request.POST['layout']
             title = request.POST['title']
             content = request.POST['content']
             category = request.POST['category']
+
+            # This is a turnaround... I don't know why it happened.
+            # Checkbox produces 'on' as the result when selected.
+            comments = assign_boolean_to_comments(comments)
+
+            # save stuff to the database
+            save_post_database(author, comments, date, layout, title, content)
+
+            # Create file name
+            file_name = create_file_name(date, title)
+
+            # Create header content for the markdown file
+            head_content = header_content(author, comments, date, layout, title)
+
+            # Convert the body content to markdown
+            body_content = convert_content(content)
+
+            # Write the content into files
+            write_file(file_name, head_content, body_content)
+
         return HttpResponseRedirect('/result/' + str(scan_id))
 
