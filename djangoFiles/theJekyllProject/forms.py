@@ -12,13 +12,22 @@ class AddPostForm(forms.Form):
     )
 
     comments = forms.BooleanField(
-        help_text='Should the comment be added?',
-        label='Allow commenting'
+        initial=True,
+        required=False
     )
 
-    date = forms.DateField(
+    date = forms.DateTimeField(
         help_text='Date of posting',
         initial=timezone.now()
+    )
+
+    layouts = (
+        ('post', 'post'),
+        ('page', 'page')
+    )
+
+    layout = forms.ChoiceField(
+        choices=layouts
     )
 
     title = forms.CharField(
