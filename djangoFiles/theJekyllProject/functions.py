@@ -27,6 +27,7 @@ def create_file_name(date, title):
     title = title.lower()
     title = title.replace(' ', '-')
     file_name = str(date) + '-' + title + '.markdown'
+    print file_name
     return file_name
 
 
@@ -53,3 +54,9 @@ def header_content(author=None, comments=None, date=None, layout=None, title=Non
 
 def convert_content(content):
     return html2markdown.convert(content)
+
+
+def write_file(file_name, head_content, body_content):
+    file = open(file_name, 'w+')
+    file.write(head_content + body_content)
+    file.close()
