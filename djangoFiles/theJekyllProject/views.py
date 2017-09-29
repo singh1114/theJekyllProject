@@ -14,6 +14,7 @@ from theJekyllProject.functions import create_file_name
 from theJekyllProject.functions import header_content
 from theJekyllProject.functions import convert_content
 from theJekyllProject.functions import write_file
+from theJekyllProject.functions import move_file
 
 from theJekyllProject.models import Post
 
@@ -67,5 +68,7 @@ class AddPostView(FormView):
             # Write the content into files
             write_file(file_name, head_content, body_content)
 
+            # Move file to correct location
+            move_file(file_name)
         return HttpResponseRedirect('/result/' + str(scan_id))
 
