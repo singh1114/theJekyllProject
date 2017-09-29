@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+from datetime import datetime
 from django.shortcuts import render
 from django.views.generic.edit import FormView
 
@@ -12,6 +13,7 @@ from theJekyllProject.functions import save_post_database
 from theJekyllProject.functions import create_file_name
 from theJekyllProject.functions import header_content
 from theJekyllProject.functions import convert_content
+from theJekyllProject.functions import write_file
 
 from theJekyllProject.models import Post
 
@@ -52,7 +54,9 @@ class AddPostView(FormView):
             save_post_database(author, comments, date, layout, title, content)
 
             # Create file name
-            file_name = create_file_name(date, title)
+            date_obj = datetime.strptime(date, '%Y-%m-%d %H:%M:%S')
+            only_date = date_obj.date()
+            file_name = create_file_name(only_date, title)
 
             # Create header content for the markdown file
             head_content = header_content(author, comments, date, layout, title)
