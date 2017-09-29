@@ -1,0 +1,9 @@
+---
+author: New stuff
+comments: true
+date: 2017-09-29 20:33:36
+layout: post
+title: New stuff
+slug: new-stuff
+---
+New stuff

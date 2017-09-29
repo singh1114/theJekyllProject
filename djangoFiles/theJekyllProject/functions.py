@@ -1,6 +1,7 @@
 from theJekyllProject.models import Post
 
 import html2markdown
+import shutil
 
 
 def assign_boolean_to_comments(comments):
@@ -60,3 +61,7 @@ def write_file(file_name, head_content, body_content):
     file = open(file_name, 'w+')
     file.write(head_content + body_content)
     file.close()
+
+
+def move_file(file_name):
+    shutil.move(file_name, 'theJekyllProject/_posts/' + file_name)
