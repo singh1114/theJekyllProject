@@ -1,9 +1,13 @@
 from django import forms
+from django.forms import ModelForm
 from django.utils import timezone
 
-from theJekyllProject.models import PostCategory
 from ckeditor.fields import RichTextField
 from ckeditor.widgets import CKEditorWidget
+
+from theJekyllProject.models import PostCategory
+from theJekyllProject.models import SiteData
+
 class AddPostForm(forms.Form):
     author = forms.CharField(
         label='Author',
@@ -41,3 +45,13 @@ class AddPostForm(forms.Form):
         #initial=PostCategory.objects.all()
         max_length=20
     )
+
+
+
+class SiteProfileForm(ModelForm):
+    class Meta:
+        model = SiteData
+        fields = '__all__'
+        #initials = {
+        #    'name': _('Username'),
+        #}

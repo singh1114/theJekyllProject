@@ -9,6 +9,7 @@ from django.views.generic.edit import FormView
 from markdown2 import Markdown
 
 from theJekyllProject.forms import AddPostForm
+from theJekyllProject.forms import SiteProfileForm
 from theJekyllProject.functions import assign_boolean_to_comments
 from theJekyllProject.functions import save_post_database
 from theJekyllProject.functions import create_file_name
@@ -80,3 +81,8 @@ from django.shortcuts import render
 @login_required
 def home(request):
     return render(request, 'core/home.html')
+
+
+class SiteProfileView(FormView):
+    template_name = 'theJekyllProject/siteprofile.html'
+    form_class = SiteProfileForm
