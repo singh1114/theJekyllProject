@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 
 from datetime import datetime
+from django.http import HttpResponse
 from django.shortcuts import render
 from django.views.generic.edit import FormView
 
@@ -70,5 +71,12 @@ class AddPostView(FormView):
 
             # Move file to correct location
             move_file(file_name)
-        return HttpResponseRedirect('/result/' + str(scan_id))
+        return HttpResponse('Post ADDED!')
 
+
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render
+
+@login_required
+def home(request):
+    return render(request, 'core/home.html')
