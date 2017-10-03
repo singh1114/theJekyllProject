@@ -54,8 +54,8 @@ class SiteData(models.Model):
 
 
 class SiteSocialProfile(models.Model):
-    site_data = models.OneToOneField(
-        SiteData,
+    user = models.OneToOneField(
+        User,
         on_delete=models.CASCADE,
         primary_key=True,
     )

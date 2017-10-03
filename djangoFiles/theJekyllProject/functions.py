@@ -65,3 +65,13 @@ def write_file(file_name, head_content, body_content):
 
 def move_file(file_name):
     shutil.move(file_name, 'theJekyllProject/_posts/' + file_name)
+
+
+def save_site_data(user, name=None, description=None, avatar=None):
+    site_data = SiteData(
+        user=user,
+        name=name,
+        description=description,
+        avatar=avatar
+    )
+    site_data.save()

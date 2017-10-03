@@ -10,6 +10,8 @@ from markdown2 import Markdown
 
 from theJekyllProject.forms import AddPostForm
 from theJekyllProject.forms import SiteProfileForm
+from theJekyllProject.forms import SocialProfileForm
+
 from theJekyllProject.functions import assign_boolean_to_comments
 from theJekyllProject.functions import save_post_database
 from theJekyllProject.functions import create_file_name
@@ -17,10 +19,12 @@ from theJekyllProject.functions import header_content
 from theJekyllProject.functions import convert_content
 from theJekyllProject.functions import write_file
 from theJekyllProject.functions import move_file
+from theJekyllProject.functions import save_site_data
 
 from theJekyllProject.models import Post
 
 
+# FIXME all the views must be decorated with login_required decorators
 class AddPostView(FormView):
     """AddPostView to add post
 
@@ -75,6 +79,8 @@ class AddPostView(FormView):
         return HttpResponse('Post ADDED!')
 
 
+# FIXME Take care of this function based view
+# FIXME Change it to class based view
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 
@@ -82,7 +88,29 @@ from django.shortcuts import render
 def home(request):
     return render(request, 'core/home.html')
 
+# FIXME ends here.
+# FIXME ends here.
+
 
 class SiteProfileView(FormView):
     template_name = 'theJekyllProject/siteprofile.html'
     form_class = SiteProfileForm
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            user = request.user
+            name = request.POST['name']
+            description = request.POST['description']
+            avatar = request.POST['avatar']
+
+            # save stuff to the database
+            save_site_data(user, name, description, avatar)
+
+            return HttpResponse('Profile data saved')
+
+
+class SocialProfileView(FormView):
+    template_name = 'theJekyllProject/socialprofile.html'
+    form_class = SocialProfileForm
+
