@@ -40,7 +40,7 @@ class AddPostForm(forms.Form):
     )
 
     content = forms.CharField(widget=CKEditorWidget())
-    # ModelChoiceField or add more categories
+    # FIXME ModelChoiceField or add more categories
     category = forms.CharField(
         #initial=PostCategory.objects.all()
         max_length=20
@@ -48,10 +48,99 @@ class AddPostForm(forms.Form):
 
 
 
-class SiteProfileForm(ModelForm):
-    class Meta:
-        model = SiteData
-        fields = '__all__'
-        #initials = {
-        #    'name': _('Username'),
-        #}
+class SiteProfileForm(forms.Form):
+    # TODO All these stuff must have some initialized values
+    name = forms.CharField(
+        max_length=200,
+        help_text='Name of the site',
+        initial='Your new site',
+        required=False,
+    )
+    description = forms.CharField(
+        max_length=2000,
+        help_text='Description of the site',
+        initial='Your site description',
+        required=False,
+    )
+    avatar = forms.ImageField(
+        required=False,
+    )
+
+
+class SocialProfileForm(forms.Form):
+    # TODO Add initials
+    dribble = forms.CharField(
+        max_length=200,
+        help_text='Your dribble username',
+        required=False
+    )
+    email = forms.CharField(
+        max_length=200,
+        required=False,
+        help_text='email id'
+    )
+    facebook = forms.CharField(
+        max_length=200,
+        required=False,
+        help_text='facebook username'
+    )
+    flickr = forms.CharField(
+        max_length=200,
+        required=False,
+        help_text='flickr username'
+    )
+    github = forms.CharField(
+        max_length=200,
+        required=False,
+        help_text='GitHub username'
+    )
+    instagram = forms.CharField(
+        max_length=200,
+        required=False,
+        help_text='Instagram username'
+    )
+    linkedin = forms.CharField(
+        max_length=200,
+        required=False,
+        help_text='Linkedin username'
+    )
+    pinterest = forms.CharField(
+        max_length=200,
+        required=False,
+        help_text='pinterest username'
+    )
+    rss = forms.CharField(
+        max_length=200,
+        required=False,
+        help_text='rss username'
+    )
+    twitter = forms.CharField(
+        max_length=200,
+        required=False,
+        help_text='twitter username'
+    )
+    stackoverflow = forms.CharField(
+        max_length=200,
+        required=False,
+        help_text='stackoverflow username'
+    )
+    youtube = forms.CharField(
+        max_length=200,
+        required=False,
+        help_text='youtube username'
+    )
+    googleplus = forms.CharField(
+        max_length=200,
+        required=False,
+        help_text='google plus username'
+    )
+    disqus = forms.CharField(
+        max_length=200,
+        required=False,
+        help_text='disqus username'
+    )
+    google_analytics = forms.CharField(
+        max_length=200,
+        required=False,
+        help_text='google analytics tracking id'
+    ) 
