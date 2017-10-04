@@ -137,8 +137,8 @@ class SiteSocialProfile(models.Model):
 
 
 class SitePlugin(models.Model):
-    site_data = models.ForeignKey(
-        SiteData,
+    user = models.ForeignKey(
+        User,
         on_delete=models.CASCADE,
     )
     plugin = models.CharField(
@@ -147,8 +147,8 @@ class SitePlugin(models.Model):
 
 
 class SiteExclude(models.Model):
-    site_data = models.ForeignKey(
-        SiteData,
+    user = models.ForeignKey(
+        User,
         on_delete=models.CASCADE,
     )
     exclude = models.CharField(
@@ -157,8 +157,8 @@ class SiteExclude(models.Model):
 
 
 class SiteTheme(models.Model):
-    site_data = models.OneToOneField(
-        SiteData,
+    user = models.OneToOneField(
+        User,
         on_delete=models.CASCADE,
         primary_key=True,
     )
