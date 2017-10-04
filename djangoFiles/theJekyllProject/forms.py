@@ -67,7 +67,7 @@ class SiteProfileForm(forms.Form):
     )
 
 
-class SocialProfileForm(forms.Form):
+class SiteSocialProfileForm(forms.Form):
     # TODO Add initials
     dribble = forms.CharField(
         max_length=200,
@@ -143,4 +143,31 @@ class SocialProfileForm(forms.Form):
         max_length=200,
         required=False,
         help_text='google analytics tracking id'
-    ) 
+    )
+
+
+class SitePluginForm(forms.Form):
+    # TODO More than one plugins are allowed
+    plugins = forms.CharField(
+        max_length=200,
+        required=False,
+        help_text='Jekyll plugins that can be used in blog'
+    )
+
+
+class SiteExcludeForm(forms.Form):
+    # TODO More than one excludes are allowed
+    excludes = forms.CharField(
+        max_length=200,
+        required=False,
+        help_text='Jekyll plugins that can be used in blog'
+    )
+
+
+class SiteThemeForm(forms.Form):
+    # TODO get a picture of theme ready for the user to think about
+    theme = forms.CharField(
+        max_length=200,
+        required=False,
+        help_text='Theme of the site'
+    )

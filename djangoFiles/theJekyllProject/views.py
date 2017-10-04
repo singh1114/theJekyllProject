@@ -9,8 +9,11 @@ from django.views.generic.edit import FormView
 from markdown2 import Markdown
 
 from theJekyllProject.forms import AddPostForm
+from theJekyllProject.forms import SiteExcludeForm
+from theJekyllProject.forms import SitePluginForm
 from theJekyllProject.forms import SiteProfileForm
-from theJekyllProject.forms import SocialProfileForm
+from theJekyllProject.forms import SiteThemeForm
+from theJekyllProject.forms import SiteSocialProfileForm
 
 from theJekyllProject.functions import assign_boolean_to_comments
 from theJekyllProject.functions import save_post_database
@@ -110,7 +113,24 @@ class SiteProfileView(FormView):
             return HttpResponse('Profile data saved')
 
 
-class SocialProfileView(FormView):
+class SiteSocialProfileView(FormView):
     template_name = 'theJekyllProject/socialprofile.html'
-    form_class = SocialProfileForm
+    form_class = SiteSocialProfileForm
+
+
+
+class SitePluginView(FormView):
+    template_name = 'theJekyllProject/siteplugin.html'
+    form_class = SitePluginForm
+
+
+
+class SiteExcludeView(FormView):
+    template_name = 'theJekyllProject/siteexclude.html'
+    form_class = SiteExcludeForm
+
+
+class SiteThemeView(FormView):
+    template_name = 'theJekyllProject/sitetheme.html'
+    form_class = SiteThemeForm
 
