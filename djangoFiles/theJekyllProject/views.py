@@ -24,9 +24,12 @@ from theJekyllProject.functions import convert_content
 from theJekyllProject.functions import write_file
 from theJekyllProject.functions import move_file
 from theJekyllProject.functions import save_site_data
+from theJekyllProject.functions import save_site_theme_data
 
 from theJekyllProject.models import Post
 from theJekyllProject.models import SiteData
+from theJekyllProject.models import SiteSocialProfile
+from theJekyllProject.models import SiteTheme
 
 
 # FIXME all the views must be decorated with login_required decorators
@@ -143,13 +146,110 @@ class SiteSocialProfileView(FormView):
     template_name = 'theJekyllProject/socialprofile.html'
     form_class = SiteSocialProfileForm
 
+    def get_form_kwargs(self):
+        user = self.request.user
+        try:
+            SiteSocialProfile.objects.get(user=User.objects.get(username=user.username))
+            dribble = SiteSocialProfile.objects.get(user=User.objects.get(username=user.username)).dribble
+            email = SiteSocialProfile.objects.get(user=User.objects.get(username=user.username)).email
+            facebook = SiteSocialProfile.objects.get(user=User.objects.get(username=user.username)).facebook
+            flickr = SiteSocialProfile.objects.get(user=User.objects.get(username=user.username)).flickr
+            github = SiteSocialProfile.objects.get(user=User.objects.get(username=user.username)).github
+            instagram = SiteSocialProfile.objects.get(user=User.objects.get(username=user.username)).instagram
+            linkedin = SiteSocialProfile.objects.get(user=User.objects.get(username=user.username)).linkedin
+            pinterest = SiteSocialProfile.objects.get(user=User.objects.get(username=user.username)).pinterest
+            rss = SiteSocialProfile.objects.get(user=User.objects.get(username=user.username)).rss
+            twitter = SiteSocialProfile.objects.get(user=User.objects.get(username=user.username)).twitter
+            stackoverflow = SiteSocialProfile.objects.get(user=User.objects.get(username=user.username)).stackoverflow
+            youtube = SiteSocialProfile.objects.get(user=User.objects.get(username=user.username)).youtube
+            googleplus = SiteSocialProfile.objects.get(user=User.objects.get(username=user.username)).googleplus
+            disqus = SiteSocialProfile.objects.get(user=User.objects.get(username=user.username)).disqus
+            google_analytics = SiteSocialProfile.objects.get(user=User.objects.get(username=user.username)).google_analytics
+        except:
+            dribble = ''
+            email = ''
+            facebook = ''
+            flickr = ''
+            github = ''
+            instagram = ''
+            linkedin = ''
+            pinterest = ''
+            rss = ''
+            twitter = ''
+            stackoverflow = ''
+            youtube = ''
+            googleplus = ''
+            disqus = ''
+            google_analytics = ''
+
+        form_kwargs = super(SiteSocialProfileView, self).get_form_kwargs()
+        form_kwargs.update({
+            'initial': {
+                'dribble': dribble,
+                'email': email,
+                'facebook': facebook,
+                'flickr': flickr,
+                'github': github,
+                'instagram': instagram,
+                'linkedin': linkedin,
+                'pinterest': pinterest,
+                'rss': rss,
+                'twitter': twitter,
+                'stackoverflow': stackoverflow,
+                'youtube': youtube,
+                'googleplus': googleplus,
+                'disqus': disqus,
+                'google_analytics': google_analytics,
+            }
+        })
+        return form_kwargs
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            user = request.user
+            dribble = request.POST['dribble']
+            email = request.POST['email']
+            facebook = request.POST['facebook']
+            flickr = request.POST['flickr']
+            github = request.POST['github']
+            instagram = request.POST['instagram']
+            linkedin = request.POST['linkedin']
+            pinterest = request.POST['pinterest']
+            rss = request.POST['rss']
+            twitter = request.POST['twitter']
+            stackoverflow = request.POST['stackoverflow']
+            youtube = request.POST['youtube']
+            googleplus = request.POST['googleplus']
+            disqus = request.POST['disqus']
+            google_analytics = request.POST['google_analytics']
+
+            site_social_profile = SiteSocialProfile(
+                user = user,
+                dribble = dribble,
+                email = email,
+                facebook = facebook,
+                flickr = flickr,
+                github = github,
+                instagram = instagram,
+                linkedin = linkedin,
+                pinterest = pinterest,
+                rss = rss,
+                twitter = twitter,
+                stackoverflow = stackoverflow,
+                youtube = youtube,
+                googleplus = googleplus,
+                disqus = disqus,
+                google_analytics = google_analytics
+            )
+            site_social_profile.save()
+
+            return HttpResponse('Social data saved')
 
 
 class SitePluginView(FormView):
     template_name = 'theJekyllProject/siteplugin.html'
     form_class = SitePluginForm
-
-
 
 class SiteExcludeView(FormView):
     template_name = 'theJekyllProject/siteexclude.html'
@@ -160,3 +260,26 @@ class SiteThemeView(FormView):
     template_name = 'theJekyllProject/sitetheme.html'
     form_class = SiteThemeForm
 
+    def get_form_kwargs(self):
+        user = self.request.user
+        try:
+            SiteTheme.objects.get(user=User.objects.get(username=user.username))
+            theme = SiteTheme.objects.get(user=User.objects.get(username=user.username)).theme
+        except:
+            theme = ''
+
+        form_kwargs = super(SiteThemeView, self).get_form_kwargs()
+        form_kwargs.update({
+            'initial': {
+                'theme': theme,
+            }
+        })
+        return form_kwargs
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            user = request.user
+            theme = request.POST['theme']
+            save_site_theme_data(user, theme)
+            return HttpResponse('THEME SAVED!')
