@@ -64,7 +64,7 @@ class SiteSocialProfile(models.Model):
         null=True,
         blank=True
     )
-    email = models.CharField(
+    email = models.EmailField(
         max_length=200,
         null=True,
         blank=True

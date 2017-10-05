@@ -74,7 +74,7 @@ class SiteSocialProfileForm(forms.Form):
         help_text='Your dribble username',
         required=False
     )
-    email = forms.CharField(
+    email = forms.EmailField(
         max_length=200,
         required=False,
         help_text='email id'

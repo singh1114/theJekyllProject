@@ -1,5 +1,6 @@
 from theJekyllProject.models import Post
 from theJekyllProject.models import SiteData
+from theJekyllProject.models import SiteTheme
 
 import html2markdown
 import shutil
@@ -76,3 +77,11 @@ def save_site_data(user, name=None, description=None, avatar=None):
         avatar=avatar
     )
     site_data.save()
+
+
+def save_site_theme_data(user, theme=None):
+    site_theme = SiteTheme(
+        user=user,
+        theme=theme
+    )
+    site_theme.save()
