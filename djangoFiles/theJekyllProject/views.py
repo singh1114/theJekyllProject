@@ -2,9 +2,10 @@
 from __future__ import unicode_literals
 
 from datetime import datetime
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.views.generic.edit import FormView
+from django.contrib.auth.models import User
 
 from markdown2 import Markdown
 
@@ -25,6 +26,7 @@ from theJekyllProject.functions import move_file
 from theJekyllProject.functions import save_site_data
 
 from theJekyllProject.models import Post
+from theJekyllProject.models import SiteData
 
 
 # FIXME all the views must be decorated with login_required decorators
@@ -98,6 +100,30 @@ def home(request):
 class SiteProfileView(FormView):
     template_name = 'theJekyllProject/siteprofile.html'
     form_class = SiteProfileForm
+
+    def get_form_kwargs(self):
+        user = self.request.user
+        try:
+            SiteData.objects.get(user=User.objects.get(username=user.username))
+            name = SiteData.objects.get(user=User.objects.get(username=user.username)).name
+            description = SiteData.objects.get(user=User.objects.get(username=user.username)).description
+            avatar = SiteData.objects.get(user=User.objects.get(username=user.username)).avatar
+
+        except:
+            name = 'Your new site'
+            description = 'Single line description of the site'
+            # FIXME add an image initial
+            avatar = 'An image'
+
+        form_kwargs = super(SiteProfileView, self).get_form_kwargs()
+        form_kwargs.update({
+            'initial': {
+                'name': name,
+                'description': description,
+                'avatar': avatar,
+            }
+        })
+        return form_kwargs
 
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST)

@@ -1,6 +1,7 @@
 from django import forms
 from django.forms import ModelForm
 from django.utils import timezone
+from django.contrib.auth.models import User
 
 from ckeditor.fields import RichTextField
 from ckeditor.widgets import CKEditorWidget
@@ -53,7 +54,6 @@ class SiteProfileForm(forms.Form):
     name = forms.CharField(
         max_length=200,
         help_text='Name of the site',
-        initial='Your new site',
         required=False,
     )
     description = forms.CharField(
