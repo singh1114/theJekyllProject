@@ -40,9 +40,9 @@ class SiteData(models.Model):
         on_delete=models.CASCADE,
         primary_key=True,
     )
-    name = models.CharField(
+    title = models.CharField(
         max_length=200,
-        default='Your site name',
+        default='Your site title',
     )
     description = models.CharField(
         max_length=2000,
