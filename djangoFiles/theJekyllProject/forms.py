@@ -51,7 +51,7 @@ class AddPostForm(forms.Form):
 
 class SiteProfileForm(forms.Form):
     # TODO All these stuff must have some initialized values
-    name = forms.CharField(
+    title = forms.CharField(
         max_length=200,
         help_text='Name of the site',
         required=False,

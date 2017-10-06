@@ -14,3 +14,8 @@ A Jekyll project to add some features to Jekyll.
 - `create database your_database_name`
 
 Now change the content of the file settings.py accordingly.
+
+
+## How to run Jekyll blog
+
+- `bundle exec jekyll serve`

@@ -25,6 +25,7 @@ from theJekyllProject.functions import write_file
 from theJekyllProject.functions import move_file
 from theJekyllProject.functions import save_site_data
 from theJekyllProject.functions import save_site_theme_data
+from theJekyllProject.functions import create_config_file
 
 from theJekyllProject.models import Post
 from theJekyllProject.models import SiteData
@@ -108,12 +109,12 @@ class SiteProfileView(FormView):
         user = self.request.user
         try:
             SiteData.objects.get(user=User.objects.get(username=user.username))
-            name = SiteData.objects.get(user=User.objects.get(username=user.username)).name
+            title = SiteData.objects.get(user=User.objects.get(username=user.username)).title
             description = SiteData.objects.get(user=User.objects.get(username=user.username)).description
             avatar = SiteData.objects.get(user=User.objects.get(username=user.username)).avatar
 
         except:
-            name = 'Your new site'
+            title = 'Your new site'
             description = 'Single line description of the site'
             # FIXME add an image initial
             avatar = 'An image'
@@ -121,7 +122,7 @@ class SiteProfileView(FormView):
         form_kwargs = super(SiteProfileView, self).get_form_kwargs()
         form_kwargs.update({
             'initial': {
-                'name': name,
+                'title': title,
                 'description': description,
                 'avatar': avatar,
             }
@@ -132,13 +133,13 @@ class SiteProfileView(FormView):
         form = self.form_class(request.POST)
         if form.is_valid():
             user = request.user
-            name = request.POST['name']
+            title = request.POST['title']
             description = request.POST['description']
             avatar = request.POST['avatar']
 
             # save stuff to the database
-            save_site_data(user, name, description, avatar)
-
+            save_site_data(user, title, description, avatar)
+            create_config_file(user)
             return HttpResponse('Profile data saved')
 
 
@@ -243,6 +244,7 @@ class SiteSocialProfileView(FormView):
                 google_analytics = google_analytics
             )
             site_social_profile.save()
+            create_config_file(user)
 
             return HttpResponse('Social data saved')
 
@@ -282,4 +284,5 @@ class SiteThemeView(FormView):
             user = request.user
             theme = request.POST['theme']
             save_site_theme_data(user, theme)
+            create_config_file(user)
             return HttpResponse('THEME SAVED!')
