@@ -5,6 +5,9 @@ from datetime import datetime
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.views.generic.edit import FormView
+from django.views.generic.edit import UpdateView
+from django.views.generic.edit import DeleteView
+from django.views.generic.list import ListView
 from django.contrib.auth.models import User
 
 from markdown2 import Markdown
@@ -52,6 +55,7 @@ class AddPostView(FormView):
     form_class = AddPostForm
 
     def post(self, request, *args, **kwargs):
+        user = request.user
         form = self.form_class(request.POST)
         if form.is_valid():
             author = request.POST['author']
@@ -67,7 +71,7 @@ class AddPostView(FormView):
             comments = assign_boolean_to_comments(comments)
 
             # save stuff to the database
-            save_post_database(author, comments, date, layout, title, content)
+            save_post_database(user, author, comments, date, layout, title, content)
 
             # Create file name
             date_obj = datetime.strptime(date, '%Y-%m-%d %H:%M:%S')
@@ -86,6 +90,23 @@ class AddPostView(FormView):
             # Move file to correct location
             move_file(file_name)
         return HttpResponse('Post ADDED!')
+
+
+class PostListView(ListView):
+    model = Post
+    template_name = 'theJekyllProject/post_list.html'
+    context_object_name = "post_list"
+    paginate_by = 5
+
+    def get_queryset(self):
+        post_list = Post.objects.filter(user=self.request.user)
+        return post_list
+
+
+class PostUpdateView(UpdateView):
+    model = Post
+    fields = ['author', 'comments', 'date', 'layout', 'title', 'content']
+    template_name = 'theJekyllProject/addpost.html'
 
 
 # FIXME Take care of this function based view
@@ -107,11 +128,12 @@ class SiteProfileView(FormView):
 
     def get_form_kwargs(self):
         user = self.request.user
+        user = User.objects.get(username=user.username)
         try:
-            SiteData.objects.get(user=User.objects.get(username=user.username))
-            title = SiteData.objects.get(user=User.objects.get(username=user.username)).title
-            description = SiteData.objects.get(user=User.objects.get(username=user.username)).description
-            avatar = SiteData.objects.get(user=User.objects.get(username=user.username)).avatar
+            SiteData.objects.get(user=user)
+            title = SiteData.objects.get(user=user).title
+            description = SiteData.objects.get(user=user).description
+            avatar = SiteData.objects.get(user=user).avatar
 
         except:
             title = 'Your new site'
@@ -136,7 +158,6 @@ class SiteProfileView(FormView):
             title = request.POST['title']
             description = request.POST['description']
             avatar = request.POST['avatar']
-
             # save stuff to the database
             save_site_data(user, title, description, avatar)
             create_config_file(user)
@@ -149,23 +170,24 @@ class SiteSocialProfileView(FormView):
 
     def get_form_kwargs(self):
         user = self.request.user
+        user = User.objects.get(username=user.username)
         try:
-            SiteSocialProfile.objects.get(user=User.objects.get(username=user.username))
-            dribble = SiteSocialProfile.objects.get(user=User.objects.get(username=user.username)).dribble
-            email = SiteSocialProfile.objects.get(user=User.objects.get(username=user.username)).email
-            facebook = SiteSocialProfile.objects.get(user=User.objects.get(username=user.username)).facebook
-            flickr = SiteSocialProfile.objects.get(user=User.objects.get(username=user.username)).flickr
-            github = SiteSocialProfile.objects.get(user=User.objects.get(username=user.username)).github
-            instagram = SiteSocialProfile.objects.get(user=User.objects.get(username=user.username)).instagram
-            linkedin = SiteSocialProfile.objects.get(user=User.objects.get(username=user.username)).linkedin
-            pinterest = SiteSocialProfile.objects.get(user=User.objects.get(username=user.username)).pinterest
-            rss = SiteSocialProfile.objects.get(user=User.objects.get(username=user.username)).rss
-            twitter = SiteSocialProfile.objects.get(user=User.objects.get(username=user.username)).twitter
-            stackoverflow = SiteSocialProfile.objects.get(user=User.objects.get(username=user.username)).stackoverflow
-            youtube = SiteSocialProfile.objects.get(user=User.objects.get(username=user.username)).youtube
-            googleplus = SiteSocialProfile.objects.get(user=User.objects.get(username=user.username)).googleplus
-            disqus = SiteSocialProfile.objects.get(user=User.objects.get(username=user.username)).disqus
-            google_analytics = SiteSocialProfile.objects.get(user=User.objects.get(username=user.username)).google_analytics
+            SiteSocialProfile.objects.get(user=user)
+            dribble = SiteSocialProfile.objects.get(user=user).dribble
+            email = SiteSocialProfile.objects.get(user=user).email
+            facebook = SiteSocialProfile.objects.get(user=user).facebook
+            flickr = SiteSocialProfile.objects.get(user=user).flickr
+            github = SiteSocialProfile.objects.get(user=user).github
+            instagram = SiteSocialProfile.objects.get(user=user).instagram
+            linkedin = SiteSocialProfile.objects.get(user=user).linkedin
+            pinterest = SiteSocialProfile.objects.get(user=user).pinterest
+            rss = SiteSocialProfile.objects.get(user=user).rss
+            twitter = SiteSocialProfile.objects.get(user=user).twitter
+            stackoverflow = SiteSocialProfile.objects.get(user=user).stackoverflow
+            youtube = SiteSocialProfile.objects.get(user=user).youtube
+            googleplus = SiteSocialProfile.objects.get(user=user).googleplus
+            disqus = SiteSocialProfile.objects.get(user=user).disqus
+            google_analytics = SiteSocialProfile.objects.get(user=user).google_analytics
         except:
             dribble = ''
             email = ''
@@ -264,9 +286,10 @@ class SiteThemeView(FormView):
 
     def get_form_kwargs(self):
         user = self.request.user
+        user = User.objects.get(username=user.username)
         try:
-            SiteTheme.objects.get(user=User.objects.get(username=user.username))
-            theme = SiteTheme.objects.get(user=User.objects.get(username=user.username)).theme
+            SiteTheme.objects.get(user=user)
+            theme = SiteTheme.objects.get(user=user).theme
         except:
             theme = ''
 
