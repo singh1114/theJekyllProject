@@ -16,8 +16,9 @@ def assign_boolean_to_comments(comments):
         return False
 
 
-def save_post_database(author, comments, date, layout, title, content):
+def save_post_database(user, author, comments, date, layout, title, content):
     post = Post(
+        user=user,
         author=author,
         comments=comments,
         date=date,

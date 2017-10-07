@@ -6,6 +6,10 @@ from django.db import models
 from ckeditor.fields import RichTextField
 
 class Post(models.Model):
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+    )
     author = models.CharField(max_length=100, null=True, blank=True)
     comments = models.BooleanField(default=True)
     date = models.DateTimeField()

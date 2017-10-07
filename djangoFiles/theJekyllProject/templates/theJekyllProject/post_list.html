@@ -1,0 +1,40 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Ranvir</title>
+    </head>
+    <body>
+    <h1>Post List</h1>
+        {% if post_list %}
+            <ul>
+
+                {% for post in post_list %}
+                    <li>
+                        <a href="{{ post.get_absolute_url }}">{{ post.title }}</a> ({{post.date}})
+                    </li>
+                {% endfor %}
+
+            </ul>
+            {% if is_paginated %}
+                <div class="pagination">
+                    <span class="page-links">
+                        {% if page_obj.has_previous %}
+                            <a href="/listposts?page={{ page_obj.previous_page_number }}">previous</a>
+                        {% endif %}
+                        <span class="page-current">
+                            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                        </span>
+                        {% if page_obj.has_next %}
+                            <a href="/listposts?page={{ page_obj.next_page_number }}">next</a>
+                        {% endif %}
+                    </span>
+                </div>
+            {% endif %}
+        {% else %}
+            <p>There are no Posts yet.</p>
+        {% endif %}       
+    </body>
+</html>
+
