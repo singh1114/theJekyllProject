@@ -1,25 +1,40 @@
-{% load static %}
-<!Doctype html>
+{% load staticfiles %}
+<!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <title>{% block title %}Jeklog{% endblock %}</title>
-    <!--<link rel="stylesheet" type="text/css" href="{% static 'css/app.css' %}">-->
-    {% block stylesheet %}{% endblock %}
-  </head>
-  <body>
-    <div class="header">
-
-    </div>
-    <div class="main">
-      {% block content %}
-      {% endblock %}
-    </div>
-    <div class="footer">
-
-    </div>
-    <script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
-    <script src="{% static 'js/app.js' %}"></script>
-    {% block javascript %}{% endblock %}
-  </body>
+<head>
+	<title>JekLog</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu:400,700" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+</head>
+<body>
+	<div class="container-fluid">
+		<nav class="navbar navbar-default navbar-fixed-top" id="header">
+		    <div class="container">
+			    <div class="navbar-header">
+			      <a class="navbar-brand" href="#"><strong>JekLog</strong></a>
+			    </div>
+			    <ul class="nav navbar-nav" id="nav-list" style="float:right; color: #EA4525;">
+				    <li><a href="/"><strong>Home</strong></a></li>
+				    <li><a href="#"><strong>Contact Us</strong></a></li>
+				    <li><a href="#"><strong>About Us</strong></a></li>
+			    </ul>
+		    </div>
+		</nav>
+		<div class="container-fluid" id="main-content">
+			<div class = "row">
+				<div class="col-md-12">
+					{% block content %}
+					{% endblock %}
+				</div>
+			</div>
+		</div>
+		<div class ="footer">
+            {% block footer %}
+            {% endblock %}
+		</div>
+	</div>
+</body>
 </html>

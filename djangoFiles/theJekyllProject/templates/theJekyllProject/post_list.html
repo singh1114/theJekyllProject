@@ -1,40 +1,55 @@
+{% extends 'theJekyllProject/base.html' %}
 {% load staticfiles %}
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>Ranvir</title>
-    </head>
-    <body>
+{% block content %}
     <h1>Post List</h1>
-        {% if post_list %}
-            <ul>
-
-                {% for post in post_list %}
-                    <li>
-                        <a href="{{ post.get_absolute_url }}">{{ post.title }}</a> ({{post.date}})
-                    </li>
-                {% endfor %}
-
-            </ul>
-            {% if is_paginated %}
-                <div class="pagination">
-                    <span class="page-links">
-                        {% if page_obj.has_previous %}
-                            <a href="/listposts?page={{ page_obj.previous_page_number }}">previous</a>
-                        {% endif %}
-                        <span class="page-current">
-                            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
-                        </span>
-                        {% if page_obj.has_next %}
-                            <a href="/listposts?page={{ page_obj.next_page_number }}">next</a>
-                        {% endif %}
+    <hr>
+    {% if post_list %}
+        <ul>
+    
+            {% for post in post_list %}
+                <li>
+                    <a href="{% url 'post-update' pk=post.pk%}">{{ post.title }}</a> ({{post.date}})
+                    <p>{{ post.content|safe }}</p>
+                    <hr>
+                </li>
+            {% endfor %}
+    
+        </ul>
+        {% if is_paginated %}
+            <div class="pagination">
+                <span class="page-links">
+                    {% if page_obj.has_previous %}
+                        <a href="/listposts?page={{ page_obj.previous_page_number }}">previous</a>
+                    {% endif %}
+                    <span class="page-current">
+                        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
                     </span>
-                </div>
-            {% endif %}
-        {% else %}
-            <p>There are no Posts yet.</p>
+                    {% if page_obj.has_next %}
+                        <a href="/listposts?page={{ page_obj.next_page_number }}">next</a>
+                    {% endif %}
+                </span>
+            </div>
         {% endif %}
-    </body>
-</html>
-
+    {% else %}
+        <p>There are no Posts yet.</p>
+    {% endif %}
+{% endblock %}
+{% block footer %}
+    <div class="row">
+        <div class="col-md-4">
+            <button type="button" class="btn btn-primary">
+                <a href="{% url 'addpost' %}"><strong>Add Post</strong></a>
+            </button>
+        </div>
+        <div class="col-md-4">
+            <button type="button" class="btn btn-success">
+                <a href="{% url 'siteprofile' %}"><strong>Blog Profile</strong></a>
+            </button>
+        </div>
+        <div class="col-md-4">
+            <button type="button" class="btn btn-info">
+                <a href="{% url 'socialprofile' %}"><strong>Social Profiles</strong></a>
+            </button>
+        </div>
+    </div>
+{% endblock %}
