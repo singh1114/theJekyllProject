@@ -9,7 +9,6 @@ from theJekyllProject.views import SiteThemeView
 from theJekyllProject.views import PostListView
 from theJekyllProject.views import PostUpdateView
 
-from theJekyllProject.views import home
 urlpatterns = [
     url(r'^addpost/?', AddPostView.as_view(), name='addpost'),
     url(r'^listposts/$', PostListView.as_view(), name='listposts'),
@@ -18,7 +17,7 @@ urlpatterns = [
     url(r'^siteprofile/?', SiteProfileView.as_view(), name='siteprofile'),
 #    url(r'^sitedataupdate/?', SiteDataUpdateView.as_view(), name='siteprofile'),
     url(r'^ckeditor/', include('froala_editor.urls')),
-    url(r'^home/?', home, name='home'),
+    url(r'^home/?', PostListView.as_view(), name='home'),
     url(r'^sitesocialprofile/?', SiteSocialProfileView.as_view(), name='socialprofile'),
     url(r'^siteplugin/?', SitePluginView.as_view(), name='siteplugin'),
     url(r'^siteexclude/?', SiteExcludeView.as_view(), name='siteexclude'),
