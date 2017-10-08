@@ -36,7 +36,6 @@ from theJekyllProject.models import SiteSocialProfile
 from theJekyllProject.models import SiteTheme
 
 
-# FIXME all the views must be decorated with login_required decorators
 class AddPostView(FormView):
     """AddPostView to add post
 
@@ -99,7 +98,7 @@ class PostListView(ListView):
     paginate_by = 5
 
     def get_queryset(self):
-        post_list = Post.objects.filter(user=self.request.user)
+        post_list = Post.objects.order_by('-date').filter(user=self.request.user)
         return post_list
 
 
@@ -107,19 +106,6 @@ class PostUpdateView(UpdateView):
     model = Post
     fields = ['author', 'comments', 'date', 'layout', 'title', 'content']
     template_name = 'theJekyllProject/addpost.html'
-
-
-# FIXME Take care of this function based view
-# FIXME Change it to class based view
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
-
-@login_required
-def home(request):
-    return render(request, 'core/home.html')
-
-# FIXME ends here.
-# FIXME ends here.
 
 
 class SiteProfileView(FormView):
