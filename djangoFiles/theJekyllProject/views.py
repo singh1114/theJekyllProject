@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 
 from datetime import datetime
+from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.views.generic.edit import FormView
@@ -106,6 +107,9 @@ class PostUpdateView(UpdateView):
     model = Post
     fields = ['author', 'comments', 'date', 'layout', 'title', 'content']
     template_name = 'theJekyllProject/addpost.html'
+
+    def get_success_url(self):
+        return reverse('home')
 
 
 class SiteProfileView(FormView):
