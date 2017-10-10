@@ -203,3 +203,12 @@ def save_repo_data(user, repo):
         repo=repo
     )
     repo.save()
+
+
+from github3 import login
+def create_repo(user, repo):
+    user = User.objects.get(username=user.username)
+    social = user.social_auth.get(provider='github')
+    user_token = social.extra_data['access_token']
+    g = login(token=user_token)
+    repo = g.create_repo(repo)

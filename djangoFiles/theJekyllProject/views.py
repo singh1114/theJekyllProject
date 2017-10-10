@@ -33,6 +33,7 @@ from theJekyllProject.functions import save_site_data
 from theJekyllProject.functions import save_site_theme_data
 from theJekyllProject.functions import create_config_file
 from theJekyllProject.functions import get_repo_list
+from theJekyllProject.functions import create_repo
 from theJekyllProject.functions import save_repo_data
 
 from theJekyllProject.models import Post
@@ -65,6 +66,7 @@ class CreateRepoView(FormView):
         form = self.form_class(request.POST)
         if form.is_valid():
             repo = request.POST['repo']
+            create_repo(user, repo)
             save_repo_data(user, repo)
 
 
