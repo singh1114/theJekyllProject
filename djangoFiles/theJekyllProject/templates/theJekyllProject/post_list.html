@@ -37,19 +37,13 @@
 {% block footer %}
     <div class="row">
         <div class="col-md-4">
-            <button type="button" class="btn btn-primary">
-                <a href="{% url 'addpost' %}"><strong>Add Post</strong></a>
-            </button>
+            <a href="{% url 'addpost' %}" class="btn btn-primary"><strong>Add Post</strong></a>
         </div>
         <div class="col-md-4">
-            <button type="button" class="btn btn-success">
-                <a href="{% url 'siteprofile' %}"><strong>Blog Profile</strong></a>
-            </button>
+            <a href="{% url 'siteprofile' %}" class="btn btn-success"><strong>Blog Profile</strong></a>
         </div>
         <div class="col-md-4">
-            <button type="button" class="btn btn-info">
-                <a href="{% url 'socialprofile' %}"><strong>Social Profiles</strong></a>
-            </button>
+            <a href="{% url 'socialprofile' %}" class="btn btn-info"><strong>Social Profiles</strong></a>
         </div>
     </div>
 {% endblock %}

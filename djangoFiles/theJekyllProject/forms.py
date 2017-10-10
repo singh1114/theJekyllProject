@@ -9,6 +9,15 @@ from ckeditor.widgets import CKEditorWidget
 from theJekyllProject.models import PostCategory
 from theJekyllProject.models import SiteData
 
+
+class RepoForm(forms.Form):
+    repo = forms.CharField(
+        label='New repository Name',
+        max_length=200,
+        help_text='Create a new repository with the following name'
+    )
+
+
 class AddPostForm(forms.Form):
     author = forms.CharField(
         label='Author',

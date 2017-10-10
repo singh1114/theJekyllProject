@@ -1,0 +1,12 @@
+{% extends 'theJekyllProject/base.html' %}
+{% load staticfiles %}
+{% block content %}
+    <form action="" method="post">
+        {% csrf_token %}
+        {{ form }}
+        <br />
+        <input type="submit" value="Submit" />
+    </form>
+{% endblock %}
+
+

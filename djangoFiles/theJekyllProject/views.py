@@ -5,6 +5,7 @@ from datetime import datetime
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
+from django.views.generic.base import TemplateView
 from django.views.generic.edit import FormView
 from django.views.generic.edit import UpdateView
 from django.views.generic.edit import DeleteView
@@ -14,6 +15,7 @@ from django.contrib.auth.models import User
 from markdown2 import Markdown
 
 from theJekyllProject.forms import AddPostForm
+from theJekyllProject.forms import RepoForm
 from theJekyllProject.forms import SiteExcludeForm
 from theJekyllProject.forms import SitePluginForm
 from theJekyllProject.forms import SiteProfileForm
@@ -30,11 +32,40 @@ from theJekyllProject.functions import move_file
 from theJekyllProject.functions import save_site_data
 from theJekyllProject.functions import save_site_theme_data
 from theJekyllProject.functions import create_config_file
+from theJekyllProject.functions import get_repo_list
+from theJekyllProject.functions import save_repo_data
 
 from theJekyllProject.models import Post
 from theJekyllProject.models import SiteData
 from theJekyllProject.models import SiteSocialProfile
 from theJekyllProject.models import SiteTheme
+
+
+class RepoListView(TemplateView):
+
+    def get(self, request, *args, **kwargs):
+        user = request.user
+        user = User.objects.get(username=user.username)
+        social = user.social_auth.get(provider='github')
+        user_token = social.extra_data['access_token']
+
+        repo_list = get_repo_list(user_token)
+
+        return render(request, 'theJekyllProject/repo_list.html', context={
+            'repo_list': repo_list,
+        })
+
+
+class CreateRepoView(FormView):
+    template_name = 'theJekyllProject/create_repo.html'
+    form_class = RepoForm
+
+    def post(self, request, *args, **kwargs):
+        user = request.user
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            repo = request.POST['repo']
+            save_repo_data(user, repo)
 
 
 class AddPostView(FormView):

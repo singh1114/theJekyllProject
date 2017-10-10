@@ -8,8 +8,12 @@ from theJekyllProject.views import SiteExcludeView
 from theJekyllProject.views import SiteThemeView
 from theJekyllProject.views import PostListView
 from theJekyllProject.views import PostUpdateView
+from theJekyllProject.views import RepoListView
+from theJekyllProject.views import CreateRepoView
 
 urlpatterns = [
+    url(r'^repolist/?', RepoListView.as_view(), name='repo-list'),
+    url(r'^createrepo/?', CreateRepoView.as_view(), name='create-repo'),
     url(r'^addpost/?', AddPostView.as_view(), name='addpost'),
 #    url(r'^listposts/$', PostListView.as_view(), name='listposts'),
     url(r'^updatepost/(?P<pk>\d+)$', PostUpdateView.as_view(), name='post-update'),

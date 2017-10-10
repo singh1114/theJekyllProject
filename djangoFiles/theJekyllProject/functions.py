@@ -4,7 +4,9 @@ from theJekyllProject.models import Post
 from theJekyllProject.models import SiteData
 from theJekyllProject.models import SiteSocialProfile
 from theJekyllProject.models import SiteTheme
+from theJekyllProject.models import Repo
 
+from github import Github
 import html2markdown
 import shutil
 
@@ -184,3 +186,20 @@ def create_config_file(user):
     file.write(file_string)
     file.close()
     shutil.move('_config.yml', 'theJekyllProject/_config.yml')
+
+
+def get_repo_list(token):
+    g = Github(token)
+    repositories_name = []
+    for repo in g.get_user().get_repos():
+        index = repo.full_name.index('/')
+        repositories_name.append(repo.full_name[index+1:])
+        return repositories_name
+
+
+def save_repo_data(user, repo):
+    repo = Repo(
+        user=user,
+        repo=repo
+    )
+    repo.save()
