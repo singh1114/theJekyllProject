@@ -56,3 +56,12 @@
 .footer a strong {
     color: white;
 }
+
+#create_repo {
+    text-align: center;
+}
+
+#create_repo a {
+    color: white;
+    text-decoration: none;
+}
