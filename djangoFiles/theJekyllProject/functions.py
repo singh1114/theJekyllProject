@@ -7,8 +7,11 @@ from theJekyllProject.models import SiteTheme
 from theJekyllProject.models import Repo
 
 from github import Github
+
 import html2markdown
+import os
 import shutil
+import subprocess
 
 
 def assign_boolean_to_comments(comments):
@@ -192,9 +195,8 @@ def get_repo_list(token):
     g = Github(token)
     repositories_name = []
     for repo in g.get_user().get_repos():
-        index = repo.full_name.index('/')
-        repositories_name.append(repo.full_name[index+1:])
-        return repositories_name
+        repositories_name.append(repo.name)
+    return repositories_name
 
 
 def save_repo_data(user, repo):
@@ -205,10 +207,15 @@ def save_repo_data(user, repo):
     repo.save()
 
 
-from github3 import login
 def create_repo(user, repo):
+    for_further_use = user
     user = User.objects.get(username=user.username)
     social = user.social_auth.get(provider='github')
     user_token = social.extra_data['access_token']
-    g = login(token=user_token)
-    repo = g.create_repo(repo)
+    g = Github(user_token)
+    user = g.get_user()
+    repo = user.create_repo(repo)
+    dest_path = '/'.join(['JekLog', '{}'.format(for_further_use.username), repo.name])
+    source_path = '/'.join(['JekyllMinima', 'minima'])
+    shutil.copytree(source_path, dest_path)
+    subprocess.Popen(['/bin/bash', 'gitscript.sh', for_further_use.username, repo.name, user_token])
