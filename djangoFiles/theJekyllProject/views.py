@@ -35,6 +35,8 @@ from theJekyllProject.functions import create_config_file
 from theJekyllProject.functions import get_repo_list
 from theJekyllProject.functions import create_repo
 from theJekyllProject.functions import save_repo_data
+from theJekyllProject.functions import copy_jekyll_files
+from theJekyllProject.functions import run_git_script
 
 from theJekyllProject.models import Post
 from theJekyllProject.models import SiteData
@@ -68,6 +70,10 @@ class CreateRepoView(FormView):
             repo = request.POST['repo']
             create_repo(user, repo)
             save_repo_data(user, repo)
+            copy_jekyll_files(user, repo)
+            run_git_script(user, repo)
+
+        return HttpResponse("I am done with this project")
 
 
 class AddPostView(FormView):

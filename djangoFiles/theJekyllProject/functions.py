@@ -39,7 +39,6 @@ def create_file_name(date, title):
     title = title.lower()
     title = title.replace(' ', '-')
     file_name = str(date) + '-' + title + '.markdown'
-    print file_name
     return file_name
 
 
@@ -206,16 +205,25 @@ def save_repo_data(user, repo):
     )
     repo.save()
 
-
 def create_repo(user, repo):
-    for_further_use = user
     user = User.objects.get(username=user.username)
     social = user.social_auth.get(provider='github')
     user_token = social.extra_data['access_token']
     g = Github(user_token)
     user = g.get_user()
     repo = user.create_repo(repo)
-    dest_path = '/'.join(['JekLog', '{}'.format(for_further_use.username), repo.name])
-    source_path = '/'.join(['JekyllMinima', 'minima'])
+
+
+def copy_jekyll_files(user, repo_name):
+    print user.username
+    print repo_name
+    dest_path = '/'.join(['JekLog', user.username, repo_name])
+    source_path = '/'.join(['JekyllNow', 'jekyll-now'])
     shutil.copytree(source_path, dest_path)
-    subprocess.Popen(['/bin/bash', 'gitscript.sh', for_further_use.username, repo.name, user_token])
+
+
+def run_git_script(user, repo_name):
+    user = User.objects.get(username=user.username)
+    social = user.social_auth.get(provider='github')
+    user_token = social.extra_data['access_token']
+    subprocess.Popen(['/bin/bash', 'gitscript.sh', user.username, repo_name, user_token])
