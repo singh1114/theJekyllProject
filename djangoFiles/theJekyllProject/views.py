@@ -39,6 +39,7 @@ from theJekyllProject.functions import copy_jekyll_files
 from theJekyllProject.functions import run_git_script
 
 from theJekyllProject.models import Post
+from theJekyllProject.models import Repo
 from theJekyllProject.models import SiteData
 from theJekyllProject.models import SiteSocialProfile
 from theJekyllProject.models import SiteTheme
@@ -191,6 +192,16 @@ class SiteProfileView(FormView):
             save_site_data(user, title, description, avatar)
             create_config_file(user)
             return HttpResponse('Profile data saved')
+
+
+class ChooseSiteView(ListView):
+    model = Repo
+    template_name = 'theJekyllProject/choose_site.html'
+    context_object_name = 'site_list'
+
+    def get_queryset(self):
+        site_list = Repo.objects.filter(user=self.request.user)
+        return site_list
 
 
 class SiteSocialProfileView(FormView):
