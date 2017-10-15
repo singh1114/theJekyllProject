@@ -1,0 +1,22 @@
+{% extends 'theJekyllProject/base.html' %}
+{% load staticfiles %}
+{% block content %}
+  <h1>Repo List</h1>
+  <table>
+    <th>
+      <td>Repo Name</td>
+      <td>Choose site</td>
+    </th>
+    {% for repo in site_list %}
+      <tr>
+        <td>{{ repo.repo }}</td>
+        <td>
+          {% if repo.main is not True %}
+            <a href="#" class="btn btn-success">Select this site</a>
+          {% endif %}
+        </td>
+      </tr>
+    {% endfor %}
+  </table>
+
+{% endblock %}
