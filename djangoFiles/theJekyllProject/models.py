@@ -14,6 +14,9 @@ class Repo(models.Model):
     repo = models.CharField(
         max_length=200,
     )
+    main = models.BooleanField(
+        default=False
+    )
 
 
 class Post(models.Model):
