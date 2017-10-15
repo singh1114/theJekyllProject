@@ -201,9 +201,18 @@ def get_repo_list(token):
 def save_repo_data(user, repo):
     repo = Repo(
         user=user,
-        repo=repo
+        repo=repo,
+        main=True
     )
     repo.save()
+
+    # Now set all other repo `main` to False
+    all_repos = Repo.objects.all()
+    current_repo = Repo.objects.get(id=repo.id)
+    for repo in all_repos:
+        if repo.id is not current_repo.id:
+            repo.main = False
+            repo.save()
 
 def create_repo(user, repo):
     user = User.objects.get(username=user.username)
