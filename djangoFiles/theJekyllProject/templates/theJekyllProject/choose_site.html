@@ -12,7 +12,7 @@
         <td>{{ repo.repo }}</td>
         <td>
           {% if repo.main is not True %}
-            <a href="#" class="btn btn-success">Select this site</a>
+            <a href="{% url 'select-main-site' pk=repo.pk %}" class="btn btn-success">Select this site</a>
           {% endif %}
         </td>
       </tr>
