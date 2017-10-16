@@ -8,7 +8,7 @@
     
             {% for post in post_list %}
                 <li>
-                    <a href="{% url 'post-update' pk=post.pk%}">{{ post.title }}</a> ({{post.date}})
+                    <a href="{% url 'post-update' pk=post.pk %}">{{ post.title }}</a> ({{post.date}})
                     <p>{{ post.content|safe }}</p>
                     <hr>
                 </li>

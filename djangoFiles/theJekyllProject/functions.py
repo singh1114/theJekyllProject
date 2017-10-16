@@ -214,6 +214,7 @@ def save_repo_data(user, repo):
             repo.main = False
             repo.save()
 
+
 def create_repo(user, repo):
     user = User.objects.get(username=user.username)
     social = user.social_auth.get(provider='github')
@@ -236,3 +237,14 @@ def run_git_script(user, repo_name):
     social = user.social_auth.get(provider='github')
     user_token = social.extra_data['access_token']
     subprocess.Popen(['/bin/bash', 'gitscript.sh', user.username, repo_name, user_token])
+
+
+def select_main_site(user, pk):
+    all_repos = Repo.objects.all()
+    current_repo = Repo.objects.get(pk=pk)
+    current_repo.main = True
+    current_repo.save()
+    for repo in all_repos:
+        if repo.id is not current_repo.id:
+            repo.main = False
+            repo.save()

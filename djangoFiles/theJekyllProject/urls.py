@@ -11,13 +11,16 @@ from theJekyllProject.views import PostUpdateView
 from theJekyllProject.views import RepoListView
 from theJekyllProject.views import CreateRepoView
 from theJekyllProject.views import ChooseSiteView
+from theJekyllProject.views import SelectMainSiteView
+
 
 urlpatterns = [
     url(r'^repolist/?', RepoListView.as_view(), name='repo-list'),
     url(r'^createrepo/?', CreateRepoView.as_view(), name='create-repo'),
 
     url(r'^choosesite/?', ChooseSiteView.as_view(), name='choose-site'),
-    
+    url(r'^selectmainsite/(?P<pk>\d+)$', SelectMainSiteView.as_view(), name='select-main-site'),
+
     url(r'^addpost/?', AddPostView.as_view(), name='addpost'),
     url(r'^updatepost/(?P<pk>\d+)$', PostUpdateView.as_view(), name='post-update'),
 
