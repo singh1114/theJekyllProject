@@ -5,6 +5,7 @@ from datetime import datetime
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
+from django.shortcuts import redirect
 from django.views import View
 from django.views.generic.base import TemplateView
 from django.views.generic.edit import FormView
@@ -212,6 +213,17 @@ class SelectMainSiteView(View):
         user = self.request.user
         select_main_site(user, pk)
         return HttpResponseRedirect(reverse('home'))
+
+
+class DecideHomeView(View):
+    def get(self, request, *args, **kwargs):
+        user = self.request.user
+        repo = Repo.objects.filter(user=user)
+        if(len(repo) is 0):
+            return redirect(reverse('create-repo'))
+        else:
+            return redirect(reverse('home'))
+
 
 class SiteSocialProfileView(FormView):
     template_name = 'theJekyllProject/socialprofile.html'
