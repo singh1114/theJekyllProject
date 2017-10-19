@@ -131,7 +131,8 @@ class AddPostView(FormView):
             write_file(file_name, head_content, body_content)
 
             # Move file to correct location
-            move_file(file_name)
+            repo = Repo.objects.get(main=True)
+            move_file(file_name, user, repo)
         return HttpResponse('Post ADDED!')
 
 

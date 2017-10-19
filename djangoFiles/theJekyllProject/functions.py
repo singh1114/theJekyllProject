@@ -73,8 +73,8 @@ def write_file(file_name, head_content, body_content):
     file.close()
 
 
-def move_file(file_name):
-    shutil.move(file_name, 'theJekyllProject/_posts/' + file_name)
+def move_file(file_name, user, repo):
+    shutil.move(file_name, 'JekLog/' + user.username  + '/' + repo.repo + '/_posts/' + file_name)
 
 
 def save_site_data(user, title=None, description=None, avatar=None):
