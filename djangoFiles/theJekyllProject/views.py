@@ -26,6 +26,7 @@ from theJekyllProject.forms import SiteSocialProfileForm
 
 from theJekyllProject.functions import assign_boolean_to_comments
 from theJekyllProject.functions import save_post_database
+from theJekyllProject.functions import save_post_category_database
 from theJekyllProject.functions import create_file_name
 from theJekyllProject.functions import header_content
 from theJekyllProject.functions import convert_content
@@ -42,6 +43,7 @@ from theJekyllProject.functions import run_git_script
 from theJekyllProject.functions import select_main_site
 
 from theJekyllProject.models import Post
+from theJekyllProject.models import PostCategory
 from theJekyllProject.models import Repo
 from theJekyllProject.models import SiteData
 from theJekyllProject.models import SiteSocialProfile
@@ -113,8 +115,11 @@ class AddPostView(FormView):
             # Checkbox produces 'on' as the result when selected.
             comments = assign_boolean_to_comments(comments)
 
-            # save stuff to the database
-            save_post_database(user, author, comments, date, layout, title, content)
+            # save stuff to the post database
+            post = save_post_database(user, author, comments, date, layout, title, content)
+
+            # save stuff to the post_category database
+            save_post_category_database(post, category)
 
             # Create file name
             date_obj = datetime.strptime(date, '%Y-%m-%d %H:%M:%S')
@@ -147,13 +152,63 @@ class PostListView(ListView):
         return post_list
 
 
-class PostUpdateView(UpdateView):
-    model = Post
-    fields = ['author', 'comments', 'date', 'layout', 'title', 'content']
+class PostUpdateView(FormView):
+    form_class = AddPostForm
     template_name = 'theJekyllProject/addpost.html'
 
-    def get_success_url(self):
-        return reverse('home')
+    def get_form_kwargs(self):
+        pk = self.kwargs['pk']
+        try:
+            post = Post.objects.get(pk=pk)
+            author = post.author
+            comments = post.comments
+            date = post.date
+            layout = post.layout
+            title = post.title
+            content = post.content
+            # FIXME get is used as we can only category for now
+            post_category = PostCategory.objects.get(post=post)
+            category = post_category.category
+        except:
+            pass
+
+        form_kwargs = super(PostUpdateView, self).get_form_kwargs()
+        form_kwargs.update({
+            'initial': {
+                'author': author,
+                'comments': comments,
+                'date': date,
+                'layout': layout,
+                'title': title,
+                'content': content,
+                'category': category
+            }
+        })
+        return form_kwargs
+
+    def post(self, request, *args, **kwargs):
+        user = request.user
+        pk = self.kwargs['pk']
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            author = request.POST['author']
+            comments = request.POST['comments']
+            date = request.POST['date']
+            layout = request.POST['layout']
+            title = request.POST['title']
+            content = request.POST['content']
+            category = request.POST['category']
+
+            # This is a turnaround... I don't know why it happened.
+            # Checkbox produces 'on' as the result when selected.
+            comments = assign_boolean_to_comments(comments)
+
+            # save stuff to the post database
+            post = save_post_database(user, author, comments, date, layout, title, content, pk)
+
+            # save stuff to the post_category database
+            save_post_category_database(post, category, pk)
+        return HttpResponseRedirect(reverse('home'))
 
 
 class SiteProfileView(FormView):
@@ -164,10 +219,10 @@ class SiteProfileView(FormView):
         user = self.request.user
         user = User.objects.get(username=user.username)
         try:
-            SiteData.objects.get(user=user)
-            title = SiteData.objects.get(user=user).title
-            description = SiteData.objects.get(user=user).description
-            avatar = SiteData.objects.get(user=user).avatar
+            site_data = SiteData.objects.get(user=user)
+            title = site_data.title
+            description = site_data.description
+            avatar = site_data.avatar
 
         except:
             title = 'Your new site'

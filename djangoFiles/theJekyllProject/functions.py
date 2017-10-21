@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 
 from theJekyllProject.models import Post
+from theJekyllProject.models import PostCategory
 from theJekyllProject.models import SiteData
 from theJekyllProject.models import SiteSocialProfile
 from theJekyllProject.models import SiteTheme
@@ -21,17 +22,43 @@ def assign_boolean_to_comments(comments):
         return False
 
 
-def save_post_database(user, author, comments, date, layout, title, content):
-    post = Post(
-        user=user,
-        author=author,
-        comments=comments,
-        date=date,
-        layout=layout,
-        title=title,
-        content=content,
-    )
-    post.save()
+def save_post_database(user, author, comments, date, layout, title, content, pk=None):
+    if pk is not None:
+        post = Post.objects.get(pk=pk)
+        post.author = author
+        post.comments = comments
+        post.date = date
+        post.layout = layout
+        post.title = title
+        post.content = content
+        post.save()
+    else:
+        post = Post(
+            user=user,
+            author=author,
+            comments=comments,
+            date=date,
+            layout=layout,
+            title=title,
+            content=content,
+        )
+        post.save()
+    return post
+
+
+def save_post_category_database(post, category, pk=None):
+    if pk is not None:
+        # FIXME use filter instead of get
+        post = Post.objects.get(pk=pk)
+        post_category = PostCategory.objects.get(post=post)
+        post_category.category = category
+        post_category.save()
+    else:
+        post_category = PostCategory(
+            post=post,
+            category=category
+        )
+        post_category.save()
 
 
 def create_file_name(date, title):
