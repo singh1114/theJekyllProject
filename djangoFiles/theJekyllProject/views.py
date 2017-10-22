@@ -41,6 +41,7 @@ from theJekyllProject.functions import save_repo_data
 from theJekyllProject.functions import copy_jekyll_files
 from theJekyllProject.functions import run_git_script
 from theJekyllProject.functions import select_main_site
+from theJekyllProject.functions import push_online
 
 from theJekyllProject.models import Post
 from theJekyllProject.models import PostCategory
@@ -138,6 +139,9 @@ class AddPostView(FormView):
             # Move file to correct location
             repo = Repo.objects.get(main=True)
             move_file(file_name, user, repo)
+
+            # Push the code online
+            push_online(user, repo)
         return HttpResponse('Post ADDED!')
 
 
@@ -208,6 +212,9 @@ class PostUpdateView(FormView):
 
             # save stuff to the post_category database
             save_post_category_database(post, category, pk)
+
+            # send the changes online
+            push_online(user, repo)
         return HttpResponseRedirect(reverse('home'))
 
 

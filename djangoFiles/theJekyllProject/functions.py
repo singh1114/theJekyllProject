@@ -104,6 +104,10 @@ def move_file(file_name, user, repo):
     shutil.move(file_name, 'JekLog/' + user.username  + '/' + repo.repo + '/_posts/' + file_name)
 
 
+def push_online(user, repo):
+    subprocess.Popen(['/bin/bash', 'gitsendupstream.sh', user.username, repo.repo])
+
+
 def save_site_data(user, title=None, description=None, avatar=None):
     site_data = SiteData(
         user=user,
