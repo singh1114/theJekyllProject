@@ -42,6 +42,8 @@ from theJekyllProject.functions import copy_jekyll_files
 from theJekyllProject.functions import run_git_script
 from theJekyllProject.functions import select_main_site
 from theJekyllProject.functions import push_online
+from theJekyllProject.functions import add_theme_name
+from theJekyllProject.functions import change_site_baseurl
 
 from theJekyllProject.models import Post
 from theJekyllProject.models import PostCategory
@@ -78,6 +80,8 @@ class CreateRepoView(FormView):
             create_repo(user, repo)
             save_repo_data(user, repo)
             copy_jekyll_files(user, repo)
+            add_theme_name(user, repo)
+            change_site_baseurl(user, repo)
             run_git_script(user, repo)
 
         return HttpResponse("I am done with this project")

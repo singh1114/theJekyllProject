@@ -256,11 +256,24 @@ def create_repo(user, repo):
 
 
 def copy_jekyll_files(user, repo_name):
-    print user.username
-    print repo_name
     dest_path = '/'.join(['JekLog', user.username, repo_name])
     source_path = '/'.join(['JekyllNow', 'jekyll-now'])
     shutil.copytree(source_path, dest_path)
+
+
+def add_theme_name(user, repo_name):
+    with open('JekLog/' + user.username + '/' + repo_name + '/' + '_config.yml', 'a') as conf_file:
+        conf_file.write('theme: jekyll-theme-cayman')
+
+
+def change_site_baseurl(user, repo_name):
+    with open('JekLog/' + user.username + '/' + repo_name + '/' + '_config.yml', 'r') as conf_file:
+        filedata = conf_file.read()
+
+    filedata = filedata.replace('baseurl: ""', 'baseurl: "/' + repo_name + '"')
+
+    with open('JekLog/' + user.username + '/' + repo_name + '/' + '_config.yml', 'w') as conf_file:
+        conf_file.write(filedata)
 
 
 def run_git_script(user, repo_name):
