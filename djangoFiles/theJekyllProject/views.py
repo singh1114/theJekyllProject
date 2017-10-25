@@ -198,6 +198,7 @@ class PostUpdateView(FormView):
         user = request.user
         pk = self.kwargs['pk']
         form = self.form_class(request.POST)
+        repo = Repo.objects.get(main=True)
         if form.is_valid():
             author = request.POST['author']
             comments = request.POST['comments']
@@ -217,6 +218,22 @@ class PostUpdateView(FormView):
             # save stuff to the post_category database
             save_post_category_database(post, category, pk)
 
+            date_obj = datetime.strptime(date, '%Y-%m-%d %H:%M:%S')
+            only_date = date_obj.date()
+            file_name = create_file_name(only_date, title)
+
+            # Create header content for the markdown file
+            head_content = header_content(author, comments, date, layout, title)
+
+            # Convert the body content to markdown
+            body_content = convert_content(content)
+
+            # Write the content into files
+            write_file(file_name, head_content, body_content)
+
+            # Move file to correct location
+            move_file(file_name, user, repo)
+
             # send the changes online
             push_online(user, repo)
         return HttpResponseRedirect(reverse('home'))
@@ -229,8 +246,9 @@ class SiteProfileView(FormView):
     def get_form_kwargs(self):
         user = self.request.user
         user = User.objects.get(username=user.username)
+        repo = Repo.objects.get(main=True)
         try:
-            site_data = SiteData.objects.get(user=user)
+            site_data = SiteData.objects.get(repo=repo)
             title = site_data.title
             description = site_data.description
             avatar = site_data.avatar
@@ -259,8 +277,10 @@ class SiteProfileView(FormView):
             description = request.POST['description']
             avatar = request.POST['avatar']
             # save stuff to the database
-            save_site_data(user, title, description, avatar)
-            create_config_file(user)
+            repo = Repo.objects.get(main=True)
+            save_site_data(repo, title, description, avatar)
+            create_config_file(user, repo)
+            push_online(user, repo)
             return HttpResponse('Profile data saved')
 
 
@@ -301,7 +321,7 @@ class SiteSocialProfileView(FormView):
         user = User.objects.get(username=user.username)
         try:
             SiteSocialProfile.objects.get(user=user)
-            dribble = SiteSocialProfile.objects.get(user=user).dribble
+            dribbble = SiteSocialProfile.objects.get(user=user).dribbble
             email = SiteSocialProfile.objects.get(user=user).email
             facebook = SiteSocialProfile.objects.get(user=user).facebook
             flickr = SiteSocialProfile.objects.get(user=user).flickr
@@ -317,7 +337,7 @@ class SiteSocialProfileView(FormView):
             disqus = SiteSocialProfile.objects.get(user=user).disqus
             google_analytics = SiteSocialProfile.objects.get(user=user).google_analytics
         except:
-            dribble = ''
+            dribbble = ''
             email = ''
             facebook = ''
             flickr = ''
@@ -336,7 +356,7 @@ class SiteSocialProfileView(FormView):
         form_kwargs = super(SiteSocialProfileView, self).get_form_kwargs()
         form_kwargs.update({
             'initial': {
-                'dribble': dribble,
+                'dribbble': dribbble,
                 'email': email,
                 'facebook': facebook,
                 'flickr': flickr,
@@ -359,7 +379,8 @@ class SiteSocialProfileView(FormView):
         form = self.form_class(request.POST)
         if form.is_valid():
             user = request.user
-            dribble = request.POST['dribble']
+            repo = Repo.objects.get(main=True)
+            dribbble = request.POST['dribbble']
             email = request.POST['email']
             facebook = request.POST['facebook']
             flickr = request.POST['flickr']
@@ -377,7 +398,7 @@ class SiteSocialProfileView(FormView):
 
             site_social_profile = SiteSocialProfile(
                 user = user,
-                dribble = dribble,
+                dribbble = dribbble,
                 email = email,
                 facebook = facebook,
                 flickr = flickr,
@@ -394,8 +415,8 @@ class SiteSocialProfileView(FormView):
                 google_analytics = google_analytics
             )
             site_social_profile.save()
-            create_config_file(user)
-
+            create_config_file(user, repo)
+            push_online(user, repo)
             return HttpResponse('Social data saved')
 
 
@@ -433,7 +454,9 @@ class SiteThemeView(FormView):
         form = self.form_class(request.POST)
         if form.is_valid():
             user = request.user
+            repo = Repo.objects.get(main=True)
             theme = request.POST['theme']
-            save_site_theme_data(user, theme)
-            create_config_file(user)
+            save_site_theme_data(repo, theme)
+            create_config_file(user, repo)
+            push_online(user, repo)
             return HttpResponse('THEME SAVED!')
