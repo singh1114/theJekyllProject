@@ -11,6 +11,7 @@ from github import Github
 
 import html2markdown
 import os
+import re
 import shutil
 import subprocess
 
@@ -108,9 +109,9 @@ def push_online(user, repo):
     subprocess.Popen(['/bin/bash', 'gitsendupstream.sh', user.username, repo.repo])
 
 
-def save_site_data(user, title=None, description=None, avatar=None):
+def save_site_data(repo, title=None, description=None, avatar=None):
     site_data = SiteData(
-        user=user,
+        repo=repo,
         title=title,
         description=description,
         avatar=avatar
@@ -118,41 +119,33 @@ def save_site_data(user, title=None, description=None, avatar=None):
     site_data.save()
 
 
-def save_site_theme_data(user, theme=None):
+def save_site_theme_data(repo, theme=None):
     site_theme = SiteTheme(
-        user=user,
+        repo=repo,
         theme=theme
     )
     site_theme.save()
 
-# FIXME How can we only change the certain part of the file rather than changing the whole file.
-def create_config_file(user):
+
+def create_config_file(user, repo):
     user = User.objects.get(username=user.username)
     try:
-        site_data = SiteData.objects.get(user=user)
+        site_data = SiteData.objects.get(repo=repo)
 
         title = site_data.title
         description = site_data.description
         # FIXME Check avatar properly
         avatar = site_data.avatar
     except:
-        title = ''
-        description = ''
+        title = 'your name'
+        description = 'Web Developer from Somewhere'
         # FIXME Create avatar properly
         #avatar = ''
-
-    # create string
-    file_string = '# first phase starts\n'
-    file_string += 'title: ' + title + '\n'
-    file_string += 'description: ' + description + '\n'
-    # We have to create the github URL of the avatar
-    #file_string += 'avatar: ' + avatar + '\n'
-    file_string += '# first phase ends\n'
 
     try:
         site_social_profile = SiteSocialProfile.objects.get(user=user)
 
-        dribble = site_social_profile.dribble
+        dribbble = site_social_profile.dribbble
         email = site_social_profile.email
         facebook = site_social_profile.facebook
         flickr = site_social_profile.flickr
@@ -169,7 +162,7 @@ def create_config_file(user):
         google_analytics = site_social_profile.google_analytics
 
     except:
-            dribble = ''
+            dribbble = ''
             email = ''
             facebook = ''
             flickr = ''
@@ -185,40 +178,61 @@ def create_config_file(user):
             disqus = ''
             google_analytics = ''
 
-
-    file_string += '# second phase starts\n'
-    file_string += 'dribble: ' +  dribble + '\n'
-    file_string += 'email: ' +  email + '\n'
-    file_string += 'facebook: ' +  facebook + '\n'
-    file_string += 'flickr: ' +  flickr + '\n'
-    file_string += 'github: ' +  github + '\n'
-    file_string += 'instagram: ' +  instagram + '\n'
-    file_string += 'linkedin: ' +  linkedin + '\n'
-    file_string += 'pinterest: ' +  pinterest + '\n'
-    file_string += 'rss: ' +  rss + '\n'
-    file_string += 'twitter: ' +  twitter + '\n'
-    file_string += 'stackoverflow: ' +  stackoverflow + '\n'
-    file_string += 'youtube: ' +  youtube + '\n'
-    file_string += 'googleplus: ' +  googleplus + '\n'
-    file_string += 'disqus: ' +  disqus + '\n'
-    file_string += 'google_analytics: ' +  google_analytics + '\n'
-    file_string += '# second phase ends\n'
-
     try:
         site_theme = SiteTheme.objects.get(user=user)
 
         theme = site_theme.theme
 
     except:
-        theme = ''
+        theme = 'jekyll-theme-cayman'
 
-    file_string += '# third phase starts\n'
-    file_string += 'theme: ' + theme + '\n'
-    file_string += '# third phase ends\n'
-    file = open('_config.yml', 'w')
-    file.write(file_string)
-    file.close()
-    shutil.move('_config.yml', 'theJekyllProject/_config.yml')
+    with open('JekLog/' + user.username + '/' + repo.repo + '/' + '_config.yml', 'r') as conf_file:
+        file_data = conf_file.read()
+
+    title_data = re.findall(r'name:.+', file_data)
+    description_data = re.findall(r'description:.+', file_data)
+    avatar_data = re.findall(r'avatar:.+', file_data)
+
+    dribbble_data = re.findall(r'dribbble:.+|dribbble:', file_data)
+    email_data = re.findall(r'email:.+|email:', file_data)
+    facebook_data = re.findall(r'facebook:.+|facebook:', file_data)
+    flickr_data = re.findall(r'flickr:.+|flickr:', file_data)
+    github_data = re.findall(r'github:.+|github:', file_data)
+    instagram_data = re.findall(r'instagram:.+|instagram:', file_data)
+    linkedin_data = re.findall(r'linkedin:.+|linkedin:', file_data)
+    pinterest_data = re.findall(r'pinterest:.+|pinterest:', file_data)
+    rss_data = re.findall(r'rss:.+|rss:', file_data)
+    twitter_data = re.findall(r'twitter:.+|twitter:', file_data)
+    stackoverflow_data = re.findall(r'stackoverflow:.+|stackoverflow:', file_data)
+    youtube_data = re.findall(r'youtube:.+|youtube:', file_data)
+    googleplus_data = re.findall(r'googleplus:.+|googleplus:', file_data)
+    disqus_data = re.findall(r'disqus:.+|disqus:', file_data)
+    google_analytics_data = re.findall(r'google_analytics:.+|google_analytics:', file_data)
+
+    theme_data = re.findall(r'theme:.+|theme:', file_data)
+
+    file_data = file_data.replace(title_data[0], 'name: ' + title)
+    file_data = file_data.replace(description_data[0], 'description: ' + description)
+    #file_data = file_data.replace(avatar_data[0], 'avatar: ' + avatar)
+    file_data = file_data.replace(dribbble_data[0], 'dribbble: ' + dribbble)
+    file_data = file_data.replace(email_data[0], 'email: ' + email)
+    file_data = file_data.replace(facebook_data[0], 'facebook: ' + facebook)
+    file_data = file_data.replace(flickr_data[0], 'flickr: ' + flickr)
+    file_data = file_data.replace(github_data[0], 'github: ' + github)
+    file_data = file_data.replace(instagram_data[0], 'instagram: ' + instagram)
+    file_data = file_data.replace(linkedin_data[0], 'linkedin: ' + linkedin)
+    file_data = file_data.replace(pinterest_data[0], 'pinterest: ' + pinterest)
+    file_data = file_data.replace(rss_data[0], 'rss: ' + rss)
+    file_data = file_data.replace(twitter_data[0], 'twitter: ' + twitter)
+    file_data = file_data.replace(stackoverflow_data[0], 'stackoverflow: ' + stackoverflow)
+    file_data = file_data.replace(youtube_data[0], 'youtube: ' + youtube)
+    file_data = file_data.replace(googleplus_data[0], 'googleplus: ' + googleplus)
+    file_data = file_data.replace(disqus_data[0], 'disqus: ' + disqus)
+    file_data = file_data.replace(google_analytics_data[0], 'google_analytics: ' + google_analytics)
+    file_data = file_data.replace(theme_data[0], 'theme: ' + theme)
+
+    with open('JekLog/' + user.username + '/' + repo.repo + '/' + '_config.yml', 'w') as conf_file:
+        conf_file.write(file_data)
 
 
 def get_repo_list(token):

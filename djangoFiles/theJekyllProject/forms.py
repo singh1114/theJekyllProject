@@ -78,9 +78,9 @@ class SiteProfileForm(forms.Form):
 
 class SiteSocialProfileForm(forms.Form):
     # TODO Add initials
-    dribble = forms.CharField(
+    dribbble = forms.CharField(
         max_length=200,
-        help_text='Your dribble username',
+        help_text='Your dribbble username',
         required=False
     )
     email = forms.EmailField(

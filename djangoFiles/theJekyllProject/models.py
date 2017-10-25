@@ -53,8 +53,8 @@ class PostCategory(models.Model):
 
 
 class SiteData(models.Model):
-    user = models.OneToOneField(
-        User,
+    repo = models.OneToOneField(
+        Repo,
         on_delete=models.CASCADE,
         primary_key=True,
     )
@@ -77,7 +77,7 @@ class SiteSocialProfile(models.Model):
         on_delete=models.CASCADE,
         primary_key=True,
     )
-    dribble = models.CharField(
+    dribbble = models.CharField(
         max_length=200,
         null=True,
         blank=True
@@ -175,8 +175,8 @@ class SiteExclude(models.Model):
 
 
 class SiteTheme(models.Model):
-    user = models.OneToOneField(
-        User,
+    repo = models.OneToOneField(
+        Repo,
         on_delete=models.CASCADE,
         primary_key=True,
     )
