@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 
 from datetime import datetime
 from django.core.urlresolvers import reverse
+from django.core.mail import send_mail
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.shortcuts import redirect
@@ -13,6 +14,7 @@ from django.views.generic.edit import UpdateView
 from django.views.generic.edit import DeleteView
 from django.views.generic.list import ListView
 from django.contrib.auth.models import User
+from django.contrib.auth.models import AnonymousUser
 
 from markdown2 import Markdown
 
@@ -23,6 +25,7 @@ from theJekyllProject.forms import SitePluginForm
 from theJekyllProject.forms import SiteProfileForm
 from theJekyllProject.forms import SiteThemeForm
 from theJekyllProject.forms import SiteSocialProfileForm
+from theJekyllProject.forms import ContactForm
 
 from theJekyllProject.functions import assign_boolean_to_comments
 from theJekyllProject.functions import save_post_database
@@ -51,6 +54,34 @@ from theJekyllProject.models import Repo
 from theJekyllProject.models import SiteData
 from theJekyllProject.models import SiteSocialProfile
 from theJekyllProject.models import SiteTheme
+from theJekyllProject.models import Contact
+
+
+class IndexView(FormView):
+    template_name = 'theJekyllProject/index.html'
+    form_class = ContactForm
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
+        if(form.is_valid()):
+            first_name = request.POST['first_name']
+            last_name = request.POST['last_name']
+            email = request.POST['email']
+            message = request.POST['message']
+            jeklog_email = 'jeklogjek@gmail.com'
+            contact = Contact(
+                first_name = first_name,
+                last_name = last_name,
+                email = email,
+                message = message
+            )
+            contact.save()
+
+            subject = "New mail from " + first_name + " " + last_name + " " + email
+            send_mail(subject, message, email, [jeklog_email], fail_silently=False)
+
+        return render(request, 'theJekyllProject/contact_status.html')
+        
 
 
 class RepoListView(TemplateView):
@@ -304,6 +335,8 @@ class SelectMainSiteView(View):
 
 class DecideHomeView(View):
     def get(self, request, *args, **kwargs):
+        if not request.user.is_authenticated():
+            return redirect(reverse('index'))
         user = self.request.user
         repo = Repo.objects.filter(user=user)
         if(len(repo) is 0):

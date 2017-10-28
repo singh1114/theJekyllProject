@@ -180,3 +180,14 @@ class SiteThemeForm(forms.Form):
         required=False,
         help_text='Theme of the site'
     )
+
+
+class ContactForm(forms.Form):
+    first_name = forms.CharField(label="First Name", max_length=200,
+                               widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ranvir...','name': 'first_name'}))
+    last_name = forms.CharField(label="Last Name", max_length=200,
+                               widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Singh...','name': 'last_name'}))
+    email = forms.EmailField(label="Email", max_length=200,
+                               widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'jeklogjek@gmail.com...','name': 'email_name'}))
+    message = forms.CharField(label="Message", max_length=5000,
+                               widget=forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Type your message here..', 'name': 'message'}))

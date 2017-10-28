@@ -25,7 +25,7 @@
     <nav class="navbar navbar-expand-lg bg-danger fixed-top navbar-transparent " color-on-scroll="400">
         <div class="container">
             <div class="navbar-translate">
-                <a class="navbar-brand" href="#" rel="tooltip" title="Designed by Invision. Coded by Creative Tim" data-placement="bottom" target="_blank">
+                <a class="navbar-brand" href="/" rel="tooltip">
                     <strong>JekLog</strong>
                 </a>
                 <button class="navbar-toggler navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
@@ -42,31 +42,13 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="./documentation/tutorial-components.html" target="_blank">
+                        <a class="nav-link" href="javascript:void(0)" onclick="scrollToAboutUs()">
                             <p><strong>About us</strong></p>
                         </a>
                     </li>
-                    <!--<li class="nav-item">
-                        <a class="nav-link btn btn-neutral" href="https://www.creative-tim.com/product/now-ui-kit-pro" target="_blank">
-                            <i class="now-ui-icons arrows-1_share-66"></i>
-                            <p>Upgrade to PRO</p>
-                        </a>
-                    </li>-->
                     <li class="nav-item">
                         <a class="nav-link btn btn-neutral btn-round" title="Star us on GitHub" href="https://github.com/singh1114/theJekyllProject" target="_blank">
                             <p><strong>GitHub</strong></p>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" rel="tooltip" title="Like us on Facebook" data-placement="bottom" href="https://www.facebook.com/CreativeTim" target="_blank">
-                            <i class="fa fa-facebook-square"></i>
-                            <p class="d-lg-none d-xl-none">Facebook</p>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" rel="tooltip" title="Follow us on Instagram" data-placement="bottom" href="https://www.instagram.com/CreativeTimOfficial" target="_blank">
-                            <i class="now-ui-icons users_single-02"></i>
-                            <p class="d-lg-none d-xl-none">Instagram</p>
                         </a>
                     </li>
                 </ul>
@@ -155,7 +137,7 @@
                     </div>
                 </div>
             </div>
-            <div class="section section-tabs">
+            <div class="section section-aboutus" id="aboutus">
                 <div class="container" style="text-align:center;">
                     <h3 class="category" style="color:#343434">About us</h3><br>
                     <div class="row">
@@ -233,7 +215,7 @@
                     </div>
                 </div>
             </div>
-            <div class="section section-signup" style="background-image: url(' {% static "nowui/assets/img/bg11.jpg" %}'); background-size: cover; background-position: top center; padding-top:50px">
+            <div class="section section-contact" id="contact" style="background-image: url(' {% static "nowui/assets/img/bg11.jpg" %}'); background-size: cover; background-position: top center; padding-top:50px">
                 <div class="container" style="text-align:center;">
                     <h3 class="category" style="color:#343434">Contact us</h3>
                     <div class="row" style="padding:auto; text-align: center;">
@@ -316,9 +298,17 @@
 
     function scrollToDownload() {
 
-        if ($('.section-download').length != 0) {
+        if ($('.section-contact').length != 0) {
             $("html, body").animate({
-                scrollTop: $('.section-download').offset().top
+                scrollTop: $('.section-contact').offset().top
+            }, 1000);
+        }
+    }
+    function scrollToAboutUs() {
+
+        if ($('.section-aboutus').length != 0) {
+            $("html, body").animate({
+                scrollTop: $('.section-aboutus').offset().top
             }, 1000);
         }
     }

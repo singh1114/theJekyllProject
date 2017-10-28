@@ -6,6 +6,25 @@ from django.db import models
 from ckeditor.fields import RichTextField
 
 
+class Contact(models.Model):
+    first_name = models.CharField(
+        max_length=200
+    )
+    last_name = models.CharField(
+        max_length = 200,
+        null=True,
+        blank=True
+    )
+    email = models.EmailField(
+        max_length = 200,
+        null=True,
+        blank=True
+    )
+    message = models.CharField(
+        max_length=5000
+    )
+
+    
 class Repo(models.Model):
     user = models.ForeignKey(
         User,
