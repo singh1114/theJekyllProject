@@ -481,6 +481,9 @@
 .section-images {
     padding-bottom: 0;
 }
+#techused {
+    min-height: 320px;
+}
 
 @media screen and (max-width: 991px) {
     .section-navbars .navbar-collapse {
