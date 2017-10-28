@@ -1,4 +1,5 @@
 from django.conf.urls import url, include
+#from django.views.generic import TemplateView
 
 from theJekyllProject.views import AddPostView
 from theJekyllProject.views import SiteProfileView
@@ -13,8 +14,10 @@ from theJekyllProject.views import CreateRepoView
 from theJekyllProject.views import ChooseSiteView
 from theJekyllProject.views import SelectMainSiteView
 from theJekyllProject.views import DecideHomeView
+from theJekyllProject.views import IndexView
 
 urlpatterns = [
+    url(r'^index/?', IndexView.as_view(), name='index'),
     url(r'^$', DecideHomeView.as_view(), name='decide-home-view'),
     url(r'^repolist/?', RepoListView.as_view(), name='repo-list'),
     url(r'^createrepo/?', CreateRepoView.as_view(), name='create-repo'),
