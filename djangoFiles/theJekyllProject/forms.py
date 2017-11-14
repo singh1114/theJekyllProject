@@ -155,67 +155,132 @@ class SiteSocialProfileForm(forms.Form):
     facebook = forms.CharField(
         max_length=200,
         required=False,
-        help_text='facebook username'
+        help_text='facebook username',
+        widget = forms.TextInput(attrs= {
+                'class': 'form-control',
+                'placeholder': 'ranvir.singh',
+                'name': 'facebook'
+            })
     )
     flickr = forms.CharField(
         max_length=200,
         required=False,
-        help_text='flickr username'
+        help_text='flickr username',
+        widget = forms.TextInput(attrs= {
+                'class': 'form-control',
+                'placeholder': 'ranvir.singh',
+                'name': 'flickr'
+            })
     )
     github = forms.CharField(
         max_length=200,
         required=False,
-        help_text='GitHub username'
+        help_text='GitHub username',
+        widget = forms.TextInput(attrs= {
+                'class': 'form-control',
+                'placeholder': 'singh1114',
+                'name': 'github'
+            })
     )
     instagram = forms.CharField(
         max_length=200,
         required=False,
-        help_text='Instagram username'
+        help_text='Instagram username',
+        widget = forms.TextInput(attrs= {
+                'class': 'form-control',
+                'placeholder': 'ranvir.singh',
+                'name': 'instagram'
+            })
     )
     linkedin = forms.CharField(
         max_length=200,
         required=False,
-        help_text='Linkedin username'
+        help_text='Linkedin username',
+        widget = forms.TextInput(attrs= {
+                'class': 'form-control',
+                'placeholder': 'ranvir.singh',
+                'name': 'linkedin'
+            })
     )
     pinterest = forms.CharField(
         max_length=200,
         required=False,
-        help_text='pinterest username'
+        help_text='pinterest username',
+        widget = forms.TextInput(attrs= {
+                'class': 'form-control',
+                'placeholder': 'ranvir.singh',
+                'name': 'pinterest'
+            })
     )
     rss = forms.CharField(
         max_length=200,
         required=False,
-        help_text='rss username'
+        help_text='rss username',
+        widget = forms.TextInput(attrs= {
+                'class': 'form-control',
+                'placeholder': 'ranvir.singh',
+                'name': 'rss'
+            })
     )
     twitter = forms.CharField(
         max_length=200,
         required=False,
-        help_text='twitter username'
+        help_text='twitter username',
+        widget = forms.TextInput(attrs= {
+                'class': 'form-control',
+                'placeholder': 'ranvir.singh',
+                'name': 'twitter'
+            })
     )
     stackoverflow = forms.CharField(
         max_length=200,
         required=False,
-        help_text='stackoverflow username'
+        help_text='stackoverflow username',
+        widget = forms.TextInput(attrs= {
+                'class': 'form-control',
+                'placeholder': 'ranvir.singh',
+                'name': 'stackoverflow'
+            })
     )
     youtube = forms.CharField(
         max_length=200,
         required=False,
-        help_text='youtube username'
+        help_text='youtube username',
+        widget = forms.TextInput(attrs= {
+                'class': 'form-control',
+                'placeholder': 'ranvir.singh',
+                'name': 'youtube'
+            })
     )
     googleplus = forms.CharField(
         max_length=200,
         required=False,
-        help_text='google plus username'
+        help_text='google plus username',
+        widget = forms.TextInput(attrs= {
+                'class': 'form-control',
+                'placeholder': 'ranvir.singh',
+                'name': 'googleplus'
+            })
     )
     disqus = forms.CharField(
         max_length=200,
         required=False,
-        help_text='disqus username'
+        help_text='disqus username',
+        widget = forms.TextInput(attrs= {
+                'class': 'form-control',
+                'placeholder': 'ranvir.singh',
+                'name': 'disqus'
+            })
     )
     google_analytics = forms.CharField(
         max_length=200,
         required=False,
-        help_text='google analytics tracking id'
+        help_text='google analytics tracking id',
+        widget = forms.TextInput(attrs= {
+                'class': 'form-control',
+                'placeholder': 'UASR32323232_',
+                'name': 'google_analytics'
+            })
     )
 
 
