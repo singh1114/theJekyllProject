@@ -24,7 +24,7 @@ class Contact(models.Model):
         max_length=5000
     )
 
-    
+
 class Repo(models.Model):
     user = models.ForeignKey(
         User,
@@ -39,13 +39,14 @@ class Repo(models.Model):
 
 
 class Post(models.Model):
-    user = models.ForeignKey(
-        User,
+    repo = models.ForeignKey(
+        Repo,
         on_delete=models.CASCADE,
     )
     author = models.CharField(max_length=100, null=True, blank=True)
     comments = models.BooleanField(default=True)
-    date = models.DateTimeField()
+    date = models.DateField(auto_now_add=True,)
+    time = models.TimeField(auto_now_add=True,)
     layouts = (
         ('post', 'post'),
         ('page', 'page')

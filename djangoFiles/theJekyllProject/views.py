@@ -81,7 +81,6 @@ class IndexView(FormView):
             send_mail(subject, message, email, [jeklog_email], fail_silently=False)
 
         return render(request, 'theJekyllProject/contact_status.html')
-        
 
 
 class RepoListView(TemplateView):
@@ -102,6 +101,19 @@ class RepoListView(TemplateView):
 class CreateRepoView(FormView):
     template_name = 'theJekyllProject/create_repo.html'
     form_class = RepoForm
+
+    def get(self, request, *args, **kwargs):
+        user = request.user
+        user = User.objects.get(username=user.username)
+        social = user.social_auth.get(provider='github')
+        user_token = social.extra_data['access_token']
+
+        repo_list = get_repo_list(user_token)
+
+        return render(request, 'theJekyllProject/create_repo.html', context={
+            'repo_list': repo_list,
+            'form': self.form_class,
+        })
 
     def post(self, request, *args, **kwargs):
         user = request.user
@@ -138,10 +150,12 @@ class AddPostView(FormView):
     def post(self, request, *args, **kwargs):
         user = request.user
         form = self.form_class(request.POST)
+        repo = Repo.objects.get(main=True)
         if form.is_valid():
             author = request.POST['author']
             comments = request.POST['comments']
             date = request.POST['date']
+            time = request.POST['time']
             layout = request.POST['layout']
             title = request.POST['title']
             content = request.POST['content']
@@ -152,18 +166,16 @@ class AddPostView(FormView):
             comments = assign_boolean_to_comments(comments)
 
             # save stuff to the post database
-            post = save_post_database(user, author, comments, date, layout, title, content)
+            post = save_post_database(repo, author, comments, date, time, layout, title, content)
 
             # save stuff to the post_category database
             save_post_category_database(post, category)
 
             # Create file name
-            date_obj = datetime.strptime(date, '%Y-%m-%d %H:%M:%S')
-            only_date = date_obj.date()
-            file_name = create_file_name(only_date, title)
+            file_name = create_file_name(date, title)
 
             # Create header content for the markdown file
-            head_content = header_content(author, comments, date, layout, title)
+            head_content = header_content(author, comments, date, time, layout, title)
 
             # Convert the body content to markdown
             body_content = convert_content(content)
@@ -187,7 +199,8 @@ class PostListView(ListView):
     paginate_by = 5
 
     def get_queryset(self):
-        post_list = Post.objects.order_by('-date').filter(user=self.request.user)
+        repo = Repo.objects.get(main=True)
+        post_list = Post.objects.order_by('-date').filter(repo=repo)
         return post_list
 
 
@@ -202,6 +215,7 @@ class PostUpdateView(FormView):
             author = post.author
             comments = post.comments
             date = post.date
+            time = post.time
             layout = post.layout
             title = post.title
             content = post.content
@@ -217,6 +231,7 @@ class PostUpdateView(FormView):
                 'author': author,
                 'comments': comments,
                 'date': date,
+                'time': time,
                 'layout': layout,
                 'title': title,
                 'content': content,
@@ -234,6 +249,7 @@ class PostUpdateView(FormView):
             author = request.POST['author']
             comments = request.POST['comments']
             date = request.POST['date']
+            time = request.POST['time']
             layout = request.POST['layout']
             title = request.POST['title']
             content = request.POST['content']
@@ -244,17 +260,15 @@ class PostUpdateView(FormView):
             comments = assign_boolean_to_comments(comments)
 
             # save stuff to the post database
-            post = save_post_database(user, author, comments, date, layout, title, content, pk)
+            post = save_post_database(repo, author, comments, date, time, layout, title, content, pk)
 
             # save stuff to the post_category database
             save_post_category_database(post, category, pk)
 
-            date_obj = datetime.strptime(date, '%Y-%m-%d %H:%M:%S')
-            only_date = date_obj.date()
-            file_name = create_file_name(only_date, title)
+            file_name = create_file_name(date, title)
 
             # Create header content for the markdown file
-            head_content = header_content(author, comments, date, layout, title)
+            head_content = header_content(author, comments, date, time, layout, title)
 
             # Convert the body content to markdown
             body_content = convert_content(content)
