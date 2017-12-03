@@ -15,6 +15,7 @@ from theJekyllProject.views import ChooseSiteView
 from theJekyllProject.views import SelectMainSiteView
 from theJekyllProject.views import DecideHomeView
 from theJekyllProject.views import IndexView
+from theJekyllProject.views import PageListView
 
 urlpatterns = [
     url(r'^index/?', IndexView.as_view(), name='index'),
@@ -36,4 +37,7 @@ urlpatterns = [
     url(r'^siteplugin/?', SitePluginView.as_view(), name='siteplugin'),
     url(r'^siteexclude/?', SiteExcludeView.as_view(), name='siteexclude'),
     url(r'^sitetheme/?', SiteThemeView.as_view(), name='sitetheme'),
+    
+    # urls about pages
+    url(r'^pages_list/?', PageListView.as_view(), name='page-list'),
 ]

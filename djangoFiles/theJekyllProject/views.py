@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 
 from datetime import datetime
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.urlresolvers import reverse
 from django.core.mail import send_mail
 from django.http import HttpResponse, HttpResponseRedirect
@@ -47,6 +48,7 @@ from theJekyllProject.functions import select_main_site
 from theJekyllProject.functions import push_online
 from theJekyllProject.functions import add_theme_name
 from theJekyllProject.functions import change_site_baseurl
+from theJekyllProject.functions import read_all_pages
 
 from theJekyllProject.models import Post
 from theJekyllProject.models import PostCategory
@@ -507,3 +509,26 @@ class SiteThemeView(FormView):
             create_config_file(user, repo)
             push_online(user, repo)
             return HttpResponse('THEME SAVED!')
+
+
+class PageListView(LoginRequiredMixin, TemplateView):
+    """PageListView to list all the pages in the website
+
+    Example:
+        Click on the pages button when the user is logged in.
+        We can see the list of pages only if the user is logged in.
+
+    TODO:
+        * Read all .md files in the root directory of the blog code.
+        * Put them in the list.
+        * Pass that list further.
+    """
+    def get(self, request, *args, **kwargs):
+        user = request.user
+        repo = Repo.objects.get(main=True)
+        pages = read_all_pages(user, repo)
+
+        return render(request, 'theJekyllProject/pages_list.html', context={
+            'pages': pages,
+        })
+
