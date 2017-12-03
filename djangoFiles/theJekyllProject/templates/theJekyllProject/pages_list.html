@@ -1,0 +1,13 @@
+{% extends 'theJekyllProject/base.html' %}
+{% load staticfiles %}
+{% block content %}
+  {% if pages %}
+  <h1>Pages</h1>
+  {% for page in pages %}
+    <button href="assingsomething">{{ page }}</button>
+  {% endfor %}
+  {% else %}
+  <h3>No page found.</h3>
+  {% endif %}
+
+{% endblock %}

@@ -320,3 +320,13 @@ def select_main_site(user, pk):
         if repo.id is not current_repo.id:
             repo.main = False
             repo.save()
+
+
+def read_all_pages(user, repo):
+    base_dir = settings.BASE_DIR
+    pages = []
+    for file in os.listdir(base_dir + "/../JekLog/" + user.username + "/" + repo.repo):
+        if file.endswith(".md"):
+                pages.append(file)
+
+    return pages
