@@ -44,7 +44,7 @@ class AddPostForm(forms.Form):
         help_text='Date of posting',
         initial=timezone.now().date(),
         widget = forms.TextInput(attrs= {
-                'class': 'form-control date-picker',
+                'class': 'form-control',
                 'name': 'date'
             })
     )
@@ -54,7 +54,7 @@ class AddPostForm(forms.Form):
         initial=timezone.now().time(),
         widget = forms.TextInput(attrs= {
                 'class': 'form-control',
-                'name': 'date'
+                'name': 'time'
             })
     )
 
