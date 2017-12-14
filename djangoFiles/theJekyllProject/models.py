@@ -64,6 +64,19 @@ class Post(models.Model):
         return self.title + str(self.date)
 
 
+class Page(models.Model):
+    repo = models.ForeignKey(
+        Repo,
+        on_delete=models.CASCADE
+    )
+    title = models.CharField(max_length=2000)
+    permalink = models.CharField(max_length=2000)
+    content = RichTextField()
+    
+    def __str__(self):
+        return self.title
+
+
 class PostCategory(models.Model):
     post = models.ForeignKey(Post)
     category = models.CharField(max_length=200, null= True, blank=True)
