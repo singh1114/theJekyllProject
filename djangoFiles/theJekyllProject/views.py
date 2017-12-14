@@ -125,6 +125,7 @@ class CreateRepoView(FormView):
             create_repo(user, repo)
             save_repo_data(user, repo)
             copy_jekyll_files(user, repo)
+            read_all_pages(user, repo)
             add_theme_name(user, repo)
             change_site_baseurl(user, repo)
             run_git_script(user, repo)
@@ -201,7 +202,8 @@ class PostListView(ListView):
     paginate_by = 5
 
     def get_queryset(self):
-        repo = Repo.objects.get(main=True)
+        user = self.request.user
+        repo = Repo.objects.get(user=user, main=True)
         post_list = Post.objects.order_by('-date').filter(repo=repo)
         return post_list
 
@@ -510,25 +512,25 @@ class SiteThemeView(FormView):
             push_online(user, repo)
             return HttpResponse('THEME SAVED!')
 
-
-class PageListView(LoginRequiredMixin, TemplateView):
-    """PageListView to list all the pages in the website
-
-    Example:
-        Click on the pages button when the user is logged in.
-        We can see the list of pages only if the user is logged in.
-
-    TODO:
-        * Read all .md files in the root directory of the blog code.
-        * Put them in the list.
-        * Pass that list further.
-    """
-    def get(self, request, *args, **kwargs):
-        user = request.user
-        repo = Repo.objects.get(main=True)
-        pages = read_all_pages(user, repo)
-
-        return render(request, 'theJekyllProject/pages_list.html', context={
-            'pages': pages,
-        })
-
+#
+#class PageListView(LoginRequiredMixin, TemplateView):
+#    """PageListView to list all the pages in the website
+#
+#    Example:
+#        Click on the pages button when the user is logged in.
+#        We can see the list of pages only if the user is logged in.
+#
+#    TODO:
+#        * Read all .md files in the root directory of the blog code.
+#        * Put them in the list.
+#        * Pass that list further.
+#    """
+#    def get(self, request, *args, **kwargs):
+#        user = request.user
+#        repo = Repo.objects.get(user=user, main=True)
+#        pages = read_all_pages(user, repo)
+#
+#        return render(request, 'theJekyllProject/pages_list.html', context={
+#            'pages': pages,
+#        })
+#

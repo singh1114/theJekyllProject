@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.contrib.auth.models import User
 
+from theJekyllProject.models import Page
 from theJekyllProject.models import Post
 from theJekyllProject.models import PostCategory
 from theJekyllProject.models import SiteData
@@ -9,7 +10,7 @@ from theJekyllProject.models import SiteTheme
 from theJekyllProject.models import Repo
 
 from github import Github
-
+from markdown2 import Markdown
 import html2markdown
 import os
 import re
@@ -292,6 +293,45 @@ def add_theme_name(user, repo_name):
         conf_file.write('theme: jekyll-theme-cayman')
 
 
+def read_all_pages(user, repo_name):
+    """read_all_pages will put all the pages information into the database
+
+    Example:
+        No need to click any button this is the default behaviour.
+
+    TODO:
+        * Read all .md files in the root directory of the blog code.
+        * Leave the README and 404 file.
+        * Process all other files and put things into Page model.
+    """
+    base_dir = settings.BASE_DIR
+    for file in os.listdir(base_dir + "/../JekLog/" + user.username + "/" + repo_name):
+        if file.endswith(".md"):
+            if(str(file) != 'README.md' and str(file) != '404.md'):
+                with open(base_dir+ '/../JekLog/' + user.username + '/' + repo_name + '/' + str(file)) as page_file:
+                    file_data = page_file.read()
+                    title = re.findall(r'title:.+', file_data)
+                    permalink = re.findall(r'permalink:.+', file_data)
+                    page_text = ''
+                    temp = 0
+                    list_file_data = file_data.split('\n')
+                    for line in list_file_data:
+                        if(temp==2):
+                            page_text += line
+                        if(temp == 1):
+                            if(line == '---'):
+                                temp=2
+                        if(line == '---' and temp==0):
+                            temp=1
+                    title = title[0].replace('title: ', '')
+                    permalink = permalink[0].replace('permalink: ', '')
+                    repo = Repo.objects.get(main=True, user=user)
+                    markdowner = Markdown()
+                    page_text = markdowner.convert(page_text)
+                    page = Page(repo=repo, title=title, permalink=permalink, content=page_text)
+                    page.save()
+
+
 def change_site_baseurl(user, repo_name):
     base_dir = settings.BASE_DIR
     with open(base_dir + '/../' +'JekLog/' + user.username + '/' + repo_name + '/' + '_config.yml', 'r') as conf_file:
@@ -312,7 +352,7 @@ def run_git_script(user, repo_name):
 
 
 def select_main_site(user, pk):
-    all_repos = Repo.objects.all()
+    all_repos = Repo.objects.filter(user=user)
     current_repo = Repo.objects.get(pk=pk)
     current_repo.main = True
     current_repo.save()
@@ -320,13 +360,3 @@ def select_main_site(user, pk):
         if repo.id is not current_repo.id:
             repo.main = False
             repo.save()
-
-
-def read_all_pages(user, repo):
-    base_dir = settings.BASE_DIR
-    pages = []
-    for file in os.listdir(base_dir + "/../JekLog/" + user.username + "/" + repo.repo):
-        if file.endswith(".md"):
-                pages.append(file)
-
-    return pages
