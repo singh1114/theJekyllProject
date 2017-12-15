@@ -23,6 +23,33 @@ class RepoForm(forms.Form):
     )
 
 
+class AddPageForm(forms.Form):
+    title = forms.CharField(
+        help_text='title of the post',
+        max_length=400,
+        widget = forms.TextInput(attrs= {
+                'class': 'form-control',
+                'placeholder': 'About',
+                'name': 'title'
+            })
+    )
+
+    permalink = forms.CharField(
+        label='permalink',
+        max_length=400,
+        widget = forms.TextInput(attrs= {
+                'class': 'form-control',
+                'placeholder': '/about/',
+                'name': 'permalink'
+            })
+    )
+
+    content = forms.CharField(
+        widget=CKEditorWidget(attrs= {
+                'class': 'form-control',
+                'name': 'content'
+            })
+    )
 class AddPostForm(forms.Form):
     author = forms.CharField(
         label='Author',

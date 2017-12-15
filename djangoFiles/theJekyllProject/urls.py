@@ -1,6 +1,7 @@
 from django.conf.urls import url, include
 #from django.views.generic import TemplateView
 
+from theJekyllProject.views import AddPageView
 from theJekyllProject.views import AddPostView
 from theJekyllProject.views import SiteProfileView
 from theJekyllProject.views import SiteSocialProfileView
@@ -15,6 +16,8 @@ from theJekyllProject.views import ChooseSiteView
 from theJekyllProject.views import SelectMainSiteView
 from theJekyllProject.views import DecideHomeView
 from theJekyllProject.views import IndexView
+from theJekyllProject.views import PageListView
+from theJekyllProject.views import PageUpdateView
 
 urlpatterns = [
     url(r'^index/?', IndexView.as_view(), name='index'),
@@ -36,7 +39,10 @@ urlpatterns = [
     url(r'^siteplugin/?', SitePluginView.as_view(), name='siteplugin'),
     url(r'^siteexclude/?', SiteExcludeView.as_view(), name='siteexclude'),
     url(r'^sitetheme/?', SiteThemeView.as_view(), name='sitetheme'),
-    
+
     # urls about pages
     #url(r'^pages_list/?', PageListView.as_view(), name='page-list'),
+    url(r'^updatepage/(?P<pk>\d+)$', PageUpdateView.as_view(), name='page-update'),
+    url(r'^addpage/?', AddPageView.as_view(), name='add-page'),
+    url(r'^pages/?$', PageListView.as_view(), name='page-list'),
 ]

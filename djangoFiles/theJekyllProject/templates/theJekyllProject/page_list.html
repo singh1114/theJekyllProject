@@ -1,0 +1,33 @@
+{% extends 'theJekyllProject/base.html' %}
+{% load staticfiles %}
+{% block content %}
+    <h1>Page List</h1>
+    <hr>
+    {% if page_list %}
+        <ul>
+            {% for page in page_list %}
+                <li>
+                    <a href="{% url 'page-update' pk=page.pk %}">{{ page.title }}</a>
+                    <hr>
+                </li>
+            {% endfor %}
+        </ul>
+        {% if is_paginated %}
+            <div class="pagination">
+                <span class="page-links">
+                    {% if page_obj.has_previous %}
+                        <a href="/listpages?page={{ page_obj.previous_page_number }}">previous</a>
+                    {% endif %}
+                    <span class="page-current">
+                        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                    </span>
+                    {% if page_obj.has_next %}
+                        <a href="/listpages?page={{ page_obj.next_page_number }}">next</a>
+                    {% endif %}
+                </span>
+            </div>
+        {% endif %}
+    {% else %}
+        <p>There are no Pages yet.</p>
+    {% endif %}
+{% endblock %}

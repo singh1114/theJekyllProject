@@ -19,6 +19,7 @@ from django.contrib.auth.models import AnonymousUser
 
 from markdown2 import Markdown
 
+from theJekyllProject.forms import AddPageForm
 from theJekyllProject.forms import AddPostForm
 from theJekyllProject.forms import RepoForm
 from theJekyllProject.forms import SiteExcludeForm
@@ -29,12 +30,15 @@ from theJekyllProject.forms import SiteSocialProfileForm
 from theJekyllProject.forms import ContactForm
 
 from theJekyllProject.functions import assign_boolean_to_comments
+from theJekyllProject.functions import page_header_content
 from theJekyllProject.functions import save_post_database
+from theJekyllProject.functions import save_page_database
 from theJekyllProject.functions import save_post_category_database
 from theJekyllProject.functions import create_file_name
 from theJekyllProject.functions import header_content
 from theJekyllProject.functions import convert_content
 from theJekyllProject.functions import write_file
+from theJekyllProject.functions import write_page_file
 from theJekyllProject.functions import move_file
 from theJekyllProject.functions import save_site_data
 from theJekyllProject.functions import save_site_theme_data
@@ -50,6 +54,7 @@ from theJekyllProject.functions import add_theme_name
 from theJekyllProject.functions import change_site_baseurl
 from theJekyllProject.functions import read_all_pages
 
+from theJekyllProject.models import Page
 from theJekyllProject.models import Post
 from theJekyllProject.models import PostCategory
 from theJekyllProject.models import Repo
@@ -153,7 +158,7 @@ class AddPostView(FormView):
     def post(self, request, *args, **kwargs):
         user = request.user
         form = self.form_class(request.POST)
-        repo = Repo.objects.get(main=True)
+        repo = Repo.objects.get(user=user, main=True)
         if form.is_valid():
             author = request.POST['author']
             comments = request.POST['comments']
@@ -192,7 +197,7 @@ class AddPostView(FormView):
 
             # Push the code online
             push_online(user, repo)
-        return HttpResponse('Post ADDED!')
+        return HttpResponseRedirect(reverse('home'))
 
 
 class PostListView(ListView):
@@ -248,7 +253,7 @@ class PostUpdateView(FormView):
         user = request.user
         pk = self.kwargs['pk']
         form = self.form_class(request.POST)
-        repo = Repo.objects.get(main=True)
+        repo = Repo.objects.get(user=user, main=True)
         if form.is_valid():
             author = request.POST['author']
             comments = request.POST['comments']
@@ -286,6 +291,124 @@ class PostUpdateView(FormView):
             # send the changes online
             push_online(user, repo)
         return HttpResponseRedirect(reverse('home'))
+
+
+class AddPageView(LoginRequiredMixin, FormView):
+    """AddPageView to add page
+
+    Example:
+        Click on the Add page button when the user is logged in.
+        We can add pages only if the user is logged in.
+
+    Tasks:
+        * Make this view for logged in people only.
+        * Load the form:
+        * convert the taken html to markdown
+        * create and move the files to proper locations
+        * Push the code to the repository.
+    """
+    template_name = 'theJekyllProject/addpage.html'
+    form_class = AddPageForm
+
+    def post(self, request, *args, **kwargs):
+        user = request.user
+        form = self.form_class(request.POST)
+        repo = Repo.objects.get(user=user, main=True)
+        if form.is_valid():
+            title = request.POST['title']
+            permalink = request.POST['permalink']
+            content = request.POST['content']
+
+            # save stuff to the page database
+            page = save_page_database(repo, title, permalink, content)
+
+            # Create header content for the markdown file
+            head_content = page_header_content(title, permalink)
+
+            # Convert the body content to markdown
+            body_content = convert_content(content)
+
+            # Write the content into files
+            write_page_file(title.lower(), user, repo, head_content, body_content)
+
+            # Push the code online
+            push_online(user, repo)
+        return HttpResponseRedirect(reverse('page-list'))
+
+
+class PageUpdateView(LoginRequiredMixin, FormView):
+    """PageUpdateView to add page
+
+    Example:
+        Click on any of the page when the user is logged in.
+        We can update the content of pages only if the user is logged in.
+
+    Tasks:
+        * Make this view for logged in people only.
+        * Load the form with content from the database
+        * convert the taken html to markdown
+        * create and move the files to proper locations
+        * Push the code to the repository
+    """
+    form_class = AddPageForm
+    template_name = 'theJekyllProject/addpage.html'
+
+    def get_form_kwargs(self):
+        pk = self.kwargs['pk']
+        try:
+            page = Page.objects.get(pk=pk)
+            title = page.title
+            permalink = page.permalink
+            content = page.content
+        except:
+            pass
+
+        form_kwargs = super(PageUpdateView, self).get_form_kwargs()
+        form_kwargs.update({
+            'initial': {
+                'title': title,
+                'permalink': permalink,
+                'content': content,
+            }
+        })
+        return form_kwargs
+
+    def post(self, request, *args, **kwargs):
+        user = request.user
+        pk = self.kwargs['pk']
+        form = self.form_class(request.POST)
+        repo = Repo.objects.get(user=user, main=True)
+        if form.is_valid():
+            title = request.POST['title']
+            permalink = request.POST['permalink']
+            content = request.POST['content']
+
+            page = save_page_database(repo, title, permalink, content)
+
+            # Create header content for the markdown file
+            head_content = page_header_content(title, permalink)
+
+            # Convert the body content to markdown
+            body_content = convert_content(content)
+
+            # Write the content into files
+            write_page_file(title.lower(), user, repo, head_content, body_content)
+
+            # Push the code online
+            push_online(user, repo)
+        return HttpResponseRedirect(reverse('page-update', args=[pk]))
+
+
+class PageListView(LoginRequiredMixin, ListView):
+    model = Page
+    template_name = 'theJekyllProject/page_list.html'
+    context_object_name = "page_list"
+
+    def get_queryset(self):
+        user = self.request.user
+        repo = Repo.objects.get(user=user, main=True)
+        page_list = Page.objects.filter(repo=repo)
+        return page_list
 
 
 class SiteProfileView(FormView):
