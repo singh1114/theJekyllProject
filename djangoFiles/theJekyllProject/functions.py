@@ -50,6 +50,24 @@ def save_post_database(repo, author, comments, date, time, layout, title, conten
     return post
 
 
+def save_page_database(repo, title, permalink, content, pk=None):
+    if pk is not None:
+        page = Page.objects.get(pk=pk)
+        page.title = title
+        page.permalink = permalink
+        page.content = content
+        page.save()
+    else:
+        page = Page(
+            repo=repo,
+            title=title,
+            permalink=permalink,
+            content=content,
+        )
+        page.save()
+    return page
+
+
 def save_post_category_database(post, category, pk=None):
     if pk is not None:
         # FIXME use filter instead of get
@@ -96,6 +114,19 @@ def header_content(author=None, comments=None, date=None, time=None, layout=None
     return string
 
 
+def page_header_content(title=None, permalink=None):
+    string = '---\n'
+    layout = 'page'
+    string += 'layout: ' + layout + '\n'
+    if(title is not None):
+        string += 'title: ' + title + '\n'
+    if(permalink is not None):
+        string += 'permalink: ' + permalink + '\n'
+
+    string += '---\n'
+
+    return string
+
 def convert_content(content):
     return html2markdown.convert(content)
 
@@ -103,6 +134,13 @@ def convert_content(content):
 def write_file(file_name, head_content, body_content):
     base_dir = settings.BASE_DIR
     file = open(base_dir + '/../JekLog/' + file_name, 'w+')
+    file.write(head_content + body_content)
+    file.close()
+
+
+def write_page_file(file_name, user, repo, head_content, body_content):
+    base_dir = settings.BASE_DIR
+    file = open(base_dir + '/../JekLog/' + user.username + '/' + repo.repo + '/' + file_name + '.md', 'w+')
     file.write(head_content + body_content)
     file.close()
 
@@ -317,7 +355,7 @@ def read_all_pages(user, repo_name):
                     list_file_data = file_data.split('\n')
                     for line in list_file_data:
                         if(temp==2):
-                            page_text += line
+                            page_text += line + '\n'
                         if(temp == 1):
                             if(line == '---'):
                                 temp=2
