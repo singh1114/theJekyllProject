@@ -135,7 +135,7 @@ class CreateRepoView(FormView):
             change_site_baseurl(user, repo)
             run_git_script(user, repo)
 
-        return HttpResponse("I am done with this project")
+        return HttpResponseRedirect(reverse('home'))
 
 
 class AddPostView(FormView):
@@ -453,7 +453,7 @@ class SiteProfileView(FormView):
             save_site_data(repo, title, description, avatar)
             create_config_file(user, repo)
             push_online(user, repo)
-            return HttpResponse('Profile data saved')
+            return HttpResponseRedirect(reverse('home'))
 
 
 class ChooseSiteView(ListView):
@@ -591,7 +591,7 @@ class SiteSocialProfileView(FormView):
             site_social_profile.save()
             create_config_file(user, repo)
             push_online(user, repo)
-            return HttpResponse('Social data saved')
+            return HttpResponseRedirect(reverse('socialprofile'))
 
 
 class SitePluginView(FormView):
@@ -633,27 +633,4 @@ class SiteThemeView(FormView):
             save_site_theme_data(repo, theme)
             create_config_file(user, repo)
             push_online(user, repo)
-            return HttpResponse('THEME SAVED!')
-
-#
-#class PageListView(LoginRequiredMixin, TemplateView):
-#    """PageListView to list all the pages in the website
-#
-#    Example:
-#        Click on the pages button when the user is logged in.
-#        We can see the list of pages only if the user is logged in.
-#
-#    TODO:
-#        * Read all .md files in the root directory of the blog code.
-#        * Put them in the list.
-#        * Pass that list further.
-#    """
-#    def get(self, request, *args, **kwargs):
-#        user = request.user
-#        repo = Repo.objects.get(user=user, main=True)
-#        pages = read_all_pages(user, repo)
-#
-#        return render(request, 'theJekyllProject/pages_list.html', context={
-#            'pages': pages,
-#        })
-#
+            return HttpResponseRedirect(reverse('sitetheme'))
