@@ -192,7 +192,6 @@ class AddPostView(FormView):
             write_file(file_name, head_content, body_content)
 
             # Move file to correct location
-            repo = Repo.objects.get(main=True)
             move_file(file_name, user, repo)
 
             # Push the code online
@@ -418,7 +417,7 @@ class SiteProfileView(FormView):
     def get_form_kwargs(self):
         user = self.request.user
         user = User.objects.get(username=user.username)
-        repo = Repo.objects.get(main=True)
+        repo = Repo.objects.get(user=user, main=True)
         try:
             site_data = SiteData.objects.get(repo=repo)
             title = site_data.title
@@ -449,7 +448,7 @@ class SiteProfileView(FormView):
             description = request.POST['description']
             avatar = request.POST['avatar']
             # save stuff to the database
-            repo = Repo.objects.get(main=True)
+            repo = Repo.objects.get(user=user, main=True)
             save_site_data(repo, title, description, avatar)
             create_config_file(user, repo)
             push_online(user, repo)
@@ -553,7 +552,7 @@ class SiteSocialProfileView(FormView):
         form = self.form_class(request.POST)
         if form.is_valid():
             user = request.user
-            repo = Repo.objects.get(main=True)
+            repo = Repo.objects.get(user=user, main=True)
             dribbble = request.POST['dribbble']
             email = request.POST['email']
             facebook = request.POST['facebook']
@@ -628,7 +627,7 @@ class SiteThemeView(FormView):
         form = self.form_class(request.POST)
         if form.is_valid():
             user = request.user
-            repo = Repo.objects.get(main=True)
+            repo = Repo.objects.get(user=user, main=True)
             theme = request.POST['theme']
             save_site_theme_data(repo, theme)
             create_config_file(user, repo)

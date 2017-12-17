@@ -298,8 +298,8 @@ def save_repo_data(user, repo):
     )
     repo.save()
 
-    # Now set all other repo `main` to False
-    all_repos = Repo.objects.all()
+    # Now set all other repo `main` to False for the given user
+    all_repos = Repo.objects.filter(user=user)
     current_repo = Repo.objects.get(id=repo.id)
     for repo in all_repos:
         if repo.id is not current_repo.id:
