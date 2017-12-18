@@ -66,7 +66,7 @@
                                 <i class="fa fa-user" aria-hidden="true"></i>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-                                <a class="dropdown-header">Dropdown header</a>
+                                <a class="dropdown-header">User options</a>
                                 <a class="dropdown-item" href="/logout">Logout</a>
                                 <a class="dropdown-item" href="/choosesite">Choose site</a>
                             </div>
@@ -83,9 +83,12 @@
             </div>
             <div class="container">
                 <div class="content-center brand">
-                    <img class="n-logo" src="{%static 'nowui/assets/img/now-logo.png' %}" alt="">
+                    <br><br>
                     <h1 class="h1-seo">JekLog</h1>
                     <h3>Free Blog Using Jekyll and GitHub Pages.</h3>
+                    <a class="btn btn-neutral" title="Create your blog" href="{% url 'registration' %}">
+                       <p style="margin-bottom: 0px;"><strong>TRY It Out!</strong></p>
+                   </a>
                 </div>
                 <h6 class="category category-absolute">No expensive database setups. Just plain and simple.</h6>
             </div>
@@ -97,18 +100,18 @@
                     <div class="row" style="margin:auto">
                         <div class="col-md-4">
                             <div class="card" style="padding:10px;">
-                                <img class="card-img-top" src="{%static 'nowui/assets/img/github-logo.jpg' %}" alt="Card image cap">
+                                <img class="card-img-top" src="{%static 'nowui/assets/img/github-logo.jpg' %}" alt="Github Pages">
                                 <div class="card-block" style="display:inline-block">
                                     <h4 class="card-title">Login using GitHub</h4>
                                     <p class="card-text">Login to our app using GitHub. This will be used to create repositories that will be used as the store house of the code.</p>
                                     <a href="/login" class="btn btn-danger" style="margin-right:20px;">I have a GH account</a>
-                                    <a href="https://github.com/join?source=header-home" class="btn btn-default">Create new</a>
+                                    <a href="https://github.com/join?source=header-home" class="btn btn-default" target="_blank">Create new</a>
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="card" style="padding:10px;">
-                                <img class="card-img-top" src="{%static 'nowui/assets/img/blurred-image-1.jpg' %}" alt="Card image cap">
+                                <img class="card-img-top" src="{%static 'nowui/assets/img/create.jpg' %}" alt="Create Repository">
                                 <div class="card-block" style="display:inline-block">
                                     <h4 class="card-title">Create a Repository</h4>
                                     <p class="card-text">Create a repository using our app. This repository will be used to keep the content on the website using GitHub.</p>
@@ -117,8 +120,8 @@
                             </div>
                         </div>
                         <div class="col-md-4">
-                            <div class="card">
-                                <img class="card-img-top" src="{%static 'nowui/assets/img/blurred-image-1.jpg' %}" alt="Card image cap">
+                            <div class="card" style="padding:10px;">
+                                <img class="card-img-top" src="{%static 'nowui/assets/img/publish.jpg' %}" alt="Publish blog">
                                 <div class="card-block" style="display:inline-block">
                                     <h4 class="card-title">Start Publishing</h4>
                                     <p class="card-text">Now start writing your posts and the posts will be directly visible on your newly created blog. Share it with your friends.</p>

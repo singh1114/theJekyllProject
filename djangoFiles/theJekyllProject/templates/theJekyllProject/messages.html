@@ -1,0 +1,9 @@
+{% extends 'theJekyllProject/base.html' %}
+{% load staticfiles %}
+{% block messages %}
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert {% if message.tags %}alert-{% if message.tags == "error" %}danger{% else %}{{ message.tags }}{% endif %}"{% endif %}>{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+{% endblock %}

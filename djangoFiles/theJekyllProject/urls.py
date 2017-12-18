@@ -1,8 +1,9 @@
 from django.conf.urls import url, include
-#from django.views.generic import TemplateView
+from django.views.generic import TemplateView
 
 from theJekyllProject.views import AddPageView
 from theJekyllProject.views import AddPostView
+from theJekyllProject.views import BlogView
 from theJekyllProject.views import SiteProfileView
 from theJekyllProject.views import SiteSocialProfileView
 from theJekyllProject.views import SitePluginView
@@ -20,6 +21,7 @@ from theJekyllProject.views import PageListView
 from theJekyllProject.views import PageUpdateView
 
 urlpatterns = [
+    url(r'^registration/?', TemplateView.as_view(template_name='theJekyllProject/registration.html'), name='registration'),
     url(r'^index/?', IndexView.as_view(), name='index'),
     url(r'^$', DecideHomeView.as_view(), name='decide-home-view'),
     url(r'^repolist/?', RepoListView.as_view(), name='repo-list'),
@@ -41,8 +43,10 @@ urlpatterns = [
     url(r'^sitetheme/?', SiteThemeView.as_view(), name='sitetheme'),
 
     # urls about pages
-    #url(r'^pages_list/?', PageListView.as_view(), name='page-list'),
     url(r'^updatepage/(?P<pk>\d+)$', PageUpdateView.as_view(), name='page-update'),
     url(r'^addpage/?', AddPageView.as_view(), name='add-page'),
     url(r'^pages/?$', PageListView.as_view(), name='page-list'),
+
+    # Blog view
+    url(r'^yourblog/?', BlogView.as_view(), name='your-blog')
 ]
