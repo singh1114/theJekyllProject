@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 
 from datetime import datetime
+from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.urlresolvers import reverse
 from django.core.mail import send_mail
@@ -90,7 +91,7 @@ class IndexView(FormView):
         return render(request, 'theJekyllProject/contact_status.html')
 
 
-class RepoListView(TemplateView):
+class RepoListView(LoginRequiredMixin, TemplateView):
 
     def get(self, request, *args, **kwargs):
         user = request.user
@@ -105,9 +106,11 @@ class RepoListView(TemplateView):
         })
 
 
-class CreateRepoView(FormView):
+class CreateRepoView(LoginRequiredMixin, FormView):
     template_name = 'theJekyllProject/create_repo.html'
     form_class = RepoForm
+    form_valid_message = 'Repository created successfully'
+    form_invalid_message = 'Repository not created'
 
     def get(self, request, *args, **kwargs):
         user = request.user
@@ -138,7 +141,7 @@ class CreateRepoView(FormView):
         return HttpResponseRedirect(reverse('home'))
 
 
-class AddPostView(FormView):
+class AddPostView(LoginRequiredMixin, FormView):
     """AddPostView to add post
 
     Example:
@@ -199,7 +202,7 @@ class AddPostView(FormView):
         return HttpResponseRedirect(reverse('home'))
 
 
-class PostListView(ListView):
+class PostListView(LoginRequiredMixin, ListView):
     model = Post
     template_name = 'theJekyllProject/post_list.html'
     context_object_name = "post_list"
@@ -212,7 +215,7 @@ class PostListView(ListView):
         return post_list
 
 
-class PostUpdateView(FormView):
+class PostUpdateView(LoginRequiredMixin, FormView):
     form_class = AddPostForm
     template_name = 'theJekyllProject/addpost.html'
 
@@ -410,7 +413,7 @@ class PageListView(LoginRequiredMixin, ListView):
         return page_list
 
 
-class SiteProfileView(FormView):
+class SiteProfileView(LoginRequiredMixin, FormView):
     template_name = 'theJekyllProject/siteprofile.html'
     form_class = SiteProfileForm
 
@@ -455,7 +458,7 @@ class SiteProfileView(FormView):
             return HttpResponseRedirect(reverse('home'))
 
 
-class ChooseSiteView(ListView):
+class ChooseSiteView(LoginRequiredMixin, ListView):
     model = Repo
     template_name = 'theJekyllProject/choose_site.html'
     context_object_name = 'site_list'
@@ -465,7 +468,7 @@ class ChooseSiteView(ListView):
         return site_list
 
 
-class SelectMainSiteView(View):
+class SelectMainSiteView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         pk = self.kwargs['pk']
         user = self.request.user
@@ -485,7 +488,7 @@ class DecideHomeView(View):
             return redirect(reverse('home'))
 
 
-class SiteSocialProfileView(FormView):
+class SiteSocialProfileView(LoginRequiredMixin, FormView):
     template_name = 'theJekyllProject/socialprofile.html'
     form_class = SiteSocialProfileForm
 
@@ -593,16 +596,16 @@ class SiteSocialProfileView(FormView):
             return HttpResponseRedirect(reverse('socialprofile'))
 
 
-class SitePluginView(FormView):
+class SitePluginView(LoginRequiredMixin, FormView):
     template_name = 'theJekyllProject/siteplugin.html'
     form_class = SitePluginForm
 
-class SiteExcludeView(FormView):
+class SiteExcludeView(LoginRequiredMixin, FormView):
     template_name = 'theJekyllProject/siteexclude.html'
     form_class = SiteExcludeForm
 
 
-class SiteThemeView(FormView):
+class SiteThemeView(LoginRequiredMixin, FormView):
     template_name = 'theJekyllProject/sitetheme.html'
     form_class = SiteThemeForm
 
@@ -633,3 +636,10 @@ class SiteThemeView(FormView):
             create_config_file(user, repo)
             push_online(user, repo)
             return HttpResponseRedirect(reverse('sitetheme'))
+
+
+class BlogView(View):
+    def get(self, request, *args, **kwargs):
+        user = request.user
+        repo = Repo.objects.get(user=user, main=True)
+        return redirect('http://' + user.username + '.github.io/' + repo.repo)

@@ -1,0 +1,21 @@
+{% extends 'theJekyllProject/base.html' %}
+{% load staticfiles %}
+{% block content %}
+    <div class="section section-aboutus" id="aboutus">
+        <div class="container" style="text-align:center;">
+            <div class="row justify-content-md-center">
+                <div class="col-md-6">
+                    <div class="card" style="padding:10px;">
+                        <img class="card-img-top" src="{%static 'nowui/assets/img/github-logo.jpg' %}" alt="Github Pages">
+                        <div class="card-block" style="display:inline-block">
+                            <h4 class="card-title">Login using GitHub</h4>
+                            <p class="card-text">Login to our app using GitHub. This will be used to create repositories that will be used as the store house of the code.</p>
+                            <a href="/login" class="btn btn-danger" style="margin-right:20px;">I have a GH account</a>
+                            <a href="https://github.com/join?source=header-home" class="btn btn-default" target="_blank">Create new</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
