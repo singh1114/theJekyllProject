@@ -49,7 +49,6 @@ class Post(models.Model):
     time = models.TimeField(auto_now_add=True,)
     layouts = (
         ('post', 'post'),
-        ('page', 'page')
     )
     layout = models.CharField(
         max_length=100,
@@ -72,7 +71,7 @@ class Page(models.Model):
     title = models.CharField(max_length=2000)
     permalink = models.CharField(max_length=2000)
     content = RichTextField()
-    
+
     def __str__(self):
         return self.title
 
