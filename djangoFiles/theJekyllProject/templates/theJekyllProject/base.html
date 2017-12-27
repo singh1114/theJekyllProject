@@ -9,16 +9,20 @@
     <link rel="icon" type="image/png" href="{% static 'nowui/assets/img/favicon.png' %}">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <title>JekLog</title>
+    <script src="https://cdn.ckeditor.com/4.7.3/standard/ckeditor.js"></script>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-3.2.1.min.js"></script>
     <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
     <!--     Fonts and icons     -->
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,200" rel="stylesheet" />
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css' %}" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" />
     <!-- CSS Files -->
     <link href="{% static 'nowui/assets/css/bootstrap.min.css' %}" rel="stylesheet" />
     <link href="{% static 'nowui/assets/css/now-ui-kit.css' %}" rel="stylesheet" />
     <!-- CSS Just for demo purpose, don't include it in your project -->
     <link href="{% static 'nowui/assets/css/demo.css' %}" rel="stylesheet" />
+    <link href="{% static 'font-awesome/css/font-awesome.min.css' %}" rel="stylesheet" />
     {{ form.media }}
+    <script type="text/javascript" src="{% static "ckeditor/ckeditor.js" %}"></script>
 </head>
 
 <body class="index-page sidebar-collapse" style="margin-top:70px;">
@@ -39,6 +43,12 @@
             <div class="collapse navbar-collapse justify-content-end" id="navigation" data-nav-image="{%static 'nowui/assets/img/blurred-image-1.jpg' %}">
                 <ul class="navbar-nav">
                     <li class="nav-item">
+                        <a class="nav-link" rel="tooltip" title="Like us on Facebook" data-placement="bottom" href="https://www.facebook.com/jeklogweb/" target="_blank">
+                            <i class="fa fa-facebook-square"></i>
+                            <p class="d-lg-none">Facebook</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="/index#contact">
                             <p><strong>Contact Us</strong></p>
                         </a>
@@ -48,29 +58,30 @@
                             <p><strong>About us</strong></p>
                         </a>
                     </li>
-                    <!--<li class="nav-item">
-                        <a class="nav-link btn btn-neutral" href="https://www.creative-tim.com/product/now-ui-kit-pro" target="_blank">
-                            <i class="now-ui-icons arrows-1_share-66"></i>
-                            <p>Upgrade to PRO</p>
-                        </a>
-                    </li>-->
                     <li class="nav-item">
                         <a class="nav-link btn btn-neutral btn-round" title="Star us on GitHub" href="https://github.com/singh1114/theJekyllProject" target="_blank">
                             <p><strong>GitHub</strong></p>
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" rel="tooltip" title="Like us on Facebook" data-placement="bottom" href="https://www.facebook.com/CreativeTim" target="_blank">
-                            <i class="fa fa-facebook-square"></i>
-                            <p class="d-lg-none d-xl-none">Facebook</p>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" rel="tooltip" title="Follow us on Instagram" data-placement="bottom" href="https://www.instagram.com/CreativeTimOfficial" target="_blank">
-                            <i class="now-ui-icons users_single-02"></i>
-                            <p class="d-lg-none d-xl-none">Instagram</p>
-                        </a>
-                    </li>
+                    {% if user.is_authenticated %}
+                        <li class="nav-item dropdown">
+                            <a href="#" class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown">
+                                <i class="fa fa-user" aria-hidden="true"></i>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+                                <a class="dropdown-header">User Activities</a>
+                                <a class="dropdown-item" href="/logout">Logout</a>
+                                <a class="dropdown-item" href={% url 'create-repo' %}>Create New Site</a>
+                                <a class="dropdown-item" href="{% url 'choose-site' %}">Choose site</a>
+                                <a class="dropdown-item" href="{% url 'addpost' %}">Add Post</a>
+                                <a class="dropdown-item" href="{% url 'siteprofile' %}">Site Profile</a>
+                                <a class="dropdown-item" href="{% url 'socialprofile' %}">Connect social channels</a>
+                                <a class="dropdown-item" href="{% url 'add-page' %}">Add Page</a>
+                                <a class="dropdown-item" href="{% url 'page-list' %}">Page List</a>
+                                <a class="dropdown-item" href="{% url 'your-blog' %}" target="_blank">Visit your blog</a>
+                            </div>
+                        </li>
+                    {% endif %}
                 </ul>
             </div>
         </div>
@@ -81,6 +92,8 @@
 				<div class="col-md-12">
 					{% block content %}
 					{% endblock %}
+                    {% block messages %}
+                    {% endblock %}
 				</div>
 			</div>
 		</div>
