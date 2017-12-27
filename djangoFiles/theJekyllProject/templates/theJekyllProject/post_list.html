@@ -5,7 +5,6 @@
     <hr>
     {% if post_list %}
         <ul>
-    
             {% for post in post_list %}
                 <li>
                     <a href="{% url 'post-update' pk=post.pk %}">{{ post.title }}</a> ({{post.date}})
@@ -13,7 +12,6 @@
                     <hr>
                 </li>
             {% endfor %}
-    
         </ul>
         {% if is_paginated %}
             <div class="pagination">
@@ -33,17 +31,4 @@
     {% else %}
         <p>There are no Posts yet.</p>
     {% endif %}
-{% endblock %}
-{% block footer %}
-    <div class="row">
-        <div class="col-md-4">
-            <a href="{% url 'addpost' %}" class="btn btn-primary"><strong>Add Post</strong></a>
-        </div>
-        <div class="col-md-4">
-            <a href="{% url 'siteprofile' %}" class="btn btn-success"><strong>Blog Profile</strong></a>
-        </div>
-        <div class="col-md-4">
-            <a href="{% url 'socialprofile' %}" class="btn btn-info"><strong>Social Profiles</strong></a>
-        </div>
-    </div>
 {% endblock %}

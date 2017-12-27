@@ -1,5 +1,7 @@
+from django.conf import settings
 from django.contrib.auth.models import User
 
+from theJekyllProject.models import Page
 from theJekyllProject.models import Post
 from theJekyllProject.models import PostCategory
 from theJekyllProject.models import SiteData
@@ -8,13 +10,12 @@ from theJekyllProject.models import SiteTheme
 from theJekyllProject.models import Repo
 
 from github import Github
-
+from markdown2 import Markdown
 import html2markdown
 import os
 import re
 import shutil
 import subprocess
-
 
 def assign_boolean_to_comments(comments):
     if(comments == 'on'):
@@ -23,28 +24,48 @@ def assign_boolean_to_comments(comments):
         return False
 
 
-def save_post_database(user, author, comments, date, layout, title, content, pk=None):
+def save_post_database(repo, author, comments, date, time, layout, title, content, pk=None):
     if pk is not None:
         post = Post.objects.get(pk=pk)
         post.author = author
         post.comments = comments
         post.date = date
+        post.time = time
         post.layout = layout
         post.title = title
         post.content = content
         post.save()
     else:
         post = Post(
-            user=user,
+            repo=repo,
             author=author,
             comments=comments,
             date=date,
+            time=time,
             layout=layout,
             title=title,
             content=content,
         )
         post.save()
     return post
+
+
+def save_page_database(repo, title, permalink, content, pk=None):
+    if pk is not None:
+        page = Page.objects.get(pk=pk)
+        page.title = title
+        page.permalink = permalink
+        page.content = content
+        page.save()
+    else:
+        page = Page(
+            repo=repo,
+            title=title,
+            permalink=permalink,
+            content=content,
+        )
+        page.save()
+    return page
 
 
 def save_post_category_database(post, category, pk=None):
@@ -70,7 +91,7 @@ def create_file_name(date, title):
     return file_name
 
 
-def header_content(author=None, comments=None, date=None, layout=None, title=None):
+def header_content(author=None, comments=None, date=None, time=None, layout=None, title=None):
     string = '---\n'
     if(author is not None):
         string += 'author: ' + author + '\n'
@@ -78,7 +99,9 @@ def header_content(author=None, comments=None, date=None, layout=None, title=Non
         comments = str(comments).lower()
         string += 'comments: ' + comments + '\n'
     if(date is not None):
-        string += 'date: ' + date + '\n'
+        string += 'date: ' + date
+    if(time is not None):
+        string += ' ' + time + '\n'
     if(layout is not None):
         string += 'layout: ' + layout + '\n'
     if(title is not None):
@@ -91,22 +114,45 @@ def header_content(author=None, comments=None, date=None, layout=None, title=Non
     return string
 
 
+def page_header_content(title=None, permalink=None):
+    string = '---\n'
+    layout = 'page'
+    string += 'layout: ' + layout + '\n'
+    if(title is not None):
+        string += 'title: ' + title + '\n'
+    if(permalink is not None):
+        string += 'permalink: ' + permalink + '\n'
+
+    string += '---\n'
+
+    return string
+
 def convert_content(content):
     return html2markdown.convert(content)
 
 
 def write_file(file_name, head_content, body_content):
-    file = open(file_name, 'w+')
+    base_dir = settings.BASE_DIR
+    file = open(base_dir + '/../JekLog/' + file_name, 'w+')
+    file.write(head_content + body_content)
+    file.close()
+
+
+def write_page_file(file_name, user, repo, head_content, body_content):
+    base_dir = settings.BASE_DIR
+    file = open(base_dir + '/../JekLog/' + user.username + '/' + repo.repo + '/' + file_name + '.md', 'w+')
     file.write(head_content + body_content)
     file.close()
 
 
 def move_file(file_name, user, repo):
-    shutil.move(file_name, 'JekLog/' + user.username  + '/' + repo.repo + '/_posts/' + file_name)
+    base_dir = settings.BASE_DIR
+    shutil.move(base_dir + '/../JekLog/' + file_name, base_dir + '/../JekLog/' + user.username  + '/' + repo.repo + '/_posts/' + file_name)
 
 
 def push_online(user, repo):
-    subprocess.Popen(['/bin/bash', 'gitsendupstream.sh', user.username, repo.repo])
+    base_dir = settings.BASE_DIR
+    subprocess.Popen(['/bin/bash', base_dir + '/../' + 'gitsendupstream.sh', user.username, repo.repo, base_dir])
 
 
 def save_site_data(repo, title=None, description=None, avatar=None):
@@ -186,7 +232,8 @@ def create_config_file(user, repo):
     except:
         theme = 'jekyll-theme-cayman'
 
-    with open('JekLog/' + user.username + '/' + repo.repo + '/' + '_config.yml', 'r') as conf_file:
+    base_dir = settings.BASE_DIR
+    with open(base_dir + '/../' + 'JekLog/' + user.username + '/' + repo.repo + '/' + '_config.yml', 'r') as conf_file:
         file_data = conf_file.read()
 
     title_data = re.findall(r'name:.+', file_data)
@@ -231,7 +278,7 @@ def create_config_file(user, repo):
     file_data = file_data.replace(google_analytics_data[0], 'google_analytics: ' + google_analytics)
     file_data = file_data.replace(theme_data[0], 'theme: ' + theme)
 
-    with open('JekLog/' + user.username + '/' + repo.repo + '/' + '_config.yml', 'w') as conf_file:
+    with open(base_dir + '/../' + 'JekLog/' + user.username + '/' + repo.repo + '/' + '_config.yml', 'w') as conf_file:
         conf_file.write(file_data)
 
 
@@ -251,8 +298,8 @@ def save_repo_data(user, repo):
     )
     repo.save()
 
-    # Now set all other repo `main` to False
-    all_repos = Repo.objects.all()
+    # Now set all other repo `main` to False for the given user
+    all_repos = Repo.objects.filter(user=user)
     current_repo = Repo.objects.get(id=repo.id)
     for repo in all_repos:
         if repo.id is not current_repo.id:
@@ -270,35 +317,80 @@ def create_repo(user, repo):
 
 
 def copy_jekyll_files(user, repo_name):
+    base_dir = settings.BASE_DIR
     dest_path = '/'.join(['JekLog', user.username, repo_name])
+    dest_path = base_dir + '/../' + dest_path
     source_path = '/'.join(['JekyllNow', 'jekyll-now'])
+    source_path = base_dir + '/../' + source_path
     shutil.copytree(source_path, dest_path)
 
 
 def add_theme_name(user, repo_name):
-    with open('JekLog/' + user.username + '/' + repo_name + '/' + '_config.yml', 'a') as conf_file:
+    base_dir = settings.BASE_DIR
+    with open(base_dir + '/../' + 'JekLog/' + user.username + '/' + repo_name + '/' + '_config.yml', 'a') as conf_file:
         conf_file.write('theme: jekyll-theme-cayman')
 
 
+def read_all_pages(user, repo_name):
+    """read_all_pages will put all the pages information into the database
+
+    Example:
+        No need to click any button this is the default behaviour.
+
+    TODO:
+        * Read all .md files in the root directory of the blog code.
+        * Leave the README and 404 file.
+        * Process all other files and put things into Page model.
+    """
+    base_dir = settings.BASE_DIR
+    for file in os.listdir(base_dir + "/../JekLog/" + user.username + "/" + repo_name):
+        if file.endswith(".md"):
+            if(str(file) != 'README.md' and str(file) != '404.md'):
+                with open(base_dir+ '/../JekLog/' + user.username + '/' + repo_name + '/' + str(file)) as page_file:
+                    file_data = page_file.read()
+                    title = re.findall(r'title:.+', file_data)
+                    permalink = re.findall(r'permalink:.+', file_data)
+                    page_text = ''
+                    temp = 0
+                    list_file_data = file_data.split('\n')
+                    for line in list_file_data:
+                        if(temp==2):
+                            page_text += line + '\n'
+                        if(temp == 1):
+                            if(line == '---'):
+                                temp=2
+                        if(line == '---' and temp==0):
+                            temp=1
+                    title = title[0].replace('title: ', '')
+                    permalink = permalink[0].replace('permalink: ', '')
+                    repo = Repo.objects.get(main=True, user=user)
+                    markdowner = Markdown()
+                    page_text = markdowner.convert(page_text)
+                    page = Page(repo=repo, title=title, permalink=permalink, content=page_text)
+                    page.save()
+
+
 def change_site_baseurl(user, repo_name):
-    with open('JekLog/' + user.username + '/' + repo_name + '/' + '_config.yml', 'r') as conf_file:
+    base_dir = settings.BASE_DIR
+    with open(base_dir + '/../' +'JekLog/' + user.username + '/' + repo_name + '/' + '_config.yml', 'r') as conf_file:
         filedata = conf_file.read()
 
     filedata = filedata.replace('baseurl: ""', 'baseurl: "/' + repo_name + '"')
 
-    with open('JekLog/' + user.username + '/' + repo_name + '/' + '_config.yml', 'w') as conf_file:
+    with open(base_dir + '/../' + 'JekLog/' + user.username + '/' + repo_name + '/' + '_config.yml', 'w') as conf_file:
         conf_file.write(filedata)
 
 
 def run_git_script(user, repo_name):
+    base_dir = settings.BASE_DIR
     user = User.objects.get(username=user.username)
     social = user.social_auth.get(provider='github')
     user_token = social.extra_data['access_token']
-    subprocess.Popen(['/bin/bash', 'gitscript.sh', user.username, repo_name, user_token])
+    subprocess.Popen(['/bin/bash', base_dir + '/../' + 'gitscript.sh', user.username, repo_name, user_token, base_dir])
 
 
 def select_main_site(user, pk):
-    all_repos = Repo.objects.all()
+    all_repos = Repo.objects.filter(user=user)
     current_repo = Repo.objects.get(pk=pk)
     current_repo.main = True
     current_repo.save()

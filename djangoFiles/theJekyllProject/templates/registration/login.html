@@ -1,7 +1,23 @@
-
+{% extends 'theJekyllProject/base.html' %}
+{% load staticfiles %}
 {% block content %}
-  <h2>Login</h2>
-  <br>
-  <p><strong>-- OR --</strong></p>
-  <a href="{% url 'social:begin' 'github' %}">Login with GitHub</a><br>
+    <div class="section section-aboutus" id="aboutus">
+        <div class="container" style="text-align:center;">
+            <div class="row justify-content-md-center">
+                <div class="col-md-6">
+                    <div class="card" style="padding:10px;">
+                        <div class="row justify-content-md-center">
+                            <div class="col-md-8" style="font-size:18px;">
+                                <div class="card-block" style="display:inline-block">
+                                    <h4 class="card-title"><strong>Login</strong></h4>
+                                    <img class="card-img-top" src="{%static 'nowui/assets/img/github-logo.jpg' %}" alt="Card image cap">
+                                    <a href="{% url 'social:begin' 'github' %}" class="btn btn-danger">Login with GitHub</a><br>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}

@@ -1,6 +1,8 @@
-cd JekLog/$1/$2
+cd $4/../JekLog/$1/$2
 git init
 git add .
+git config user.email "ranvir@gmail.com"
+git config user.name "Ranvir"
 git commit -m "inital commit"
 git branch gh-pages
 git checkout gh-pages

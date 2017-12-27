@@ -3,16 +3,19 @@
 <html lang="en">
 
 <head>
+    <!-- Meta tags for google -->
     <meta charset="utf-8" />
+    <meta name="description" content="Create a free blog on JekLog.com. Free hosting and support of great open source community.">
+    <!-- Meta tags for google ends -->
 
     <link rel="apple-touch-icon" sizes="76x76" href="{% static 'nowui/assets/img/apple-icon.png' %}">
     <link rel="icon" type="image/png" href="{% static 'nowui/assets/img/favicon.png' %}">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-    <title>JekLog</title>
+    <title>JekLog | Get a free Jekyll Blog using GitHub Pages</title>
     <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
     <!--     Fonts and icons     -->
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,200" rel="stylesheet" />
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css' %}" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" />
     <!-- CSS Files -->
     <link href="{% static 'nowui/assets/css/bootstrap.min.css' %}" rel="stylesheet" />
     <link href="{% static 'nowui/assets/css/now-ui-kit.css' %}" rel="stylesheet" />
@@ -37,6 +40,12 @@
             <div class="collapse navbar-collapse justify-content-end" id="navigation" data-nav-image="{%static 'nowui/assets/img/blurred-image-1.jpg' %}">
                 <ul class="navbar-nav">
                     <li class="nav-item">
+                        <a class="nav-link" rel="tooltip" title="Like us on Facebook" data-placement="bottom" href="https://www.facebook.com/jeklogweb/" target="_blank">
+                            <i class="fa fa-facebook-square"></i>
+                            <p class="d-lg-none">Facebook</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="javascript:void(0)" onclick="scrollToDownload()">
                             <p><strong>Contact Us</strong></p>
                         </a>
@@ -51,6 +60,18 @@
                             <p><strong>GitHub</strong></p>
                         </a>
                     </li>
+                    {% if user.is_authenticated %}
+                        <li class="nav-item dropdown">
+                            <a href="#" class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown">
+                                <i class="fa fa-user" aria-hidden="true"></i>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+                                <a class="dropdown-header">User options</a>
+                                <a class="dropdown-item" href="/logout">Logout</a>
+                                <a class="dropdown-item" href="/choosesite">Choose site</a>
+                            </div>
+                        </li>
+                    {% endif %}
                 </ul>
             </div>
         </div>
@@ -62,17 +83,14 @@
             </div>
             <div class="container">
                 <div class="content-center brand">
-                    <img class="n-logo" src="{%static 'nowui/assets/img/now-logo.png' %}" alt="">
+                    <br><br>
                     <h1 class="h1-seo">JekLog</h1>
                     <h3>Free Blog Using Jekyll and GitHub Pages.</h3>
+                    <a class="btn btn-neutral" title="Create your blog" href="{% url 'registration' %}">
+                       <p style="margin-bottom: 0px;"><strong>TRY It Out!</strong></p>
+                   </a>
                 </div>
-                <h6 class="category category-absolute">Designed by
-                    <a href="http://invisionapp.com/" target="_blank">
-                        <img src="{%static 'nowui/assets/img/invision-white-slim.png' %}" class="invision-logo" />
-                    </a>. Coded by
-                    <a href="https://www.creative-tim.com" target="_blank">
-                        <img src="{%static 'nowui/assets/img/creative-tim-white-slim2.png' %}" class="creative-tim-logo" />
-                    </a>.</h6>
+                <h6 class="category category-absolute">No expensive database setups. Just plain and simple.</h6>
             </div>
         </div>
         <div class="main">
@@ -82,34 +100,32 @@
                     <div class="row" style="margin:auto">
                         <div class="col-md-4">
                             <div class="card" style="padding:10px;">
-                                <img class="card-img-top" src="{%static 'nowui/assets/img/github-logo.jpg' %}" alt="Card image cap">
+                                <img class="card-img-top" src="{%static 'nowui/assets/img/github-logo.jpg' %}" alt="Github Pages">
                                 <div class="card-block" style="display:inline-block">
                                     <h4 class="card-title">Login using GitHub</h4>
                                     <p class="card-text">Login to our app using GitHub. This will be used to create repositories that will be used as the store house of the code.</p>
-                                    <a href="#" class="btn btn-danger" style="margin-right:20px;">I have a GH account</a>
-                                    <a href="#" class="btn btn-default">Create new</a>
+                                    <a href="/login" class="btn btn-danger" style="margin-right:20px;">I have a GH account</a>
+                                    <a href="https://github.com/join?source=header-home" class="btn btn-default" target="_blank">Create new</a>
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="card" style="padding:10px;">
-                                <img class="card-img-top" src="{%static 'nowui/assets/img/blurred-image-1.jpg' %}" alt="Card image cap">
+                                <img class="card-img-top" src="{%static 'nowui/assets/img/create.jpg' %}" alt="Create Repository">
                                 <div class="card-block" style="display:inline-block">
                                     <h4 class="card-title">Create a Repository</h4>
                                     <p class="card-text">Create a repository using our app. This repository will be used to keep the content on the website using GitHub.</p>
-                                    <a href="#" class="btn btn-danger" style="margin-right:20px;">I have a GH account</a>
-                                    <a href="#" class="btn btn-default">Create new</a>
+                                    <a href="#" class="btn btn-danger" style="margin-right:20px;">Create the repository</a>
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-4">
-                            <div class="card">
-                                <img class="card-img-top" src="{%static 'nowui/assets/img/blurred-image-1.jpg' %}" alt="Card image cap">
+                            <div class="card" style="padding:10px;">
+                                <img class="card-img-top" src="{%static 'nowui/assets/img/publish.jpg' %}" alt="Publish blog">
                                 <div class="card-block" style="display:inline-block">
                                     <h4 class="card-title">Start Publishing</h4>
                                     <p class="card-text">Now start writing your posts and the posts will be directly visible on your newly created blog. Share it with your friends.</p>
-                                    <a href="#" class="btn btn-danger" style="margin-right:20px;">I have a GH account</a>
-                                    <a href="#" class="btn btn-default">Create new</a>
+                                    <a href="#" class="btn btn-danger" style="margin-right:20px;">Publish your first post</a>
                                 </div>
                             </div>
                         </div>

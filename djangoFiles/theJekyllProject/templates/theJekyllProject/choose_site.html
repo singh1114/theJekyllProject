@@ -1,6 +1,7 @@
 {% extends 'theJekyllProject/base.html' %}
 {% load staticfiles %}
 {% block content %}
+  {% if site_list %}
   <h1>Repo List</h1>
   <table>
     <th>
@@ -18,5 +19,9 @@
       </tr>
     {% endfor %}
   </table>
+  {% else %}
+  <h3>There is no site in the list. Please create one first.</h3>
+  <a class="btn btn-danger" href="/createrepo">Create site</a>
+  {% endif %}
 
 {% endblock %}

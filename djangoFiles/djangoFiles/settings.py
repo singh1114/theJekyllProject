@@ -141,4 +141,26 @@ AUTHENTICATION_BACKENDS = (
 
 LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
-LOGIN_REDIRECT_URL = 'home'
+LOGIN_REDIRECT_URL = '/'
+
+###### For e-mail configuration ####################################
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+# Host for sending e-mail.
+EMAIL_HOST = 'smtp.gmail.com'
+
+# Port for sending e-mail.
+EMAIL_PORT = 587
+
+# Optional SMTP authentication information for EMAIL_HOST.
+EMAIL_HOST_USER = 'jeklogjek@gmail.com'
+EMAIL_HOST_PASSWORD = 'Rajat1990!'
+EMAIL_USE_TLS = True
+
+###### For e-mail configuration ####################################
+
+SOCIAL_AUTH_GITHUB_KEY = 'a015402edaa76638e73e'
+SOCIAL_AUTH_GITHUB_SECRET = '086210d3180b970a20c553fb225d12d29b2997ce'
+
+SOCIAL_AUTH_GITHUB_SCOPE = ['repo']
