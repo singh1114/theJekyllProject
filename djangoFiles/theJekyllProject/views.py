@@ -385,7 +385,7 @@ class PageUpdateView(LoginRequiredMixin, FormView):
             permalink = request.POST['permalink']
             content = request.POST['content']
 
-            page = save_page_database(repo, title, permalink, content)
+            page = save_page_database(repo, title, permalink, content, pk)
 
             # Create header content for the markdown file
             head_content = page_header_content(title, permalink)
