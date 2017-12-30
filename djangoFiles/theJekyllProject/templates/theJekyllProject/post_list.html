@@ -4,15 +4,19 @@
     <h1>Post List</h1>
     <hr>
     {% if post_list %}
-        <ul>
-            {% for post in post_list %}
-                <li>
-                    <a href="{% url 'post-update' pk=post.pk %}">{{ post.title }}</a> ({{post.date}})
-                    <p>{{ post.content|safe }}</p>
-                    <hr>
-                </li>
-            {% endfor %}
-        </ul>
+        {% for post in post_list %}
+            <div class="card" style="padding:10px;">
+                <div class="row">
+                    <div class="col-md-9">
+                        <div class="card-block" style="display:inline-block; max-height: 250px; overflow: hidden;">
+                            <h5 class="card-title"><a href="{% url 'post-update' pk=post.pk %}">{{ post.title }}</a>({{post.date}})</h5><br>
+                            <p class="card-text" style="text-align:left; padding:0 20px 0 20px;">{{ post.content|safe }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
         {% if is_paginated %}
             <div class="pagination">
                 <span class="page-links">
