@@ -87,7 +87,6 @@ class AddPostForm(forms.Form):
 
     layouts = (
         ('post', 'post'),
-        ('page', 'page')
     )
 
     layout = forms.ChoiceField(
