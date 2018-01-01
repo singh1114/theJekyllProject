@@ -1,5 +1,11 @@
-# theJekyllProject
-A Jekyll project to add some features to Jekyll.
+# JekLog
+A Django project to create blogs using django Content Management System. 
+[JekLog](http://jeklog.com)
+
+## Usage
+
+- [Blog Tutorial: ](http://blog.jeklog.com/how-to-create-a-free-blog-using-github-pages-and-jekyll-with-jeklog/)
+- YouTube Video: [![Tutorial Video](https://img.youtube.com/vi/6SnaarQlRsw/0.jpg)](https://www.youtube.com/watch?v=6SnaarQlRsw)
 
 ## System requirements
 
