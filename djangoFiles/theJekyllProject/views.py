@@ -638,8 +638,25 @@ class SiteThemeView(LoginRequiredMixin, FormView):
             return HttpResponseRedirect(reverse('sitetheme'))
 
 
-class BlogView(View):
+class BlogView(LoginRequiredMixin, View):
+    """BlogView to see the created blog
+
+    Example:
+        Triggers when:
+        User clicks on the visit the blog button when logged in
+        This will take you to the Existing blog
+
+    Tasks:
+        * View for logged in users only.
+        * Place the link in the user options
+        * Redirect to the correct link.
+        * If the repo_name is equal to username.github.io
+          then redirect to username.github.io only
+    """  
     def get(self, request, *args, **kwargs):
         user = request.user
         repo = Repo.objects.get(user=user, main=True)
-        return redirect('http://' + user.username + '.github.io/' + repo.repo)
+        if(repo.repo != (user.username + '.github.io')):
+            return redirect('http://' + user.username + '.github.io/' + repo.repo)
+        else:
+            return redirect('http://' + user.username + '.github.io/')
