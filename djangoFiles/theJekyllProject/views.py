@@ -22,38 +22,42 @@ from markdown2 import Markdown
 
 from theJekyllProject.forms import AddPageForm
 from theJekyllProject.forms import AddPostForm
+from theJekyllProject.forms import ContactForm
 from theJekyllProject.forms import RepoForm
 from theJekyllProject.forms import SiteExcludeForm
 from theJekyllProject.forms import SitePluginForm
 from theJekyllProject.forms import SiteProfileForm
 from theJekyllProject.forms import SiteThemeForm
 from theJekyllProject.forms import SiteSocialProfileForm
-from theJekyllProject.forms import ContactForm
 
+from theJekyllProject.functions import add_theme_name
 from theJekyllProject.functions import assign_boolean_to_comments
+from theJekyllProject.functions import change_site_baseurl
+from theJekyllProject.functions import convert_content
+from theJekyllProject.functions import copy_jekyll_files
+from theJekyllProject.functions import create_config_file
+from theJekyllProject.functions import create_file_name
+from theJekyllProject.functions import create_repo
+from theJekyllProject.functions import fill_other_tables_from_config_file
+from theJekyllProject.functions import fill_repo_table_for_old_repo
+from theJekyllProject.functions import find_required_files
+from theJekyllProject.functions import get_repo_list
+from theJekyllProject.functions import git_clone_repo
+from theJekyllProject.functions import header_content
+from theJekyllProject.functions import move_file
 from theJekyllProject.functions import page_header_content
+from theJekyllProject.functions import push_online
+from theJekyllProject.functions import run_git_script
+from theJekyllProject.functions import read_all_pages
 from theJekyllProject.functions import save_post_database
 from theJekyllProject.functions import save_page_database
 from theJekyllProject.functions import save_post_category_database
-from theJekyllProject.functions import create_file_name
-from theJekyllProject.functions import header_content
-from theJekyllProject.functions import convert_content
-from theJekyllProject.functions import write_file
-from theJekyllProject.functions import write_page_file
-from theJekyllProject.functions import move_file
 from theJekyllProject.functions import save_site_data
 from theJekyllProject.functions import save_site_theme_data
-from theJekyllProject.functions import create_config_file
-from theJekyllProject.functions import get_repo_list
-from theJekyllProject.functions import create_repo
 from theJekyllProject.functions import save_repo_data
-from theJekyllProject.functions import copy_jekyll_files
-from theJekyllProject.functions import run_git_script
 from theJekyllProject.functions import select_main_site
-from theJekyllProject.functions import push_online
-from theJekyllProject.functions import add_theme_name
-from theJekyllProject.functions import change_site_baseurl
-from theJekyllProject.functions import read_all_pages
+from theJekyllProject.functions import write_file
+from theJekyllProject.functions import write_page_file
 
 from theJekyllProject.models import Page
 from theJekyllProject.models import Post
@@ -130,13 +134,17 @@ class CreateRepoView(LoginRequiredMixin, FormView):
         form = self.form_class(request.POST)
         if form.is_valid():
             repo = request.POST['repo']
-            create_repo(user, repo)
-            save_repo_data(user, repo)
-            copy_jekyll_files(user, repo)
-            read_all_pages(user, repo)
-            add_theme_name(user, repo)
-            change_site_baseurl(user, repo)
-            run_git_script(user, repo)
+            try:
+                create_repo(user, repo)
+                save_repo_data(user, repo)
+                copy_jekyll_files(user, repo)
+                read_all_pages(user, repo)
+                add_theme_name(user, repo)
+                change_site_baseurl(user, repo)
+                run_git_script(user, repo)
+            except:
+                # FIXME Give a proper error message
+                pass
 
         return HttpResponseRedirect(reverse('home'))
 
@@ -660,3 +668,40 @@ class BlogView(LoginRequiredMixin, View):
             return redirect('http://' + user.username + '.github.io/' + repo.repo)
         else:
             return redirect('http://' + user.username + '.github.io/')
+
+
+class UseOldRepo(LoginRequiredMixin, View):
+    """UseOldRepo to register a repo on already created Repository.
+
+    Example:
+        Triggers when:
+        User clicks on one of the already created repository
+        clamining that the repo contains the required files.
+
+    Tasks:
+        * View for logged in users only.
+        * Select any repo from the repo list
+        * Make some earlier checks
+        * Clone the repo
+        * Check if the required contents are present or not
+        * If yes do the required operations:
+            * Fill repo table
+            * Select Main Site
+        * Else give an error message
+        * Integrate celery to show the amount of task completed
+    """
+    def get(self, request, *args, **kwargs):
+        user = request.user
+        repo_name = kwargs['repo_name']
+        # Check the git tree first
+        git_clone_repo(user.username, repo_name)
+        if(find_required_files(user.username, repo_name)):
+            repo = fill_repo_table_for_old_repo(user.username, repo_name)
+            select_main_site(user, repo.pk)
+            fill_other_tables_from_config_file(user.username, repo_name)
+            find_posts(user.username, repo_name)
+            find_pages(user.username, repo_name)
+            
+
+        else:
+            pass # or give errors
