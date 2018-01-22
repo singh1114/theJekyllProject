@@ -13,3 +13,6 @@ services:
 
 addons:
   postgresql: "9.5"
+
+before_script:
+  - psql -c "CREATE DATABASE jeklog;" -U postgres
