@@ -25,12 +25,6 @@ A Django project to create blogs using django Content Management System.
 Now change the content of the file settings.py accordingly.
 
 
-## How to run Jekyll blog
-
-- `bundle exec jekyll serve`
-
-
-
 ### Documentation
 
 #### How to install and use
@@ -49,6 +43,28 @@ Fork and clone the code using the following command.
 
 ```$ git clone https://github.com/your_gh_username/theJekyllProject```
 
+```$ cd theJekyllProject```
 
+While in the virtual environment, use the following command to install the requirements
 
+```$ pip install -r requirements.txt```
 
+Now you need to get tokens for the github app. Create the tokens with proper callback URI and add both things to `djangoFiles/djangoFiles/settings.py`. 
+
+After this you need to create the database. For this use the following command
+
+This command will create jeklog user. Enter `jeklog` as the password as well. You can choose some other name and change the configuration settings in the `djangoFiles/djangoFiles/settings.py`
+
+```sudo -u postgres createuser --no-createrole --no-superuser --login --inherit --createdb --pwprompt jeklog```
+
+After this create a database named jeklog with the created user, using the following command.
+
+```createdb --encoding=utf-8 --owner=jeklog --user=jeklog --password --host=localhost --port=5432 jeklog```
+
+Now start the server and hopefully, everything will work without any error. If some error occurs, let us know.
+
+### Future Scope
+
+We are going to use environment variables for settings file. `Direnv` is a good tool for this purpose. 
+
+We are going to build a proper useable server for the admin users. So that you guys can run it on your system.
