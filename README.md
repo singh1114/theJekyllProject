@@ -10,24 +10,14 @@ A Django project to create blogs using django Content Management System.
 - YouTube Video: 
 	[![Tutorial Video](https://img.youtube.com/vi/6SnaarQlRsw/0.jpg)](https://www.youtube.com/watch?v=6SnaarQlRsw)
 
-## System requirements
 
-- Python 2.7+
-- PostgreSQL 9.5+: `sudo apt-get install postgresql-9.5-dev`
+## Documentation
 
-## Database Instructions
+### How to install and use
 
-- `sudo -i -u postgres`
-- `psql`
+Install postgresql
 
-- `create database your_database_name`
-
-Now change the content of the file settings.py accordingly.
-
-
-### Documentation
-
-#### How to install and use
+```$ sudo apt-get install postgresql```
 
 We use `virtualenv` for the python installation process. This is the recommended way of installing.
 
@@ -39,7 +29,7 @@ After this, you need to get the code using fork and `git clone`
 
 Fork and clone the code using the following command.
 
-```sudo apt-get install git```
+```$ sudo apt-get install git```
 
 ```$ git clone https://github.com/your_gh_username/theJekyllProject```
 
@@ -51,17 +41,35 @@ While in the virtual environment, use the following command to install the requi
 
 Now you need to get tokens for the github app. Create the tokens with proper callback URI and add both things to `djangoFiles/djangoFiles/settings.py`. 
 
+For this go to the link: [https://github.com/settings/applications/new](https://github.com/settings/applications/new)
+
+with the following credentials:
+
+	- App name: jeklog
+	- Homepage URL: http://127.0.0.1:8000/
+	- callback URI: http://127.0.0.1:8000/oauth/complete/github/
+
+Take the `Client ID` and put it in the `djangoFiles/djangoFiles/settings.py` file against variable `SOCIAL_AUTH_GITHUB_KEY` and `client secret` against variable `SOCIAL_AUTH_GITHUB_SECRET`.
+
 After this you need to create the database. For this use the following command
 
 This command will create jeklog user. Enter `jeklog` as the password as well. You can choose some other name and change the configuration settings in the `djangoFiles/djangoFiles/settings.py`
 
-```sudo -u postgres createuser --no-createrole --no-superuser --login --inherit --createdb --pwprompt jeklog```
+```$ sudo -u postgres createuser --no-createrole --no-superuser --login --inherit --createdb --pwprompt jeklog```
 
 After this create a database named jeklog with the created user, using the following command.
 
-```createdb --encoding=utf-8 --owner=jeklog --user=jeklog --password --host=localhost --port=5432 jeklog```
+```$ createdb --encoding=utf-8 --owner=jeklog --user=jeklog --password --host=localhost --port=5432 jeklog```
 
 Now start the server and hopefully, everything will work without any error. If some error occurs, let us know.
+
+```$ cd djangoFiles```
+
+```$ python manage.py makemigrations```
+
+```$ python manage.py migrate```
+
+```$ python manage.py runserver```
 
 ### Future Scope
 
