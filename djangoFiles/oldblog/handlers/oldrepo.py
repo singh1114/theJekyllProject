@@ -1,33 +1,40 @@
-from django.conf.settings import BASE_DIR
+import os
+import subprocess
+
+from django.conf import settings
+
+from theJekyllProject.models import Repo
 
 
 class OldRepoHandler:
-	
+
 	def __init__(self, user, repo_name):
 		self.user = user
-		self.repo = repo
+		self.repo_name = repo_name
+                self.base_dir = settings.BASE_DIR
 
 	def early_checks(self):
 		"""
 		Make some earlier checks about the code.
+                Directly return True for now.
 		"""
 		return True
 
 	def git_clone_repo(self):
-    """git_clone_repo to clone the already created Repository.
+             """git_clone_repo to clone the already created Repository.
 
-    Example:
-        Triggers when:
-        User clicks on one of the already created repository
-        clamining that the repo contains the required files.
+            Example:
+                Triggers when:
+                User clicks on one of the already created repository
+                clamining that the repo contains the required files.
 
-    Tasks:
-        * Works for a logged in user
-        * clone the repository to particular path
-    """
-    path = BASE_DIR + '/../' + 'JekLog/' + self.user.username
-    url = 'https://github.com/' + self.user.username + '/' + self.repo_name
-    subprocess.call(['git', 'clone', url, path])
+            Tasks:
+                * Works for a logged in user
+                * clone the repository to particular path
+            """
+            path = '/'.join([self.base_dir, '..'. 'JekLog', self.user.username])
+            url = 'https://github.com/' + self.user.username + '/' + self.repo_name
+            subprocess.call(['git', 'clone', url, path])
 
 
 	def find_required_files(self):
@@ -42,7 +49,7 @@ class OldRepoHandler:
 	    Tasks:
 	        * Try to find the main files.
 	    """
-	    path = BASE_DIR + '/../' + 'JekLog/' + self.user.username + '/' + self.repo_name
+	    path = '/'.join([self.base_dir, '..', 'JekLog', self.user.username, self.repo_name])
 	    files = os.listdir(path)
 	    temp = 0
 	    for file in files:
@@ -85,30 +92,31 @@ class OldRepoHandler:
 	    Tasks:
 	        * Fill Repo table
 	    """
+            pass
 
-		
+
 	def use_old_repo(self):
 		"""
 		Tasks:
-        * View for logged in users only.
-        * Select any repo from the repo list
-        * Make some earlier checks
-        * Clone the repo
-        * Check if the required contents are present or not
-        * If yes do the required operations:
-            * Fill repo table
-            * Select Main Site
-        * Else give an error message
-        * Integrate celery to show the amount of task completed
-        """
-        git_clone_repo(user.username, repo_name)
-        if(find_required_files(user.username, repo_name)):
-            repo = fill_repo_table_for_old_repo(user.username, repo_name)
-            select_main_site(user, repo.pk)
-            fill_other_tables_from_config_file(user.username, repo_name)
-            find_posts(user.username, repo_name)
-            find_pages(user.username, repo_name)
-            
+                * View for logged in users only.
+                * Select any repo from the repo list
+                * Make some earlier checks
+                * Clone the repo
+                * Check if the required contents are present or not
+                * If yes do the required operations:
+                    * Fill repo table
+                    * Select Main Site
+                * Else give an error message
+                * Integrate celery to show the amount of task completed
+                """
+                git_clone_repo(user.username, repo_name)
+                if(find_required_files(user.username, repo_name)):
+                    repo = fill_repo_table_for_old_repo(user.username, repo_name)
+                    select_main_site(user, repo.pk)
+                    fill_other_tables_from_config_file(user.username, repo_name)
+                    find_posts(user.username, repo_name)
+                    find_pages(user.username, repo_name)
 
-        else:
-            pass # or give errors
+
+                else:
+                    pass # or give errors
