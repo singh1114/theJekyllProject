@@ -38,11 +38,7 @@ from theJekyllProject.functions import copy_jekyll_files
 from theJekyllProject.functions import create_config_file
 from theJekyllProject.functions import create_file_name
 from theJekyllProject.functions import create_repo
-from theJekyllProject.functions import fill_other_tables_from_config_file
-from theJekyllProject.functions import fill_repo_table_for_old_repo
-from theJekyllProject.functions import find_required_files
 from theJekyllProject.functions import get_repo_list
-from theJekyllProject.functions import git_clone_repo
 from theJekyllProject.functions import header_content
 from theJekyllProject.functions import move_file
 from theJekyllProject.functions import page_header_content
@@ -660,7 +656,7 @@ class BlogView(LoginRequiredMixin, View):
         * Redirect to the correct link.
         * If the repo_name is equal to username.github.io
           then redirect to username.github.io only
-    """  
+    """
     def get(self, request, *args, **kwargs):
         user = request.user
         repo = Repo.objects.get(user=user, main=True)
@@ -670,38 +666,38 @@ class BlogView(LoginRequiredMixin, View):
             return redirect('http://' + user.username + '.github.io/')
 
 
-class UseOldRepo(LoginRequiredMixin, View):
-    """UseOldRepo to register a repo on already created Repository.
-
-    Example:
-        Triggers when:
-        User clicks on one of the already created repository
-        clamining that the repo contains the required files.
-
-    Tasks:
-        * View for logged in users only.
-        * Select any repo from the repo list
-        * Make some earlier checks
-        * Clone the repo
-        * Check if the required contents are present or not
-        * If yes do the required operations:
-            * Fill repo table
-            * Select Main Site
-        * Else give an error message
-        * Integrate celery to show the amount of task completed
-    """
-    def get(self, request, *args, **kwargs):
-        user = request.user
-        repo_name = kwargs['repo_name']
-        # Check the git tree first
-        git_clone_repo(user.username, repo_name)
-        if(find_required_files(user.username, repo_name)):
-            repo = fill_repo_table_for_old_repo(user.username, repo_name)
-            select_main_site(user, repo.pk)
-            fill_other_tables_from_config_file(user.username, repo_name)
-            find_posts(user.username, repo_name)
-            find_pages(user.username, repo_name)
-            
-
-        else:
-            pass # or give errors
+#class UseOldRepo(LoginRequiredMixin, View):
+#    """UseOldRepo to register a repo on already created Repository.
+#
+#    Example:
+#        Triggers when:
+#        User clicks on one of the already created repository
+#        clamining that the repo contains the required files.
+#
+#    Tasks:
+#        * View for logged in users only.
+#        * Select any repo from the repo list
+#        * Make some earlier checks
+#        * Clone the repo
+#        * Check if the required contents are present or not
+#        * If yes do the required operations:
+#            * Fill repo table
+#            * Select Main Site
+#        * Else give an error message
+#        * Integrate celery to show the amount of task completed
+#    """
+#    def get(self, request, *args, **kwargs):
+#        user = request.user
+#        repo_name = kwargs['repo_name']
+#        # Check the git tree first
+#        git_clone_repo(user.username, repo_name)
+#        if(find_required_files(user.username, repo_name)):
+#            repo = fill_repo_table_for_old_repo(user.username, repo_name)
+#            select_main_site(user, repo.pk)
+#            fill_other_tables_from_config_file(user.username, repo_name)
+#            find_posts(user.username, repo_name)
+#            find_pages(user.username, repo_name)
+#
+#
+#        else:
+#            pass # or give errors
