@@ -16,3 +16,4 @@ addons:
 
 before_script:
   - psql -c "CREATE DATABASE jeklog;" -U postgres
+  - "flake8 djangoFiles/ --exclude=migrations,settings.py,lib,tests,tmp,manage.py"
