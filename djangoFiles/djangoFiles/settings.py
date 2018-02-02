@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'oldrepo',
     'theJekyllProject',
     'ckeditor',
     'social_django',
@@ -95,7 +96,7 @@ DATABASES = {
 if 'TRAVIS' in os.environ:
     DATABASES['default']['USER'] = 'postgres'
     DATABASES['default']['PASSWORD'] = ''
-    
+
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
 

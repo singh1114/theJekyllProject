@@ -5,4 +5,4 @@ from django.apps import AppConfig
 
 
 class OldblogConfig(AppConfig):
-    name = 'oldblog'
+    name = 'oldrepo'
