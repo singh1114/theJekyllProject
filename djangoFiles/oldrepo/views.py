@@ -5,7 +5,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 from django.views import View
 
-from oldblog.handlers import OldRepoHandler
+from oldrepo.handlers.oldrepo import OldRepoHandler
 
 
 class UseOldRepo(LoginRequiredMixin, View):
