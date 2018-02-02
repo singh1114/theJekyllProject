@@ -1,4 +1,7 @@
 [![Build Status](https://travis-ci.org/singh1114/theJekyllProject.svg?branch=master)](https://travis-ci.org/singh1114/theJekyllProject)
+
+[![Coverage Status](https://coveralls.io/repos/github/singh1114/theJekyllProject/badge.svg?branch=master)](https://coveralls.io/github/singh1114/theJekyllProject?branch=master)
+
 # JekLog
 A Django project to create blogs using django Content Management System. 
 [JekLog](http://jeklog.com)
