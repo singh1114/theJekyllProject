@@ -10,5 +10,21 @@ class TestOldRepoSetUp(TestCase):
         """
         content = OldRepoSetUp.find_in_content(r'name:.+',
                                                'name: JekLog Official Blog')
-        self.assertEqual(content, 'JekLog Official Blog')
+        self.assertEqual('JekLog Official Blog', content)
 
+    def test_find_multi_line_content(self):
+        """
+        test mutli line content, multiline content is like:
+            exclude:
+                - Area
+                - README
+        """
+        file_data = """etcmfpfsp:
+exclude:
+              - README
+              - bin
+              - active
+        """
+        content = OldRepoSetUp.find_multi_line_content(r'exclude:', file_data)
+        return_content = ['README', 'bin', 'active']
+        self.assertEqual(return_content, content)
