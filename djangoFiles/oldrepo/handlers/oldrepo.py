@@ -27,19 +27,21 @@ class OldRepoSetUp:
         return data_found[0].split(':')[1].strip()
 
     @staticmethod
-    def find_multi_line_vars(regex, file_data):
+    def find_multi_line_content(regex, file_data):
         """
         find and return multi line values in file_data with regex
         """
         return_list = []
-        for line in file_data:
-            if re.search(regex, file_data):
-                while True:
-                    next_line = file_data.next().strip()
-                    if next_line[:1] is '-':
-                        return_list.append(next_line.split(' ')[1])
-                    else:
-                        break
+        file_data = file_data.split('\n')
+        iterator = iter(file_data)
+        line = next(iterator)
+        if re.search(regex, line):
+            while True:
+                line = next(iterator).strip()
+                if line[:1] is '-':
+                    return_list.append(line.split(' ')[1])
+                else:
+                    break
         return return_list
 
 
@@ -166,7 +168,8 @@ class OldRepoSetUp:
                                                   file_data)
 
         # TODO Find Site plugins
-        rdse['exclude_data']= self.find_multi_line_vars(r'exclude:', file_data)
+        rdse['exclude_data']= self.find_multi_line_content(r'exclude:',
+                                                           file_data)
         return return_data
 
 
