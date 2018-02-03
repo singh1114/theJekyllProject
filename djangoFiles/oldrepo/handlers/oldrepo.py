@@ -26,6 +26,22 @@ class OldRepoSetUp:
         data_found = re.findall(regex, file_data)
         return data_found[0].split(':')[1].strip()
 
+    @staticmethod
+    def find_multi_line_vars(regex, file_data):
+        """
+        find and return multi line values in file_data with regex
+        """
+        return_list = []
+        for line in file_data:
+            if re.search(regex, file_data):
+                while True:
+                    next_line = file_data.next().strip()
+                    if next_line[:1] is '-':
+                        return_list.append(next_line.split(' ')[1])
+                    else:
+                        break
+        return return_list
+
 
     def early_checks(self):
         """
@@ -100,30 +116,58 @@ class OldRepoSetUp:
         with open(config_file_path, 'r') as config_file:
            file_data = config_file.read()
 
+        return_data = {}
+        rdsd = return_data['site_data'] = ''
+        rdssd = return_data['social_site_data'] = ''
+        rdst = return_data['site_theme'] = ''
+        rdse = return_data['site_exclude'] = ''
         # Find SiteData
-        title_data = self.find_in_content(r'name:.+', file_data)
-        description_data = self.find_in_content(r'description:.+', file_data)
-        avatar_data = self.find_in_content(r'avatar:.+', file_data)
+        rdsd['title_data'] = self.find_in_content(r'name:.+', file_data)
+        rdsd['description_data'] = self.find_in_content(r'description:.+',
+                                                        file_data)
+        rdsd['avatar_data'] = self.find_in_content(r'avatar:.+', file_data)
 
         # Find SocialSiteData
-        dribbble_data = self.find_in_content(r'dribbble:.+|dribbble:', file_data)
-        email_data = self.find_in_content(r'email:.+|email:', file_data)
-        facebook_data = self.find_in_content(r'facebook:.+|facebook:', file_data)
-        flickr_data = self.find_in_content(r'flickr:.+|flickr:', file_data)
-        github_data = self.find_in_content(r'github:.+|github:', file_data)
-        instagram_data = self.find_in_content(r'instagram:.+|instagram:', file_data)
-        linkedin_data = self.find_in_content(r'linkedin:.+|linkedin:', file_data)
-        pinterest_data = self.find_in_content(r'pinterest:.+|pinterest:', file_data)
-        rss_data = self.find_in_content(r'rss:.+|rss:', file_data)
-        twitter_data = self.find_in_content(r'twitter:.+|twitter:', file_data)
-        stackoverflow_data = self.find_in_content(r'stackoverflow:.+|stackoverflow:', file_data)
-        youtube_data = self.find_in_content(r'youtube:.+|youtube:', file_data)
-        googleplus_data = self.find_in_content(r'googleplus:.+|googleplus:', file_data)
-        disqus_data = self.find_in_content(r'disqus:.+|disqus:', file_data)
-        google_analytics_data = self.find_in_content(r'google_analytics:.+|google_analytics:', file_data)
+        rdssd['dribbble_data'] = self.find_in_content(r'dribbble:.+|dribbble:',
+                                                      file_data)
+        rdssd['email_data'] = self.find_in_content(r'email:.+|email:',
+                                                   file_data)
+        rdssd['facebook_data'] = self.find_in_content(r'facebook:.+|facebook:',
+                                                      file_data)
+        rdssd['flickr_data'] = self.find_in_content(r'flickr:.+|flickr:',
+                                                    file_data)
+        rdssd['github_data'] = self.find_in_content(r'github:.+|github:',
+                                                    file_data)
+        rdssd['instagram_data'] = self.find_in_content((r'instagram:.+|inst'
+                                                       r'agram:'), file_data)
+        rdssd['linkedin_data'] = self.find_in_content(r'linkedin:.+|linkedin:',
+                                                      file_data)
+        rdssd['pinterest_data'] = self.find_in_content((r'pinterest:.+|pin'
+                                                       r'terest:'), file_data)
+        rdssd['rss_data'] = self.find_in_content(r'rss:.+|rss:', file_data)
+        rdssd['twitter_data'] = self.find_in_content(r'twitter:.+|twitter:',
+                                                     file_data)
+        rdssd['stackoverflow_data'] = self.find_in_content((r'stackoverflow:.+|s'
+                                                           r'tackoverflow:'),
+                                                           file_data)
+        rdssd['youtube_data'] = self.find_in_content(r'youtube:.+|youtube:',
+                                                     file_data)
+        rdssd['googleplus_data'] = self.find_in_content((r'googleplus:.+|google'
+                                                        r'plus:'), file_data)
+        rdssd['disqus_data'] = self.find_in_content(r'disqus:.+|disqus:',
+                                                    file_data)
+        rdssd['google_analytics_data'] = self.find_in_content((r'google_analyti'
+                                                              r'cs:.+|google_a'
+                                                              r'nalytics:'),
+                                                              file_data)
 
         # Find theme data
-        theme_data = self.find_in_content(r'theme:.+|theme:', file_data)
+        rdst['theme_data'] = self.find_in_content(r'theme:.+|theme:',
+                                                  file_data)
+
+        # TODO Find Site plugins
+        rdse['exclude_data']= self.find_multi_line_vars(r'exclude:', file_data)
+        return return_data
 
 
 
