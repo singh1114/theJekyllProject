@@ -4,7 +4,7 @@ import subprocess
 
 from django.conf import settings
 
-from theJekyllProject.dbapi import RepoDbIO
+from theJekyllProject.dbio import RepoDbIO
 
 
 class OldRepoSetUp:
@@ -30,18 +30,39 @@ class OldRepoSetUp:
     def find_multi_line_content(regex, file_data):
         """
         find and return multi line values in file_data with regex
+
+        expected input:
+            regex = exclude:
+
+            file_data = {
+                name: something
+                code: something
+                exclude:
+                    - Real-job
+                    - README
+            }
+        expected output:
+            ['Real-job', 'README']
         """
         return_list = []
         file_data = file_data.split('\n')
         iterator = iter(file_data)
         line = next(iterator)
-        if re.search(regex, line):
-            while True:
-                line = next(iterator).strip()
-                if line[:1] is '-':
-                    return_list.append(line.split(' ')[1])
-                else:
-                    break
+
+        # Try to find regex in the line
+        while True:
+            if re.search(regex, line):
+                break
+            else:
+                line = next(iterator)
+
+        # When you find it find  and return the list of options
+        while True:
+            line = next(iterator).strip()
+            if line[:1] is '-':
+                return_list.append(line.split(' ')[1])
+            else:
+                break
         return return_list
 
 
@@ -111,7 +132,7 @@ class OldRepoSetUp:
         RepoDbIO().create_repo_main_true(self.user, self.repo_name)
 
 
-    def read_config_extract_values(self):
+    def read_config_data(self):
         """read_config_extract_values to read config file and return data
         """
         config_file_path = '/'.join([self.repo_path, '_config.yml'])
@@ -119,10 +140,11 @@ class OldRepoSetUp:
            file_data = config_file.read()
 
         return_data = {}
-        rdsd = return_data['site_data'] = ''
-        rdssd = return_data['social_site_data'] = ''
-        rdst = return_data['site_theme'] = ''
-        rdse = return_data['site_exclude'] = ''
+        rdsd = return_data['site_data'] = {}
+        rdssd = return_data['social_site_data'] = {}
+        rdst = return_data['site_theme'] = {}
+        rdse = return_data['site_exclude'] = {}
+        rdsp = return_data['site_plugin'] = {}
         # Find SiteData
         rdsd['title_data'] = self.find_in_content(r'name:.+', file_data)
         rdsd['description_data'] = self.find_in_content(r'description:.+',
@@ -149,9 +171,9 @@ class OldRepoSetUp:
         rdssd['rss_data'] = self.find_in_content(r'rss:.+|rss:', file_data)
         rdssd['twitter_data'] = self.find_in_content(r'twitter:.+|twitter:',
                                                      file_data)
-        rdssd['stackoverflow_data'] = self.find_in_content((r'stackoverflow:.+|s'
-                                                           r'tackoverflow:'),
-                                                           file_data)
+        rdssd['stackoverflow_data'] = self.find_in_content((r'stackoverflow:.+'
+                                                            r'|stackoverflow:')
+                                                           , file_data)
         rdssd['youtube_data'] = self.find_in_content(r'youtube:.+|youtube:',
                                                      file_data)
         rdssd['googleplus_data'] = self.find_in_content((r'googleplus:.+|google'
@@ -167,14 +189,16 @@ class OldRepoSetUp:
         rdst['theme_data'] = self.find_in_content(r'theme:.+|theme:',
                                                   file_data)
 
-        # TODO Find Site plugins
-        rdse['exclude_data']= self.find_multi_line_content(r'exclude:',
+        # Find the exclude data
+        rdse['exclude_data'] = self.find_multi_line_content(r'exclude:',
                                                            file_data)
+        # Find the plugin/gems data
+        rdsp['plugin_data'] = self.find_multi_line_content(r'gems:', file_data)
         return return_data
 
 
 
-    def fill_other_tables_from_config_data(username, repo_name):
+    def store_config_data(self):
         """fill_repo_table_for_old_repo to fill the database for choosen
         old repo.
 
@@ -187,7 +211,8 @@ class OldRepoSetUp:
         Tasks:
             * Fill Repo table
         """
-        pass
+        config_file_data = self.read_config_data()
+        return config_file_data
 
 
 class OldRepo(OldRepoSetUp):

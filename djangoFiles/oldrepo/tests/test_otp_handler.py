@@ -19,8 +19,8 @@ class TestOldRepoSetUp(TestCase):
                 - Area
                 - README
         """
-        file_data = """etcmfpfsp:
-exclude:
+        file_data = """name: My Blog
+        exclude:
               - README
               - bin
               - active
