@@ -7,6 +7,6 @@ class BaseDbIO:
 
     def save_db_instance(self, kwargs):
         """
-        save instances of ORM into the database
+        save/create instances of ORM into the database
         """
         self.model_name.create(**kwargs)
