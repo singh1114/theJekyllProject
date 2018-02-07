@@ -76,7 +76,8 @@ class OldRepoSetUp:
         return True
 
     def git_clone_repo(self):
-        """git_clone_repo to clone the already created Repository.
+        """git_clone_repo to clone the already created Repository and store at
+        a particular location.
 
         Example:
             Triggers when:
@@ -93,16 +94,8 @@ class OldRepoSetUp:
 
     def find_required_files(self):
         """find_required_files to find particular files in the cloned repo.
-
-        Example:
-            Triggers when:
-            User clicks on one of the already created repository
-            clamining that the repo contains the required files.
-            After the repo is cloned this function is triggered
-
-        Tasks:
-            * Try to find the main files.
-            * We try to find _config.yml and _posts file.
+        We try to find _config.yml file and _posts directory. If we find both
+        of them it returns success
         """
         files = os.listdir(self.repo_path)
         temp = 0
@@ -117,17 +110,8 @@ class OldRepoSetUp:
             return False
 
     def fill_repo_table_for_old_repo(self):
-        """fill_repo_table_for_old_repo to fill the database for choosen
-        old repo.
-
-        Example:
-            Triggers when:
-            User clicks on one of the already created repository
-            clamining that the repo contains the required files.
-            After checking of required files this function is triggered.
-
-        Tasks:
-            * Fill Repo table
+        """fill_repo_table_for_old_repo to fill the repo table for choosen
+        old repo
         """
         data = {
             'user': self.user,
@@ -137,7 +121,7 @@ class OldRepoSetUp:
         RepoDbIO.save_db_instance(data)
 
     def read_config_data(self):
-        """read_config_extract_values to read config file and return data
+        """read_config_data to read config file and return data
         """
         config_file_path = '/'.join([self.repo_path, '_config.yml'])
         with open(config_file_path, 'r') as config_file:
@@ -196,15 +180,7 @@ class OldRepoSetUp:
 
     def store_config_data(self):
         """store_config_data to fill the database for choosen
-        old repo.
-
-        Example:
-            Triggers when:
-            User clicks on one of the already created repository
-            clamining that the repo contains the required files.
-            After checking of required files this function is triggered.
-
-        Tasks:
+        old repo:
             * Store SiteData
             * Store SiteSocialData
             * Store SiteTheme
