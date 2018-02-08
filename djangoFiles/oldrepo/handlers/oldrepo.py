@@ -21,6 +21,8 @@ class OldRepoSetUp:
                                    self.user.username, self.repo_name])
         self.site_data_db_io = SiteDataDbIO()
 
+    # FIXME YOU CAN"T CALL static methods in the same class.
+    # Copied functions to theJekyllProject/handlers/scrape_files.py
     @staticmethod
     def find_in_content(regex, file_data):
         """
