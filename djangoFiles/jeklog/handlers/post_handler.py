@@ -5,22 +5,29 @@ import re
 
 from django.conf import settings
 
+from jeklog.handlers.scrape_files import FileScraper
+
 
 class PostHandler:
     """
     Post handler will used to do all the operations related to Posts
     """
     def __init__(self, user, repo_name):
-        self.base_dir = settings.BASE_DIR
-        self.posts_path = '/'.join([self.base_dir, '..', 'JekLog',
+        self.fs = FileScraper()
+        self.posts_path = '/'.join([settings.BASE_DIR, '..', 'JekLog',
                                    self.user.username, self.repo_name,
                                    'posts'])
 
     def handle_post_head(self, head_content):
         """
+        Read and parse the head/meta content of the blog
         """
-        # TODO work on this
-        pass
+        return_data = {}
+        return_data['author'] = self.fs.find_in_content(r'author:.+|author:',
+                                                        head_content)
+        return_data['comment'] = self.fs.find_in_content(r'comment:.+|comment:'
+                                                         , head_content)
+        # TODO complete this
 
     def handle_post_body(self, body):
         """
