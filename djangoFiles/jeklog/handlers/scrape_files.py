@@ -5,6 +5,18 @@ class FileScraper:
         self.regex = regex
         self.file_data = file_data
 
+    def scrape_head_body(self, file_data):
+        """
+        scrape head content of the file
+        head content is defined as the content between --- and --- everything
+        after that is body.
+        """
+        regex_search = re.search('---([^-]+)---([^-]+)', file_data)
+        return_dict = {}
+        return_dict['head'] = regex_search.group(1)
+        return_dict['body'] = regex_search.group(2)
+        return return_dict
+
     def find_in_content(self):
         """
         Find something in the content and return things accordingly
