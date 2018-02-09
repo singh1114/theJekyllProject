@@ -1,7 +1,8 @@
 from base.dbio import BaseDbIO
 
 from theJekyllProject.models import (
-    Post, Repo, SiteData, SiteExclude, SiteSocialProfile, SitePlugin, SiteTheme
+    Page, Post, Repo, SiteData, SiteExclude, SiteSocialProfile, SitePlugin,
+    SiteTheme
 )
 
 
@@ -59,3 +60,11 @@ class PostDbIO(BaseDbIO):
     """
     def __init__(self, model_name):
         self.model_name = Post
+
+
+class PageDbIO(BaseDbIO):
+    """
+    Database I/O operations are handled using this class
+    """
+    def __init__(self, model_name):
+        self.model_name = Page
