@@ -4,6 +4,10 @@ import subprocess
 
 from django.conf import settings
 
+from jeklog.handlers.post_handlers import PostHandler
+
+from oldrepo.constants import EARLY_CHECK_FAILS, FILES_NOT_FOUND
+
 from theJekyllProject.dbio import (
     RepoDbIO, SiteDataDbIO, SiteExcludeDbIO, SitePluginDbIO,
     SiteSocialProfileDbIO, SiteThemeDbIO
@@ -111,8 +115,8 @@ class OldRepoSetUp:
         else:
             return False
 
-    def fill_repo_table_for_old_repo(self):
-        """fill_repo_table_for_old_repo to fill the repo table for choosen
+    def store_old_repo(self):
+        """store_old_repo to fill the repo table for choosen
         old repo
         """
         data = {
@@ -120,7 +124,7 @@ class OldRepoSetUp:
             'repo_name': self.repo_name,
             'main': True
         }
-        RepoDbIO.save_db_instance(data)
+        RepoDbIO().save_db_instance(data)
 
     def read_config_data(self):
         """read_config_data to read config file and return data
@@ -189,17 +193,19 @@ class OldRepoSetUp:
             * Store SitePlugins
             * Store SiteExcludes
         """
+        repo = RepoDbIO().get_repo(self.user, self.repo_name)
+        RepoDbIO().change_main(self.user, repo)
         config_data = self.read_config_data()
         SiteDataDbIO.save_db_instance(config_data['site_data'].update({
-            'user': self.user}))
+            'repo': repo}))
         SiteSocialProfileDbIO.save_db_instance(
-            config_data['site_social_data'].update({'user': self.user}))
+            config_data['site_social_data'].update({'repo': repo}))
         SiteThemeDbIO.save_db_instance(config_data['site_theme'].update({
-            'user': self.user}))
+            'repo': repo}))
         SitePluginDbIO.save_db_instance(config_data['site_plugin'].update({
-            'user': self.user}))
+            'repo': repo}))
         SiteExcludeDbIO.save_db_instance(config_data['site_exclude'].update({
-            'user': self.user}))
+            'repo': repo}))
 
 
 class OldRepo(OldRepoSetUp):
@@ -217,7 +223,21 @@ class OldRepo(OldRepoSetUp):
         * Else give an error message
         * Integrate celery to show the amount of task completed
         """
- #       git_clone_repo(user.username, repo_name)
+        self.git_clone_repo()
+        return_dict = {}
+        if not self.early_checks():
+            # FIXME take the user to same url with error as message
+            return_dict['message'] = EARLY_CHECK_FAILS
+
+        if not self.find_required_files():
+            return_dict['messages'] = FILES_NOT_FOUND
+
+        else:
+            self.store_old_repo()
+            self.store_config_data()
+            PostHandler().read_post()
+            # TODO start from here
+            # FIXME something is wrong with main = True
  #       if(find_required_files(user.username, repo_name)):
  #           repo = fill_repo_table_for_old_repo(user.username,
  #                                               repo_name)

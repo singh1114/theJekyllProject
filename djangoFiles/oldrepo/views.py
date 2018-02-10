@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+from django.contrib import messages
+
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from django.views import View
@@ -33,4 +35,4 @@ class UseOldRepo(LoginRequiredMixin, View):
 
         # can't send repo object as entry is not in database
         repo_name = kwargs['repo_name']
-        OldRepoHandler(user, repo_name).use_old_repo()
+        OldRepoHandler().use_old_repo(user, repo_name)

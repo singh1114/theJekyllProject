@@ -104,8 +104,8 @@ class SiteData(models.Model):
 
 
 class SiteSocialProfile(models.Model):
-    user = models.OneToOneField(
-        User,
+    repo = models.OneToOneField(
+        Repo,
         on_delete=models.CASCADE,
         primary_key=True,
     )
@@ -187,8 +187,8 @@ class SiteSocialProfile(models.Model):
 
 
 class SitePlugin(models.Model):
-    user = models.ForeignKey(
-        User,
+    repo = models.ForeignKey(
+        Repo,
         on_delete=models.CASCADE,
     )
     plugin = models.CharField(
@@ -197,8 +197,8 @@ class SitePlugin(models.Model):
 
 
 class SiteExclude(models.Model):
-    user = models.ForeignKey(
-        User,
+    repo = models.ForeignKey(
+        Repo,
         on_delete=models.CASCADE,
     )
     exclude = models.CharField(
