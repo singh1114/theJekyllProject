@@ -73,7 +73,7 @@ class PostHandler(FileScraper):
     def read_posts(self):
         """
         Read the _posts directory and iterate over all the files in the
-        directory.
+        directory. In the end save the instance in the database.
         """
         for file in os.listdir(self.posts_path):
             file_data = self.extract_post(file)

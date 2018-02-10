@@ -13,11 +13,17 @@ class RepoDbIO(BaseDbIO):
     def __init__(self, model_name):
         self.model_name = Repo
 
+    def create_return(self, kwargs):
+        """
+        This model has a special requirement to return the saved instance
+        """
+        return self.model_name.create(**kwargs)
+
     def get_repo(self, user, repo_name):
         """
         get the repo by name, logged_in user and main True
         """
-        return self.model_name.get(main=False, user=user, repo=repo_name)
+        return self.model_name.get(main=True, user=user, repo=repo_name)
 
     def change_main(self, user, repo):
         """
