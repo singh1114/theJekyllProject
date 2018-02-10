@@ -12,7 +12,7 @@ A Django project to create blogs using django Content Management System.
 - Blog Tutorial:
 	[http://blog.jeklog.com/how-to-create-a-free-blog-using-github-pages-and-jekyll-with-jeklog/](http://blog.jeklog.com/how-to-create-a-free-blog-using-github-pages-and-jekyll-with-jeklog/)
 - YouTube Video: 
-	[!Tutorial gif](https://i.imgur.com/1utmaOM.gif)
+	![Tutorial gif](https://i.imgur.com/1utmaOM.gif)
 
 
 ## Documentation
