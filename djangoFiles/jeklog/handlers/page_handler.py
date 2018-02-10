@@ -32,7 +32,7 @@ class PageHandler(FileScraper):
 
     def read_page(self):
         """
-        Read pages
+        Read pages and save the instance into database
         """
         for file in os.listdir(self.repo_path):
             if file.endswith('.md'):

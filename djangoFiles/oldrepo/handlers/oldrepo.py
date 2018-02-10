@@ -4,9 +4,12 @@ import subprocess
 
 from django.conf import settings
 
+from jeklog.handlers.page_handlers import PageHandler
 from jeklog.handlers.post_handlers import PostHandler
 
-from oldrepo.constants import EARLY_CHECK_FAILS, FILES_NOT_FOUND
+from oldrepo.constants import (
+    EARLY_CHECK_FAILS, FILES_NOT_FOUND, OLD_REPO_SUCCESS
+)
 
 from theJekyllProject.dbio import (
     RepoDbIO, SiteDataDbIO, SiteExcludeDbIO, SitePluginDbIO,
@@ -124,7 +127,7 @@ class OldRepoSetUp:
             'repo_name': self.repo_name,
             'main': True
         }
-        RepoDbIO().save_db_instance(data)
+        return RepoDbIO().create_return(data)
 
     def read_config_data(self):
         """read_config_data to read config file and return data
@@ -184,7 +187,7 @@ class OldRepoSetUp:
         rdsp['plugin'] = self.find_multi_line_content(r'gems:', file_data)
         return return_data
 
-    def store_config_data(self):
+    def store_config_data(self, repo):
         """store_config_data to fill the database for choosen
         old repo:
             * Store SiteData
@@ -193,7 +196,6 @@ class OldRepoSetUp:
             * Store SitePlugins
             * Store SiteExcludes
         """
-        repo = RepoDbIO().get_repo(self.user, self.repo_name)
         RepoDbIO().change_main(self.user, repo)
         config_data = self.read_config_data()
         SiteDataDbIO.save_db_instance(config_data['site_data'].update({
@@ -228,24 +230,20 @@ class OldRepo(OldRepoSetUp):
         if not self.early_checks():
             # FIXME take the user to same url with error as message
             return_dict['message'] = EARLY_CHECK_FAILS
+            return_dict['message_type'] = 'error'
+            return return_dict
 
         if not self.find_required_files():
+            # FIXME same case must be followed here
             return_dict['messages'] = FILES_NOT_FOUND
+            return_dict['message_type'] = 'error'
+            return return_dict
 
         else:
-            self.store_old_repo()
-            self.store_config_data()
+            repo = self.store_old_repo()
+            self.store_config_data(repo)
             PostHandler().read_post()
-            # TODO start from here
-            # FIXME something is wrong with main = True
- #       if(find_required_files(user.username, repo_name)):
- #           repo = fill_repo_table_for_old_repo(user.username,
- #                                               repo_name)
- #           select_main_site(user, repo.pk)
- #           fill_other_tables_from_config_file(user.username,
- #                                              repo_name)
- #           find_posts(user.username, repo_name)
- #           find_pages(user.username, repo_name)
- #       else:
- #           pass # or give errors
-        pass
+            PageHandler().read_page()
+            return_dict['message'] = OLD_REPO_SUCCESS
+            return_dict['message_type'] = 'success'
+            return return_dict

@@ -5,6 +5,10 @@ from django.contrib import messages
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 
+from django.core.urlresolvers import reverse
+
+from django.http import HttpResponseRedirect
+
 from django.views import View
 
 from oldrepo.handlers.oldrepo import OldRepoHandler
@@ -35,4 +39,12 @@ class UseOldRepo(LoginRequiredMixin, View):
 
         # can't send repo object as entry is not in database
         repo_name = kwargs['repo_name']
-        OldRepoHandler().use_old_repo(user, repo_name)
+        return_dict = OldRepoHandler().use_old_repo(user, repo_name)
+        if return_dict['message_type'] is 'error':
+            messages.error(request, return_dict['message'])
+            # FIXME haven't really created URLs for this one
+            return HttpResponseRedirect(reverse(''))
+        else:
+            messages.success(request, return_dict['message'])
+            # FIXME same for this one
+            return HttpResponseRedirect(reverse(''))
