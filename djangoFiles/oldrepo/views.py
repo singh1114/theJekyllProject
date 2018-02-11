@@ -11,7 +11,7 @@ from django.http import HttpResponseRedirect
 
 from django.views import View
 
-from oldrepo.handlers.oldrepo import OldRepoHandler
+from oldrepo.handlers.oldrepo_handlers import OldRepoSetUp
 
 
 class UseOldRepo(LoginRequiredMixin, View):
@@ -34,16 +34,16 @@ class UseOldRepo(LoginRequiredMixin, View):
         * Else give an error message
         * Integrate celery to show the amount of task completed
     """
-    def get(self, request, *args, **kwargs):
+    def get(self, request, repo_name, *args, **kwargs):
         user = request.user
 
         # can't send repo object as entry is not in database
-        repo_name = kwargs['repo_name']
-        return_dict = OldRepoHandler().use_old_repo(user, repo_name)
+        repo_name = request.get['repo_name']
+        return_dict = OldRepoSetUp().use_old_repo(user, repo_name)
         if return_dict['message_type'] is 'error':
             messages.error(request, return_dict['message'])
             # FIXME haven't really created URLs for this one
-            return HttpResponseRedirect(reverse(''))
+            return HttpResponseRedirect(reverse('old-repo'))
         else:
             messages.success(request, return_dict['message'])
             # FIXME same for this one

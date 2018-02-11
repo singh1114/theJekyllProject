@@ -119,7 +119,6 @@ class CreateRepoView(LoginRequiredMixin, FormView):
         user_token = social.extra_data['access_token']
 
         repo_list = get_repo_list(user_token)
-
         return render(request, 'theJekyllProject/create_repo.html', context={
             'repo_list': repo_list,
             'form': self.form_class,

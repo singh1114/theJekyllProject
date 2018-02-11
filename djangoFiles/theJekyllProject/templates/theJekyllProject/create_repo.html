@@ -29,7 +29,7 @@
                     <div class="card-block" style="display:inline-block">
                         <h1> Repo List </h1>
                           {% for repo in repo_list %}
-                          <a href="{% url 'old-repo' repo_name=repo %}">{{ repo }}</p>
+                            <a class='btn btn-danger' href="{% url 'old:old-repo' repo %}">{{ repo }}</a>
                           {% endfor %}
                     </div>
                 </div>
