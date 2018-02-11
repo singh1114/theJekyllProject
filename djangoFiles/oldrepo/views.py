@@ -47,4 +47,4 @@ class UseOldRepo(LoginRequiredMixin, View):
         else:
             messages.success(request, return_dict['message'])
             # FIXME same for this one
-            return HttpResponseRedirect(reverse(''))
+            return HttpResponseRedirect(reverse('home'))

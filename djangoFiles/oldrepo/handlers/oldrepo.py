@@ -4,8 +4,8 @@ import subprocess
 
 from django.conf import settings
 
-from jeklog.handlers.page_handlers import PageHandler
-from jeklog.handlers.post_handlers import PostHandler
+from jeklog.handlers.page_handler import PageHandler
+from jeklog.handlers.post_handler import PostHandler
 
 from oldrepo.constants import (
     EARLY_CHECK_FAILS, FILES_NOT_FOUND, OLD_REPO_SUCCESS
@@ -22,8 +22,8 @@ class OldRepoSetUp:
         self.user = user
         self.repo_name = repo_name
         self.base_dir = settings.BASE_DIR
-        self.user_path = '/'.join([self.base_dir, '..',
-                                   'JekLog', self.user.username])
+        self.user_path = '/'.join([self.base_dir, '..', 'JekLog',
+                                   self.user.username])
         self.repo_path = '/'.join([self.base_dir, '..', 'JekLog',
                                    self.user.username, self.repo_name])
         self.site_data_db_io = SiteDataDbIO()
