@@ -5,16 +5,18 @@ from markdown2 import Markdown
 from django.conf import settings
 
 from jeklog.handlers.scrape_files import FileScraper
-from theJekyllProject.dbio import PostDbIO
+from theJekyllProject.dbio import PostDbIO, RepoDbIO
 
 class PostHandler(FileScraper):
     """
     Post handler will used to do all the operations related to Posts
     """
     def __init__(self, user, repo_name):
+        self.user = user
+        self.repo_name = repo_name
         self.posts_path = '/'.join([settings.BASE_DIR, '..', 'JekLog',
                                    self.user.username, self.repo_name,
-                                   'posts'])
+                                   '_posts', ''])
 
     def markdown_to_html(self, content):
         """
@@ -29,8 +31,8 @@ class PostHandler(FileScraper):
         return_data = {}
         return_data['author'] = self.find_in_content(r'author:.+|author:',
                                                      head_content)
-        return_data['comment'] = self.find_in_content(r'comment:.+|comment:',
-                                                      head_content)
+        return_data['comments'] = self.find_in_content(r'comments:.+|comments:'
+                                                       , head_content)
         return_data['date'] = self.find_in_content(r'date:.+|date:',
                                                    head_content)
         return_data['layout'] = self.find_in_content(r'layout:.+|layout:',
@@ -76,6 +78,12 @@ class PostHandler(FileScraper):
         directory. In the end save the instance in the database.
         """
         for file in os.listdir(self.posts_path):
-            file_data = self.extract_post(file)
+            file_data = self.extract_post(self.posts_path + file)
             content_dict = self.call_scrapers(file_data)
-            PostDbIO.save_db_instance(content_dict)
+            if content_dict['comments'] == 'true':
+                content_dict['comments'] = True
+            else:
+                content_dict['comments'] = False
+            content_dict['repo'] = RepoDbIO().get_repo(self.user,
+                                                       self.repo_name)
+            PostDbIO().save_db_instance(content_dict)

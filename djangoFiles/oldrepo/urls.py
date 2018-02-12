@@ -5,5 +5,6 @@ from oldrepo.views import UseOldRepo
 app_name = 'oldrepo'
 
 urlpatterns = [
-    url(r'^oldrepo/(?P<repo_name>[\w\-]+)/$', UseOldRepo.as_view(), name='old-repo')
+    url(r'^oldrepo/(?P<repo_name>[\w\[.\]\\-]+)/$', UseOldRepo.as_view(),
+        name='old-repo')
 ]

@@ -38,8 +38,9 @@ class UseOldRepo(LoginRequiredMixin, View):
         user = request.user
 
         # can't send repo object as entry is not in database
-        repo_name = request.get['repo_name']
-        return_dict = OldRepoSetUp().use_old_repo(user, repo_name)
+        repo_name = self.kwargs['repo_name']
+        old_repo_obj = OldRepoSetUp(user, repo_name)
+        return_dict = old_repo_obj.use_old_repo()
         if return_dict['message_type'] is 'error':
             messages.error(request, return_dict['message'])
             # FIXME haven't really created URLs for this one
