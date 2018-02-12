@@ -57,6 +57,7 @@ class Post(models.Model):
         blank=True
     )
     title = models.CharField(max_length=2000)
+    slug = models.CharField(max_length=2000)
     content = RichTextField()
 
     def __str__(self):
@@ -70,6 +71,7 @@ class Page(models.Model):
     )
     title = models.CharField(max_length=2000)
     permalink = models.CharField(max_length=2000)
+    layout = models.CharField(max_length=2000)
     content = RichTextField()
 
     def __str__(self):

@@ -17,7 +17,6 @@ from theJekyllProject.dbio import (
 )
 
 class OldRepoSetUp:
-
     def __init__(self, user, repo_name):
         self.user = user
         self.repo_name = repo_name
@@ -26,7 +25,6 @@ class OldRepoSetUp:
                                    self.user.username])
         self.repo_path = '/'.join([self.base_dir, '..', 'JekLog',
                                    self.user.username, self.repo_name])
-        self.site_data_db_io = SiteDataDbIO()
 
     # FIXME YOU CAN"T CALL static methods in the same class.
     # Copied functions to theJekyllProject/handlers/scrape_files.py
@@ -99,7 +97,7 @@ class OldRepoSetUp:
         """
         url = '/'.join(['https://github.com', self.user.username,
                         self.repo_name])
-        subprocess.call(['git', 'clone', url, self.user_path])
+        subprocess.call(['git', 'clone', url, self.repo_path])
 
     def find_required_files(self):
         """find_required_files to find particular files in the cloned repo.
@@ -124,7 +122,7 @@ class OldRepoSetUp:
         """
         data = {
             'user': self.user,
-            'repo_name': self.repo_name,
+            'repo': self.repo_name,
             'main': True
         }
         return RepoDbIO().create_return(data)
@@ -198,19 +196,20 @@ class OldRepoSetUp:
         """
         RepoDbIO().change_main(self.user, repo)
         config_data = self.read_config_data()
-        SiteDataDbIO.save_db_instance(config_data['site_data'].update({
-            'repo': repo}))
-        SiteSocialProfileDbIO.save_db_instance(
-            config_data['site_social_data'].update({'repo': repo}))
-        SiteThemeDbIO.save_db_instance(config_data['site_theme'].update({
-            'repo': repo}))
-        SitePluginDbIO.save_db_instance(config_data['site_plugin'].update({
-            'repo': repo}))
-        SiteExcludeDbIO.save_db_instance(config_data['site_exclude'].update({
-            'repo': repo}))
+        #import ipdb; ipdb.set_trace()
+        config_data['site_data'].update({'repo': repo})
+        config_data['social_site_data'].update({'repo': repo})
+        config_data['site_theme'].update({'repo': repo})
+        config_data['site_plugin'].update({'repo': repo})
+        config_data['site_exclude'].update({'repo': repo})
+        SiteDataDbIO().save_db_instance(config_data['site_data'])
+        SiteSocialProfileDbIO().save_db_instance(
+                config_data['social_site_data'])
+        SiteThemeDbIO().save_db_instance(config_data['site_theme'])
+        SitePluginDbIO().save_db_instance(config_data['site_plugin'])
+        SiteExcludeDbIO().save_db_instance(config_data['site_exclude'])
 
 
-class OldRepo(OldRepoSetUp):
     def use_old_repo(self):
         """
         Tasks:
@@ -242,8 +241,8 @@ class OldRepo(OldRepoSetUp):
         else:
             repo = self.store_old_repo()
             self.store_config_data(repo)
-            PostHandler().read_post()
-            PageHandler().read_page()
+            PostHandler(self.user, self.repo_name).read_posts()
+            PageHandler(self.user, self.repo_name).read_pages()
             return_dict['message'] = OLD_REPO_SUCCESS
             return_dict['message_type'] = 'success'
             return return_dict

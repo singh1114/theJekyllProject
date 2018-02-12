@@ -11,18 +11,24 @@ class FileScraper:
         head content is defined as the content between --- and --- everything
         after that is body.
         """
-        regex_search = re.search('---([^-]+)---([^-]+)', file_data)
         return_dict = {}
-        return_dict['head'] = regex_search.group(1)
-        return_dict['body'] = regex_search.group(2)
+        first_occurence = file_data.find('---')
+        second_occurence = file_data[first_occurence+3:].find('---')
+        return_dict['head'] = file_data[first_occurence:(first_occurence+
+                                        second_occurence+6)]
+        return_dict['body'] = file_data[first_occurence+second_occurence+6:]
         return return_dict
 
-    def find_in_content(self):
+    def find_in_content(self, regex, file_data):
         """
         Find something in the content and return things accordingly
         """
-        data_found = re.findall(self.regex, self.file_data)
-        return data_found[0].split(':')[1].strip()
+        # FIXME try/catch this.
+        try:
+            data_found = re.findall(regex, file_data)
+            return data_found[0].split(':')[1].strip()
+        except IndexError:
+            return ''
 
     def find_multi_line_content(self):
         """

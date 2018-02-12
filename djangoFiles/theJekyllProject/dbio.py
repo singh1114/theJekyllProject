@@ -10,20 +10,21 @@ class RepoDbIO(BaseDbIO):
     """
     Database input output operations using this class
     """
-    def __init__(self, model_name):
+    def __init__(self):
         self.model_name = Repo
 
     def create_return(self, kwargs):
         """
         This model has a special requirement to return the saved instance
         """
-        return self.model_name.create(**kwargs)
+        return self.model_name.objects.create(**kwargs)
 
     def get_repo(self, user, repo_name):
         """
         get the repo by name, logged_in user and main True
         """
-        return self.model_name.get(main=True, user=user, repo=repo_name)
+        return self.model_name.objects.get(main=True,
+                                           user=user, repo=repo_name)
 
     def change_main(self, user, repo):
         """
@@ -42,7 +43,7 @@ class SiteDataDbIO(BaseDbIO):
     """
     Database I/O operations are handled using this class
     """
-    def __init__(self, model_name):
+    def __init__(self):
         self.model_name = SiteData
 
 
@@ -50,7 +51,7 @@ class SiteSocialProfileDbIO(BaseDbIO):
     """
     Database I/O operations are handled using this class
     """
-    def __init__(self, model_name):
+    def __init__(self):
         self.model_name = SiteSocialProfile
 
 
@@ -58,7 +59,7 @@ class SiteThemeDbIO(BaseDbIO):
     """
     Database I/O operations are handled using this class
     """
-    def __init__(self, model_name):
+    def __init__(self):
         self.model_name = SiteTheme
 
 
@@ -66,7 +67,7 @@ class SitePluginDbIO(BaseDbIO):
     """
     Database I/O operations are handled using this class
     """
-    def __init__(self, model_name):
+    def __init__(self):
         self.model_name = SitePlugin
 
 
@@ -74,7 +75,7 @@ class SiteExcludeDbIO(BaseDbIO):
     """
     Database I/O operations are handled using this class
     """
-    def __init__(self, model_name):
+    def __init__(self):
         self.model_name = SiteExclude
 
 
@@ -82,7 +83,7 @@ class PostDbIO(BaseDbIO):
     """
     Database I/O operations are handled using this class
     """
-    def __init__(self, model_name):
+    def __init__(self):
         self.model_name = Post
 
 
@@ -90,5 +91,5 @@ class PageDbIO(BaseDbIO):
     """
     Database I/O operations are handled using this class
     """
-    def __init__(self, model_name):
+    def __init__(self):
         self.model_name = Page

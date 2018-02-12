@@ -9,9 +9,11 @@ from theJekyllProject.dbio import PageDbIO
 
 
 class PageHandler(FileScraper):
-    def __init__(self, user, repo):
+    def __init__(self, user, repo_name):
+        self.user = user
+        self.repo_name = repo_name
         self.repo_path = '/'.join([settings.BASE_DIR, '..', 'JekLog',
-                                   self.user.username, self.repo_name])
+                                   user.username, repo_name, ''])
 
     def handle_page_head(self, head_content):
         """
@@ -30,14 +32,16 @@ class PageHandler(FileScraper):
         PostHandler().handle_body(body_content)
 
 
-    def read_page(self):
+    def read_pages(self):
         """
         Read pages and save the instance into database
         """
         for file in os.listdir(self.repo_path):
             if file.endswith('.md'):
                 if str(file) is not ('README.md' or '404.md'):
-                    with open(file, 'r') as page_file:
+                    with open(self.repo_path + file, 'r') as page_file:
                         file_data = page_file.read()
-            content_dict = PostHandler().call_scrapers(file_data)
-            PageDbIO.save_db_instance(content_dict)
+                        # FIXME call self.handle_page_head
+                        content_dict = PostHandler(self.user,
+                                       self.repo_name).call_scrapers(file_data)
+                        PageDbIO().save_db_instance(content_dict)
