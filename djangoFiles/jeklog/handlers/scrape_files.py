@@ -1,5 +1,7 @@
 import re
 
+from markdown2 import Markdown
+
 class FileScraper:
     def __init__(self, regex, file_data):
         self.regex = regex
@@ -67,4 +69,19 @@ class FileScraper:
             else:
                 break
         return return_list
+
+    def join_dicts(self, dict_one, dict_two):
+        """
+        This method is used to join to dictionaries together
+        """
+        #import ipdb; ipdb.set_trace()
+        main_dict = dict_one.copy()
+        main_dict.update(dict_two)
+        return main_dict
+
+    def markdown_to_html(self, content):
+        """
+        Convert the read markdown to html
+        """
+        return Markdown().convert(content)
 

@@ -1,7 +1,5 @@
 import os
 
-from markdown2 import Markdown
-
 from django.conf import settings
 
 from jeklog.handlers.scrape_files import FileScraper
@@ -17,12 +15,6 @@ class PostHandler(FileScraper):
         self.posts_path = '/'.join([settings.BASE_DIR, '..', 'JekLog',
                                    self.user.username, self.repo_name,
                                    '_posts', ''])
-
-    def markdown_to_html(self, content):
-        """
-        Convert the read markdown to html
-        """
-        return Markdown().convert(content)
 
     def handle_post_head(self, head_content):
         """
@@ -60,7 +52,7 @@ class PostHandler(FileScraper):
             file_data = post_file.read()
         return file_data
 
-    def call_scrapers(self, file_data):
+    def call_scrapers(self, file_data, is_post=True):
         """
         call various scrapers and return the results
         """
@@ -68,9 +60,7 @@ class PostHandler(FileScraper):
         head_dict = self.handle_post_head(content['head'])
         body_dict = self.handle_body(content['body'])
         # TODO With python 3 use main_dict = {**head_dict, **body_dict}
-        main_dict = head_dict.copy()
-        main_dict.update(body_dict)
-        return main_dict
+        return self.join_dicts(head_dict, body_dict)
 
     def read_posts(self):
         """
