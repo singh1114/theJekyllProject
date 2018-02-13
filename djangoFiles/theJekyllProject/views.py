@@ -14,48 +14,25 @@ from django.views.generic.edit import FormView
 from django.views.generic.list import ListView
 from django.contrib.auth.models import User
 
-from theJekyllProject.forms import AddPageForm
-from theJekyllProject.forms import AddPostForm
-from theJekyllProject.forms import ContactForm
-from theJekyllProject.forms import RepoForm
-from theJekyllProject.forms import SiteExcludeForm
-from theJekyllProject.forms import SitePluginForm
-from theJekyllProject.forms import SiteProfileForm
-from theJekyllProject.forms import SiteThemeForm
-from theJekyllProject.forms import SiteSocialProfileForm
+from theJekyllProject.forms import (
+    AddPageForm, AddPostForm, ContactForm, RepoForm, SiteExcludeForm,
+    SitePluginForm, SiteProfileForm, SiteThemeForm, SiteSocialProfileForm
+)
 
-from theJekyllProject.functions import add_theme_name
-from theJekyllProject.functions import assign_boolean_to_comments
-from theJekyllProject.functions import change_site_baseurl
-from theJekyllProject.functions import convert_content
-from theJekyllProject.functions import copy_jekyll_files
-from theJekyllProject.functions import create_config_file
-from theJekyllProject.functions import create_file_name
-from theJekyllProject.functions import create_repo
-from theJekyllProject.functions import get_repo_list
-from theJekyllProject.functions import header_content
-from theJekyllProject.functions import page_header_content
-from theJekyllProject.functions import push_online
-from theJekyllProject.functions import run_git_script
-from theJekyllProject.functions import read_all_pages
-from theJekyllProject.functions import save_post_database
-from theJekyllProject.functions import save_page_database
-from theJekyllProject.functions import save_post_category_database
-from theJekyllProject.functions import save_site_data
-from theJekyllProject.functions import save_site_theme_data
-from theJekyllProject.functions import save_repo_data
-from theJekyllProject.functions import select_main_site
-from theJekyllProject.functions import write_file
-from theJekyllProject.functions import write_page_file
+from theJekyllProject.functions import (
+    add_theme_name, assign_boolean_to_comments, change_site_baseurl,
+    convert_content, copy_jekyll_files, create_config_file, create_file_name,
+    create_repo, get_repo_list, header_content, move_file, page_header_content,
+    push_online, run_git_script, read_all_pages, save_post_database,
+    save_page_database, save_post_category_database, save_site_data,
+    save_site_theme_data, save_repo_data, select_main_site, write_file,
+    write_page_file
+)
 
-from theJekyllProject.models import Page
-from theJekyllProject.models import Post
-from theJekyllProject.models import PostCategory
-from theJekyllProject.models import Repo
-from theJekyllProject.models import SiteData
-from theJekyllProject.models import SiteSocialProfile
-from theJekyllProject.models import SiteTheme
-from theJekyllProject.models import Contact
+from theJekyllProject.models import (
+    Page, Post, PostCategory, Repo, SiteData, SiteSocialProfile, SiteTheme,
+    Contact
+)
 
 
 class IndexView(FormView):
@@ -71,15 +48,17 @@ class IndexView(FormView):
             message = request.POST['message']
             jeklog_email = 'jeklogjek@gmail.com'
             contact = Contact(
-                first_name = first_name,
-                last_name = last_name,
-                email = email,
-                message = message
+                first_name=first_name,
+                last_name=last_name,
+                email=email,
+                message=message
             )
             contact.save()
 
-            subject = "New mail from " + first_name + " " + last_name + " " + email
-            send_mail(subject, message, email, [jeklog_email], fail_silently=False)
+            subject = ("New mail from " + first_name + " " + last_name + " "
+                       + email)
+            send_mail(subject, message, email, [jeklog_email],
+                      fail_silently=False)
 
         return render(request, 'theJekyllProject/contact_status.html')
 
@@ -280,7 +259,7 @@ class PostUpdateView(LoginRequiredMixin, FormView):
 
             # Write the content into files
             write_file(user, repo, file_name, head_content, body_content)
-            
+
             # send the changes online
             push_online(user, repo)
         return HttpResponseRedirect(reverse('home'))
