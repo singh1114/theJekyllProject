@@ -24,6 +24,9 @@ class Contact(models.Model):
         max_length=5000
     )
 
+    def __str__(self):
+        return self.email + ' sent message ' + self.message
+
 
 class Repo(models.Model):
     user = models.ForeignKey(
@@ -37,6 +40,22 @@ class Repo(models.Model):
         default=False
     )
 
+    def __str__(self):
+        return self.user + ' has made ' + self.repo + ' and is ' + self.main
+
+
+class CName(models.Model):
+    """
+    CName model value is used to store the CNAME info of the repo
+    """
+    repo = models.ForeignKey(
+        Repo,
+        on_delete=models.CASCADE,
+    )
+    c_name = models.CharField(max_length=200)
+
+    def __str__(self):
+        return self.repo + ' has ' + self.c_name
 
 class Post(models.Model):
     repo = models.ForeignKey(
@@ -61,7 +80,7 @@ class Post(models.Model):
     content = RichTextField()
 
     def __str__(self):
-        return self.title + str(self.date)
+        return self.title + ' on ' + str(self.date)
 
 
 class Page(models.Model):
@@ -75,7 +94,7 @@ class Page(models.Model):
     content = RichTextField()
 
     def __str__(self):
-        return self.title
+        return self.title + ' on ' + self.permalink
 
 
 class PostCategory(models.Model):
@@ -103,6 +122,9 @@ class SiteData(models.Model):
     avatar = models.ImageField(
         upload_to='images/',
     )
+
+    def __str__(self):
+        return self.repo + ' has ' + self.title
 
 
 class SiteSocialProfile(models.Model):
