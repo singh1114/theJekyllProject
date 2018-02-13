@@ -1,13 +1,9 @@
 from django.conf import settings
 from django.contrib.auth.models import User
 
-from theJekyllProject.models import Page
-from theJekyllProject.models import Post
-from theJekyllProject.models import PostCategory
-from theJekyllProject.models import SiteData
-from theJekyllProject.models import SiteSocialProfile
-from theJekyllProject.models import SiteTheme
-from theJekyllProject.models import Repo
+from theJekyllProject.models import (
+    Page, Post, PostCategory, SiteData, SiteSocialProfile, SiteTheme, Repo
+)
 
 from github import Github
 from markdown2 import Markdown
@@ -24,7 +20,8 @@ def assign_boolean_to_comments(comments):
         return False
 
 
-def save_post_database(repo, author, comments, date, time, layout, title, content, pk=None):
+def save_post_database(repo, author, comments, date, time, layout, title,
+                       content, pk=None):
     if pk is not None:
         post = Post.objects.get(pk=pk)
         post.author = author
@@ -88,13 +85,13 @@ def save_post_category_database(post, category, pk=None):
 
 
 def create_file_name(date, title):
-    title = title.lower()
-    title = title.replace(' ', '-')
+    title = title.lower().replace(' ', '-')
     file_name = str(date) + '-' + title + '.markdown'
     return file_name
 
 
-def header_content(author=None, comments=None, date=None, time=None, layout=None, title=None):
+def header_content(author=None, comments=None, date=None, time=None,
+                   layout=None, title=None):
     string = '---\n'
     if(author is not None):
         string += 'author: ' + author + '\n'

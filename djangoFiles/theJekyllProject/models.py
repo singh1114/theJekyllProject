@@ -1,4 +1,4 @@
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
 from django.contrib.auth.models import User
@@ -11,12 +11,12 @@ class Contact(models.Model):
         max_length=200
     )
     last_name = models.CharField(
-        max_length = 200,
+        max_length=200,
         null=True,
         blank=True
     )
     email = models.EmailField(
-        max_length = 200,
+        max_length=200,
         null=True,
         blank=True
     )
@@ -56,6 +56,7 @@ class CName(models.Model):
 
     def __str__(self):
         return self.repo + ' has ' + self.c_name
+
 
 class Post(models.Model):
     repo = models.ForeignKey(
@@ -99,7 +100,7 @@ class Page(models.Model):
 
 class PostCategory(models.Model):
     post = models.ForeignKey(Post)
-    category = models.CharField(max_length=200, null= True, blank=True)
+    category = models.CharField(max_length=200, null=True, blank=True)
 
     def __str__(self):
         return self.category
