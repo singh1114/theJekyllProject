@@ -2,10 +2,9 @@ import os
 
 from django.conf import settings
 
-from jeklog.handlers.post_handler import PostHandler
 from jeklog.handlers.scrape_files import FileScraper
 
-from theJekyllProject.dbio import PageDbIO
+from theJekyllProject.dbio import PageDbIO, RepoDbIO
 
 
 class PageHandler(FileScraper):
@@ -29,8 +28,15 @@ class PageHandler(FileScraper):
         """
         Handle post body and create body dict
         """
-        PostHandler().handle_body(body_content)
+        return_dict = {}
+        return_dict['content'] = self.markdown_to_html(body_content)
+        return return_dict
 
+    def page_call_scrapers(self, file_data):
+        content = self.scrape_head_body(file_data)
+        head_dict = self.handle_page_head(content['head'])
+        body_dict = self.handle_page_body(content['body'])
+        return self.join_dicts(head_dict, body_dict)
 
     def read_pages(self):
         """
@@ -42,6 +48,7 @@ class PageHandler(FileScraper):
                     with open(self.repo_path + file, 'r') as page_file:
                         file_data = page_file.read()
                         # FIXME call self.handle_page_head
-                        content_dict = PostHandler(self.user,
-                                       self.repo_name).call_scrapers(file_data)
+                        content_dict = self.page_call_scrapers(file_data)
+                        content_dict['repo'] = RepoDbIO().get_repo(self.user,
+                                                          self.repo_name)
                         PageDbIO().save_db_instance(content_dict)
