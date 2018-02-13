@@ -1,13 +1,7 @@
 from django import forms
-from django.forms import ModelForm
 from django.utils import timezone
-from django.contrib.auth.models import User
 
-from ckeditor.fields import RichTextField
 from ckeditor.widgets import CKEditorWidget
-
-from theJekyllProject.models import PostCategory
-from theJekyllProject.models import SiteData
 
 
 class RepoForm(forms.Form):
@@ -15,7 +9,7 @@ class RepoForm(forms.Form):
         label='Repo Name',
         max_length=200,
         help_text='Create a new repository with the following name',
-        widget = forms.TextInput(attrs= {
+        widget=forms.TextInput(attrs={
                 'class': 'form-control',
                 'placeholder': 'blog',
                 'name': 'repo-name'
@@ -27,7 +21,7 @@ class AddPageForm(forms.Form):
     title = forms.CharField(
         help_text='title of the post',
         max_length=400,
-        widget = forms.TextInput(attrs= {
+        widget=forms.TextInput(attrs={
                 'class': 'form-control',
                 'placeholder': 'About',
                 'name': 'title'
@@ -37,7 +31,7 @@ class AddPageForm(forms.Form):
     permalink = forms.CharField(
         label='permalink',
         max_length=400,
-        widget = forms.TextInput(attrs= {
+        widget=forms.TextInput(attrs={
                 'class': 'form-control',
                 'placeholder': '/about/',
                 'name': 'permalink'
@@ -45,17 +39,19 @@ class AddPageForm(forms.Form):
     )
 
     content = forms.CharField(
-        widget=CKEditorWidget(attrs= {
+        widget=CKEditorWidget(attrs={
                 'class': 'form-control',
                 'name': 'content'
             })
     )
+
+
 class AddPostForm(forms.Form):
     author = forms.CharField(
         label='Author',
         max_length=40,
         help_text='Name of the author',
-        widget = forms.TextInput(attrs= {
+        widget=forms.TextInput(attrs={
                 'class': 'form-control',
                 'placeholder': 'Author...',
                 'name': 'author'
@@ -70,7 +66,7 @@ class AddPostForm(forms.Form):
     date = forms.DateField(
         help_text='Date of posting',
         initial=timezone.now().date(),
-        widget = forms.TextInput(attrs= {
+        widget=forms.TextInput(attrs={
                 'class': 'form-control',
                 'name': 'date'
             })
@@ -79,7 +75,7 @@ class AddPostForm(forms.Form):
     time = forms.TimeField(
         help_text='Date of posting',
         initial=timezone.now().time(),
-        widget = forms.TextInput(attrs= {
+        widget=forms.TextInput(attrs={
                 'class': 'form-control',
                 'name': 'time'
             })
@@ -91,7 +87,7 @@ class AddPostForm(forms.Form):
 
     layout = forms.ChoiceField(
         choices=layouts,
-        widget = forms.Select(attrs= {
+        widget=forms.Select(attrs={
                 'class': 'form-control',
                 'name': 'layout'
             })
@@ -100,16 +96,26 @@ class AddPostForm(forms.Form):
     title = forms.CharField(
         help_text='title of the post',
         max_length=400,
-        widget = forms.TextInput(attrs= {
+        widget=forms.TextInput(attrs={
                 'class': 'form-control',
                 'placeholder': 'How to make a website',
                 'name': 'title'
             })
     )
 
+    slug = forms.CharField(
+        help_text='url shown of the post',
+        max_length=400,
+        widget=forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'how-to-make-a-website',
+                'name': 'title'
+            })
+    )
+
     category = forms.CharField(
         max_length=20,
-        widget=forms.TextInput(attrs= {
+        widget=forms.TextInput(attrs={
                 'class': 'form-control',
                 'placeholder': 'Technology',
                 'name': 'category'
@@ -118,7 +124,7 @@ class AddPostForm(forms.Form):
     )
 
     content = forms.CharField(
-        widget=CKEditorWidget(attrs= {
+        widget=CKEditorWidget(attrs={
                 'class': 'form-control',
                 'name': 'content'
             })
@@ -130,7 +136,7 @@ class SiteProfileForm(forms.Form):
         max_length=200,
         help_text='Name of the site',
         required=False,
-        widget=forms.TextInput(attrs= {
+        widget=forms.TextInput(attrs={
                 'class': 'form-control',
                 'placeholder': 'JekLog',
                 'name': 'title'
@@ -142,7 +148,7 @@ class SiteProfileForm(forms.Form):
         help_text='Description of the site',
         initial='Your site description',
         required=False,
-        widget=forms.TextInput(attrs= {
+        widget=forms.TextInput(attrs={
                 'class': 'form-control',
                 'placeholder': 'Web developing guide',
                 'name': 'description'
@@ -159,7 +165,7 @@ class SiteSocialProfileForm(forms.Form):
         max_length=200,
         help_text='Your dribbble username',
         required=False,
-        widget=forms.TextInput(attrs= {
+        widget=forms.TextInput(attrs={
                 'class': 'form-control',
                 'placeholder': 'Dribbble',
                 'name': 'dribbble'
@@ -171,7 +177,7 @@ class SiteSocialProfileForm(forms.Form):
         max_length=200,
         required=False,
         help_text='email id',
-        widget=forms.EmailInput(attrs= {
+        widget=forms.EmailInput(attrs={
             'class': 'form-control',
             'placeholder': 'jeklogjek@gmail.com',
             'name': 'email',
@@ -182,7 +188,7 @@ class SiteSocialProfileForm(forms.Form):
         max_length=200,
         required=False,
         help_text='facebook username',
-        widget = forms.TextInput(attrs= {
+        widget=forms.TextInput(attrs={
                 'class': 'form-control',
                 'placeholder': 'ranvir.singh',
                 'name': 'facebook'
@@ -192,7 +198,7 @@ class SiteSocialProfileForm(forms.Form):
         max_length=200,
         required=False,
         help_text='flickr username',
-        widget = forms.TextInput(attrs= {
+        widget=forms.TextInput(attrs={
                 'class': 'form-control',
                 'placeholder': 'ranvir.singh',
                 'name': 'flickr'
@@ -202,7 +208,7 @@ class SiteSocialProfileForm(forms.Form):
         max_length=200,
         required=False,
         help_text='GitHub username',
-        widget = forms.TextInput(attrs= {
+        widget=forms.TextInput(attrs={
                 'class': 'form-control',
                 'placeholder': 'singh1114',
                 'name': 'github'
@@ -212,7 +218,7 @@ class SiteSocialProfileForm(forms.Form):
         max_length=200,
         required=False,
         help_text='Instagram username',
-        widget = forms.TextInput(attrs= {
+        widget=forms.TextInput(attrs={
                 'class': 'form-control',
                 'placeholder': 'ranvir.singh',
                 'name': 'instagram'
@@ -222,7 +228,7 @@ class SiteSocialProfileForm(forms.Form):
         max_length=200,
         required=False,
         help_text='Linkedin username',
-        widget = forms.TextInput(attrs= {
+        widget=forms.TextInput(attrs={
                 'class': 'form-control',
                 'placeholder': 'ranvir.singh',
                 'name': 'linkedin'
@@ -232,7 +238,7 @@ class SiteSocialProfileForm(forms.Form):
         max_length=200,
         required=False,
         help_text='pinterest username',
-        widget = forms.TextInput(attrs= {
+        widget=forms.TextInput(attrs={
                 'class': 'form-control',
                 'placeholder': 'ranvir.singh',
                 'name': 'pinterest'
@@ -242,7 +248,7 @@ class SiteSocialProfileForm(forms.Form):
         max_length=200,
         required=False,
         help_text='rss username',
-        widget = forms.TextInput(attrs= {
+        widget=forms.TextInput(attrs={
                 'class': 'form-control',
                 'placeholder': 'ranvir.singh',
                 'name': 'rss'
@@ -252,7 +258,7 @@ class SiteSocialProfileForm(forms.Form):
         max_length=200,
         required=False,
         help_text='twitter username',
-        widget = forms.TextInput(attrs= {
+        widget=forms.TextInput(attrs={
                 'class': 'form-control',
                 'placeholder': 'ranvir.singh',
                 'name': 'twitter'
@@ -262,7 +268,7 @@ class SiteSocialProfileForm(forms.Form):
         max_length=200,
         required=False,
         help_text='stackoverflow username',
-        widget = forms.TextInput(attrs= {
+        widget=forms.TextInput(attrs={
                 'class': 'form-control',
                 'placeholder': 'ranvir.singh',
                 'name': 'stackoverflow'
@@ -272,7 +278,7 @@ class SiteSocialProfileForm(forms.Form):
         max_length=200,
         required=False,
         help_text='youtube username',
-        widget = forms.TextInput(attrs= {
+        widget=forms.TextInput(attrs={
                 'class': 'form-control',
                 'placeholder': 'ranvir.singh',
                 'name': 'youtube'
@@ -282,7 +288,7 @@ class SiteSocialProfileForm(forms.Form):
         max_length=200,
         required=False,
         help_text='google plus username',
-        widget = forms.TextInput(attrs= {
+        widget=forms.TextInput(attrs={
                 'class': 'form-control',
                 'placeholder': 'ranvir.singh',
                 'name': 'googleplus'
@@ -292,7 +298,7 @@ class SiteSocialProfileForm(forms.Form):
         max_length=200,
         required=False,
         help_text='disqus username',
-        widget = forms.TextInput(attrs= {
+        widget=forms.TextInput(attrs={
                 'class': 'form-control',
                 'placeholder': 'ranvir.singh',
                 'name': 'disqus'
@@ -302,7 +308,7 @@ class SiteSocialProfileForm(forms.Form):
         max_length=200,
         required=False,
         help_text='google analytics tracking id',
-        widget = forms.TextInput(attrs= {
+        widget=forms.TextInput(attrs={
                 'class': 'form-control',
                 'placeholder': 'UASR32323232_',
                 'name': 'google_analytics'
