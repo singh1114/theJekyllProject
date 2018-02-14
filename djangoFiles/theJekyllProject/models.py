@@ -25,7 +25,7 @@ class Contact(models.Model):
     )
 
     def __str__(self):
-        return self.email + ' sent message ' + self.message
+        return '%s sent message %s' % (self.email, self.message)
 
 
 class Repo(models.Model):
@@ -41,7 +41,7 @@ class Repo(models.Model):
     )
 
     def __str__(self):
-        return self.user + ' has made ' + self.repo + ' and is ' + self.main
+        return '%s has made %s and is %s' % (self.user, self.repo, self.main)
 
 
 class CName(models.Model):
@@ -55,7 +55,7 @@ class CName(models.Model):
     c_name = models.CharField(max_length=200)
 
     def __str__(self):
-        return self.repo + ' has ' + self.c_name
+        return '%s has %s' % (self.repo, self.c_name)
 
 
 class Post(models.Model):
@@ -81,7 +81,7 @@ class Post(models.Model):
     content = RichTextField()
 
     def __str__(self):
-        return self.title + ' on ' + str(self.date)
+        return '%s on %s' % (self.title, self.date)
 
 
 class Page(models.Model):
@@ -95,7 +95,7 @@ class Page(models.Model):
     content = RichTextField()
 
     def __str__(self):
-        return self.title + ' on ' + self.permalink
+        return '%s on %s' % (self.title, self.permalink)
 
 
 class PostCategory(models.Model):
@@ -125,7 +125,7 @@ class SiteData(models.Model):
     )
 
     def __str__(self):
-        return self.repo + ' has ' + self.title
+        return '%s has %s' % (self.repo, self.title)
 
 
 class SiteSocialProfile(models.Model):
