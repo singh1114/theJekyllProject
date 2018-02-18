@@ -152,7 +152,8 @@ class AddPostView(LoginRequiredMixin, FormView):
             comments = assign_boolean_to_comments(comments)
 
             # save stuff to the post database
-            post = save_post_database(repo, author, comments, date, time, layout, title, content)
+            post = save_post_database(repo, author, comments, date, time,
+                                      layout, title, content)
 
             # save stuff to the post_category database
             save_post_category_database(post, category)
@@ -161,7 +162,8 @@ class AddPostView(LoginRequiredMixin, FormView):
             file_name = create_file_name(date, title)
 
             # Create header content for the markdown file
-            head_content = header_content(author, comments, date, time, layout, title)
+            head_content = header_content(author, comments, date, time,
+                                          layout, title)
 
             # Convert the body content to markdown
             body_content = convert_content(content)
@@ -177,7 +179,6 @@ class PostListView(LoginRequiredMixin, ListView):
     model = Post
     template_name = 'theJekyllProject/post_list.html'
     context_object_name = "post_list"
-    paginate_by = 5
 
     def get_queryset(self):
         user = self.request.user
@@ -479,11 +480,15 @@ class SiteSocialProfileView(LoginRequiredMixin, FormView):
             pinterest = SiteSocialProfile.objects.get(user=user).pinterest
             rss = SiteSocialProfile.objects.get(user=user).rss
             twitter = SiteSocialProfile.objects.get(user=user).twitter
-            stackoverflow = SiteSocialProfile.objects.get(user=user).stackoverflow
+            stackoverflow = SiteSocialProfile.objects.get(
+                user=user
+            ).stackoverflow
             youtube = SiteSocialProfile.objects.get(user=user).youtube
             googleplus = SiteSocialProfile.objects.get(user=user).googleplus
             disqus = SiteSocialProfile.objects.get(user=user).disqus
-            google_analytics = SiteSocialProfile.objects.get(user=user).google_analytics
+            google_analytics = SiteSocialProfile.objects.get(
+                user=user
+            ).google_analytics
         except:
             dribbble = ''
             email = ''
@@ -545,22 +550,22 @@ class SiteSocialProfileView(LoginRequiredMixin, FormView):
             google_analytics = request.POST['google_analytics']
 
             site_social_profile = SiteSocialProfile(
-                user = user,
-                dribbble = dribbble,
-                email = email,
-                facebook = facebook,
-                flickr = flickr,
-                github = github,
-                instagram = instagram,
-                linkedin = linkedin,
-                pinterest = pinterest,
-                rss = rss,
-                twitter = twitter,
-                stackoverflow = stackoverflow,
-                youtube = youtube,
-                googleplus = googleplus,
-                disqus = disqus,
-                google_analytics = google_analytics
+                user=user,
+                dribbble=dribbble,
+                email=email,
+                facebook=facebook,
+                flickr=flickr,
+                github=github,
+                instagram=instagram,
+                linkedin=linkedin,
+                pinterest=pinterest,
+                rss=rss,
+                twitter=twitter,
+                stackoverflow=stackoverflow,
+                youtube=youtube,
+                googleplus=googleplus,
+                disqus=disqus,
+                google_analytics=google_analytics
             )
             site_social_profile.save()
             create_config_file(user, repo)
@@ -571,6 +576,7 @@ class SiteSocialProfileView(LoginRequiredMixin, FormView):
 class SitePluginView(LoginRequiredMixin, FormView):
     template_name = 'theJekyllProject/siteplugin.html'
     form_class = SitePluginForm
+
 
 class SiteExcludeView(LoginRequiredMixin, FormView):
     template_name = 'theJekyllProject/siteexclude.html'
@@ -629,43 +635,7 @@ class BlogView(LoginRequiredMixin, View):
         user = request.user
         repo = Repo.objects.get(user=user, main=True)
         if(repo.repo != (user.username + '.github.io')):
-            return redirect('http://' + user.username + '.github.io/' + repo.repo)
+            return redirect('http://' + user.username +
+                            '.github.io/' + repo.repo)
         else:
             return redirect('http://' + user.username + '.github.io/')
-
-
-#class UseOldRepo(LoginRequiredMixin, View):
-#    """UseOldRepo to register a repo on already created Repository.
-#
-#    Example:
-#        Triggers when:
-#        User clicks on one of the already created repository
-#        clamining that the repo contains the required files.
-#
-#    Tasks:
-#        * View for logged in users only.
-#        * Select any repo from the repo list
-#        * Make some earlier checks
-#        * Clone the repo
-#        * Check if the required contents are present or not
-#        * If yes do the required operations:
-#            * Fill repo table
-#            * Select Main Site
-#        * Else give an error message
-#        * Integrate celery to show the amount of task completed
-#    """
-#    def get(self, request, *args, **kwargs):
-#        user = request.user
-#        repo_name = kwargs['repo_name']
-#        # Check the git tree first
-#        git_clone_repo(user.username, repo_name)
-#        if(find_required_files(user.username, repo_name)):
-#            repo = fill_repo_table_for_old_repo(user.username, repo_name)
-#            select_main_site(user, repo.pk)
-#            fill_other_tables_from_config_file(user.username, repo_name)
-#            find_posts(user.username, repo_name)
-#            find_pages(user.username, repo_name)
-#
-#
-#        else:
-#            pass # or give errors
