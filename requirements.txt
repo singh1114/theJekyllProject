@@ -6,6 +6,7 @@ django-ckeditor==5.3.0
 django-froala-editor==2.7.0.post1
 django-js-asset==0.1.1
 django-tinymce==2.6.0
+djangorestframework==3.7.7
 html2markdown==0.1.5
 html2text==2016.9.19
 idna==2.6
