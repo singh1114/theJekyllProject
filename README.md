@@ -55,6 +55,21 @@ with the following credentials:
 
 Take the `Client ID` and put it in the `djangoFiles/djangoFiles/settings.py` file against variable `SOCIAL_AUTH_GITHUB_KEY` and `client secret` against variable `SOCIAL_AUTH_GITHUB_SECRET`.
 
+## ALTERNATIVE METHOD( recomended)
+
+Use `direnv` to host the settings in the `.envrc` file.
+
+[Read more about direnv here](http://blog.ranvirsingh.me/dir-env-to-create-environment-variables-in-ubuntu/)
+
+Your `.envrc` file should look like this:
+
+```bash
+export EMAIL_HOST_USER=xyz@xyz.com                                      
+export EMAIL_HOST_PASSWORD=pass123                                     
+export SOCIAL_AUTH_GITHUB_KEY=mojeiwej22i39j9                              
+export SOCIAL_AUTH_GITHUB_SECRET=0jn92jnjr9n3j9k0000
+```
+
 After this you need to create the database. For this use the following command
 
 This command will create jeklog user. Enter `jeklog` as the password as well. You can choose some other name and change the configuration settings in the `djangoFiles/djangoFiles/settings.py`

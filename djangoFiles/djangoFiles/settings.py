@@ -21,7 +21,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'xxxxxxxxxxxxxxxxxxxxxxxxxxx'
+SECRET_KEY = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
     'oldrepo',
     'theJekyllProject',
     'ckeditor',
@@ -133,8 +134,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
-STATIC_URL = '/static/'
-STATIC_ROOT = '/var/www/theJekyllProject/djangoFiles/theJekyllProject/static/'
+STATIC_URL = os.path.join(BASE_DIR, 'theJekyllProject/static/')
+STATIC_ROOT = os.path.join(BASE_DIR, 'theJekyllProject/static/')
 MEDIA_URL = os.path.join(BASE_DIR, '../media/')
 CKEDITOR_JQUERY_URL = 'http://code.jquery.com/jquery-3.2.1.min.js'
 
@@ -166,13 +167,13 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 
 # Optional SMTP authentication information for EMAIL_HOST.
-EMAIL_HOST_USER = 'xxxxxxxxxxxxxxxxxxxxxxxxxxx'
-EMAIL_HOST_PASSWORD = 'xxxxxxxxxxxxxxxxxxxxxxxxxxx'
+EMAIL_HOST_USER = os.environ['EMAIL_HOST_USER']
+EMAIL_HOST_PASSWORD = os.environ['EMAIL_HOST_PASSWORD']
 EMAIL_USE_TLS = True
 
 ###### For e-mail configuration ####################################
 
-SOCIAL_AUTH_GITHUB_KEY = 'xxxxxxxxxxxxxxxxxxxxxxxxxxx'
-SOCIAL_AUTH_GITHUB_SECRET = 'xxxxxxxxxxxxxxxxxxxxxxxxxxx'
+SOCIAL_AUTH_GITHUB_KEY = os.environ['SOCIAL_AUTH_GITHUB_KEY']
+SOCIAL_AUTH_GITHUB_SECRET = os.environ['SOCIAL_AUTH_GITHUB_SECRET']
 
 SOCIAL_AUTH_GITHUB_SCOPE = ['repo']
