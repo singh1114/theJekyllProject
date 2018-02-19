@@ -11,6 +11,8 @@ class FormHandler:
         """
         This function is used to post the form fields
         """
+        # FIXME this function will not work anyway
         if(self.form_class(self.request.POST).is_valid()):
-            for field in self.fields:
-                pass
+            fields_data = [self.request.POST.field
+                           for field in self.form_fields]
+            return fields_data
