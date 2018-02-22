@@ -48,7 +48,7 @@ class CName(models.Model):
     """
     CName model value is used to store the CNAME info of the repo
     """
-    repo = models.ForeignKey(
+    repo = models.OneToOneField(
         Repo,
         on_delete=models.CASCADE,
     )

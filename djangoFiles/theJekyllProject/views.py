@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
 from django.core.mail import send_mail
 from django.http import HttpResponseRedirect
@@ -15,8 +16,9 @@ from django.views.generic.list import ListView
 from django.contrib.auth.models import User
 
 from theJekyllProject.forms import (
-    AddPageForm, AddPostForm, ContactForm, RepoForm, SiteExcludeForm,
-    SitePluginForm, SiteProfileForm, SiteThemeForm, SiteSocialProfileForm
+    AddPageForm, AddPostForm, CNameForm, ContactForm, RepoForm,
+    SiteExcludeForm, SitePluginForm, SiteProfileForm, SiteThemeForm,
+    SiteSocialProfileForm
 )
 
 from theJekyllProject.functions import (
@@ -28,6 +30,8 @@ from theJekyllProject.functions import (
     save_site_theme_data, save_repo_data, select_main_site, write_file,
     write_page_file
 )
+
+from theJekyllProject.handlers import CNameHandler
 
 from theJekyllProject.models import (
     Page, Post, PostCategory, Repo, SiteData, SiteSocialProfile, SiteTheme,
@@ -593,7 +597,7 @@ class SiteThemeView(LoginRequiredMixin, FormView):
         try:
             SiteTheme.objects.get(user=user)
             theme = SiteTheme.objects.get(user=user).theme
-        except:
+        except ObjectDoesNotExist:
             theme = ''
 
         form_kwargs = super(SiteThemeView, self).get_form_kwargs()
@@ -639,3 +643,20 @@ class BlogView(LoginRequiredMixin, View):
                             '.github.io/' + repo.repo)
         else:
             return redirect('http://' + user.username + '.github.io/')
+
+
+class CNameView(LoginRequiredMixin, FormView):
+    """
+    CNAMEView is used to setup the cname for the repo choosen
+    """
+    # TODO create urls and write tests
+    form_class = CNameForm
+
+    def get(self, request, *args, **kwrags):
+        """
+        Take the value of the CNAME from the db and return to the frontend
+        """
+        user = request.user
+        response = CNameHandler().load_initials(user, self.form_class)
+
+        return render(request, 'the_form.html', {'form':response})
