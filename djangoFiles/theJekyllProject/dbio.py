@@ -1,8 +1,9 @@
+from base.dbio import AbstractBaseDbIO
 from base.dbio import BaseDbIO
 
 from theJekyllProject.models import (
-    Page, Post, Repo, SiteData, SiteExclude, SiteSocialProfile, SitePlugin,
-    SiteTheme
+    CName, Page, Post, Repo, SiteData, SiteExclude, SiteSocialProfile,
+    SitePlugin, SiteTheme
 )
 
 
@@ -19,12 +20,14 @@ class RepoDbIO(BaseDbIO):
         """
         return self.model_name.objects.create(**kwargs)
 
-    def get_repo(self, user, repo_name):
+    def get_repo(self, user, repo_name=None):
         """
         get the repo by name, logged_in user and main True
         """
-        return self.model_name.objects.get(main=True,
-                                           user=user, repo=repo_name)
+        if not repo_name:
+            return self.model_name.objects.get(main=True, user=user)
+        return self.model_name.objects.get(main=True, user=user,
+                                           repo=repo_name)
 
     def change_main(self, user, repo):
         """
@@ -93,3 +96,11 @@ class PageDbIO(BaseDbIO):
     """
     def __init__(self):
         self.model_name = Page
+
+
+class CNameDbIO(AbstractBaseDbIO):
+    """
+    Database I/o operations for CNAME object are handled here
+    """
+    def __init__(self):
+        self.model_name = CName
