@@ -15,11 +15,14 @@ from django.views.generic.edit import FormView
 from django.views.generic.list import ListView
 from django.contrib.auth.models import User
 
+from theJekyllProject.constants import TemplateName
+
 from theJekyllProject.forms import (
-    AddPageForm, AddPostForm, CNameForm, ContactForm, RepoForm,
-    SiteExcludeForm, SitePluginForm, SiteProfileForm, SiteThemeForm,
-    SiteSocialProfileForm
+    AddPageForm, AddPostForm, ContactForm, RepoForm, SiteExcludeForm,
+    SitePluginForm, SiteProfileForm, SiteThemeForm, SiteSocialProfileForm
 )
+
+from theJekyllProject.otherforms.cname_forms import CNameForm
 
 from theJekyllProject.functions import (
     add_theme_name, assign_boolean_to_comments, change_site_baseurl,
@@ -31,7 +34,7 @@ from theJekyllProject.functions import (
     write_page_file
 )
 
-from theJekyllProject.handlers import CNameHandler
+from theJekyllProject.handlers.cname_handlers import CNameHandler
 
 from theJekyllProject.models import (
     Page, Post, PostCategory, Repo, SiteData, SiteSocialProfile, SiteTheme,
@@ -659,4 +662,4 @@ class CNameView(LoginRequiredMixin, FormView):
         user = request.user
         response = CNameHandler().load_initials(user, self.form_class)
 
-        return render(request, 'the_form.html', {'form':response})
+        return render(request, TemplateName.CNAME_TEMPLATE, {'form': response})
