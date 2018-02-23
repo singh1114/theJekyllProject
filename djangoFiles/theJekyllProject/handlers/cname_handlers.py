@@ -1,4 +1,4 @@
-from theJekyllProject.DbIO import CNameDbIO, RepoDbIO
+from theJekyllProject.dbio import CNameDbIO, RepoDbIO
 
 
 class CNameHandler:
@@ -9,6 +9,8 @@ class CNameHandler:
         pass
 
     def load_initials(self, user, form_class):
-        repo = RepoDbIO().get_repo(user)
-        form = CNameDbIO().get_or_filter({'repo': repo})
-        return form_class(**form)
+        """
+        Load the initials from the database
+        """
+        cname = CNameDbIO().get_or_filter({'repo': RepoDbIO().get_repo(user)})
+        return form_class(initial=cname.__dict__)
