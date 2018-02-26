@@ -15,6 +15,8 @@ from django.views.generic.edit import FormView
 from django.views.generic.list import ListView
 from django.contrib.auth.models import User
 
+from base.handlers.form_handler import FormHandler
+
 from theJekyllProject.constants import TemplateName
 
 from theJekyllProject.forms import (
@@ -652,7 +654,6 @@ class CNameView(LoginRequiredMixin, FormView):
     """
     CNAMEView is used to setup the cname for the repo choosen
     """
-    # TODO create urls and write tests
     form_class = CNameForm
 
     def get(self, request, *args, **kwrags):
@@ -663,3 +664,12 @@ class CNameView(LoginRequiredMixin, FormView):
         response = CNameHandler().load_initials(user, self.form_class)
 
         return render(request, TemplateName.CNAME_TEMPLATE, {'form': response})
+
+    def post(self, request, *args, **kwargs):
+        """
+        Accepts the cname from the field and add into the database
+        """
+        form_field_dict = FormHandler(request,
+            self.form_class).handle_field_data(('cname',))
+        response = CNameHandler().assign_cname()
+

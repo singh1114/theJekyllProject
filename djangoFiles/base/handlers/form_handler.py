@@ -5,14 +5,14 @@ class FormHandler:
     def __init__(self, request, form_class, form_fields):
         self.request = request
         self.form_class = form_class
-        self.form_fields = form_fields
 
-    def handle_post_fields(self):
+    def handle_post_fields(self, fields):
         """
         This function is used to post the form fields
         """
-        # FIXME this function will not work anyway
+        field_dict = {}
         if(self.form_class(self.request.POST).is_valid()):
-            fields_data = [self.request.POST.field
-                           for field in self.form_fields]
-            return fields_data
+            for field in fields:
+                field_dict[str(field)] = field
+
+        return field_dict
