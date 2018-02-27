@@ -1,7 +1,5 @@
 from django.core.exceptions import MultipleObjectsReturned, ObjectDoesNotExist
 
-from django.db import IntegrityError
-
 
 class BaseDbIO:
     """
@@ -30,13 +28,14 @@ class AbstractBaseDbIO(object):
             # FIXME This needs to be evaluated
             return ''
 
-    def create_or_update(self, kwargs, model_obj=None):
+    def create_obj(self, kwargs):
         """
         save/create instances of ORM into the database
         """
-        try:
-            self.model_name.objects.create(**kwargs)
-        except IntegrityError:
-            model_obj = model_obj(**kwargs)
-            model_obj.save()
+        return self.model_name.objects.create(**kwargs)
 
+    def update_obj(self, model_obj, kwargs):
+        """
+        update the ORM instance
+        """
+        return model_obj(**kwargs)

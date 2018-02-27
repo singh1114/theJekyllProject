@@ -1,3 +1,5 @@
+from base.handlers.file_handlers import FileHandler
+
 from theJekyllProject.dbio import CNameDbIO, RepoDbIO
 
 
@@ -16,11 +18,24 @@ class CNameHandler:
         cname = CNameDbIO().get_or_filter({'repo': RepoDbIO().get_repo(user)})
         return form_class(initial=cname.__dict__)
 
-    def assign_cname(self, user):
+    def assign_cname(self, user, cname):
         """
         Assign the Cname to the repo
         """
         # FIXME same error will be encountered
-        cname = CNameDbIO().get_or_filter({'repo': RepoDbIO().get_repo(user)})
+        repo = RepoDbIO().get_repo(user)
+        cname_obj = CNameDbIO().get_or_filter({'repo': repo})
         if cname is '':
-            CNameDbIO().create_or_update({})
+            CNameDbIO().create_obj({'repo': repo, 'c_name': cname})
+        else:
+            CNameDbIO().update_obj(cname_obj, {'c_name': cname})
+
+        return self.write_to_file(cname)
+
+    def write_to_file(self, cname):
+        """
+        Writes the CNAME content to the file
+        """
+        file_path = '/'.join([self.base_dir, '..', 'JekLog',
+                              self.user.username, self.repo_name])
+        FileHandler(file_path, 'CNAME').write_full_file(cname)
