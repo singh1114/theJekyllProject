@@ -34,7 +34,6 @@ from theJekyllProject.functions import create_file_name
 from theJekyllProject.functions import create_repo
 from theJekyllProject.functions import get_repo_list
 from theJekyllProject.functions import header_content
-from theJekyllProject.functions import move_file
 from theJekyllProject.functions import page_header_content
 from theJekyllProject.functions import push_online
 from theJekyllProject.functions import run_git_script
@@ -189,11 +188,7 @@ class AddPostView(LoginRequiredMixin, FormView):
             body_content = convert_content(content)
 
             # Write the content into files
-            write_file(file_name, head_content, body_content)
-
-            # Move file to correct location
-            move_file(file_name, user, repo)
-
+	    write_file(user, repo, file_name, head_content, body_content)
             # Push the code online
             push_online(user, repo)
         return HttpResponseRedirect(reverse('home'))
@@ -243,7 +238,7 @@ class PostUpdateView(LoginRequiredMixin, FormView):
                 'layout': layout,
                 'title': title,
                 'content': content,
-                'category': category
+                #'category': category
             }
         })
         return form_kwargs
@@ -284,11 +279,8 @@ class PostUpdateView(LoginRequiredMixin, FormView):
             body_content = convert_content(content)
 
             # Write the content into files
-            write_file(file_name, head_content, body_content)
-
-            # Move file to correct location
-            move_file(file_name, user, repo)
-
+            write_file(user, repo, file_name, head_content, body_content)
+            
             # send the changes online
             push_online(user, repo)
         return HttpResponseRedirect(reverse('home'))

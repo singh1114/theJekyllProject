@@ -133,10 +133,9 @@ def page_header_content(title=None, permalink=None):
 def convert_content(content):
     return html2markdown.convert(content)
 
-
-def write_file(file_name, head_content, body_content):
+def write_file(user, repo, file_name, head_content, body_content):
     base_dir = settings.BASE_DIR
-    file = open(base_dir + '/../JekLog/' + file_name, 'w+')
+    file = open(base_dir + '/../JekLog/' + user.username + '/' + repo.repo + '/_posts/' + file_name, 'w+')
     file.write(head_content + body_content)
     file.close()
 
@@ -146,12 +145,6 @@ def write_page_file(file_name, user, repo, head_content, body_content):
     file = open(base_dir + '/../JekLog/' + user.username + '/' + repo.repo + '/' + file_name + '.md', 'w+')
     file.write(head_content + body_content)
     file.close()
-
-
-def move_file(file_name, user, repo):
-    base_dir = settings.BASE_DIR
-    shutil.move(base_dir + '/../JekLog/' + file_name, base_dir + '/../JekLog/' + user.username  + '/' + repo.repo + '/_posts/' + file_name)
-
 
 def push_online(user, repo):
     base_dir = settings.BASE_DIR

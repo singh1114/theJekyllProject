@@ -5,13 +5,17 @@
 <head>
     <!-- Meta tags for google -->
     <meta charset="utf-8" />
-    <meta name="description" content="Create a free blog on JekLog.com. Free hosting and support of great open source community.">
+    <meta name="description" content="A static site CMS for Jekyll and GitHub Pages. Get a free, fast and secure blog for you or your project in few clicks. Hosted directly from your GitHub repository. Open-source CMS for free blog on Jekyll and GitHub pages. Just login using your GitHub account and start writing daily blogs. Headstart your blogger career with a great open-source tool. Jekyll is a static site generator that is designed for creating fast blogs. GitHub pages offers the best hosting solutions for personal blogs 100% free. Jekyll and GitHub pages have lots of advantages over a classic CMS solution like Wordpress. Get your lightning fast blog now.">
+    <meta name="og:description" content="A static site CMS for Jekyll and GitHub Pages. Get a free, fast and secure blog for you or your project in few clicks. Hosted directly from your GitHub repository. Open-source CMS for free blog on Jekyll and GitHub pages. Just login using your GitHub account and start writing daily blogs. Headstart your blogger career with a great open-source tool. Jekyll is a static site generator that is designed for creating fast blogs. GitHub pages offers the best hosting solutions for personal blogs 100% free. Jekyll and GitHub pages have lots of advantages over a classic CMS solution like Wordpress. Get your lightning fast blog now.">
+    <meta name="author" content="JekLog">
+    <meta property="og:title" content="JekLog | open-source CMS for free Jekyll and GitHub Pages Blog">
+    <meta property="twitter:title" content="JekLog | open-source CMS for free Jekyll and GitHub Pages Blog">
     <!-- Meta tags for google ends -->
 
     <link rel="apple-touch-icon" sizes="76x76" href="{% static 'nowui/assets/img/apple-icon.png' %}">
     <link rel="icon" type="image/png" href="{% static 'nowui/assets/img/favicon.png' %}">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-    <title>JekLog | Get a free Jekyll Blog using GitHub Pages</title>
+    <title>JekLog | open-source CMS for free Jekyll and GitHub Pages Blog</title>
     <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
     <!--     Fonts and icons     -->
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,200" rel="stylesheet" />
@@ -28,11 +32,21 @@
     <!-- Google analytics -->
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-73349527-4"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
       gtag('config', 'UA-73349527-4');
+    </script>
+    <script>
+        $(".popup").click(function () {
+            var $this = $(this);
+            var $iframe = $("<iframe>").attr("src", $this.data("link")).css({"width": 400, "height": 300});
+            var $title = $("<h1>").text($this.data("title"));
+            $("#video-view").html($title).append($iframe);
+            $iframe.wrap("<div class='class-video'>");
+        });
     </script>
 </head>
 
@@ -111,7 +125,8 @@
                     <h3>Free Blog Using Jekyll and GitHub Pages.</h3>
                     <a class="btn btn-neutral" title="Create your blog" href="{% url 'registration' %}">
                        <p style="margin-bottom: 0px;"><strong>TRY It Out!</strong></p>
-                   </a>
+                    </a><br><br>
+                    <a class="btn btn-neutral btn-round" href="https://www.youtube.com/watch?v=6SnaarQlRsw" target="_blank"><strong>Watch Intro Video</strong></a>
                 </div>
                 <h6 class="category category-absolute">No expensive database setups. Just plain and simple.</h6>
             </div>
