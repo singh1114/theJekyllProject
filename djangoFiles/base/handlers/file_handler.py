@@ -13,9 +13,9 @@ class FileHandler:
         with open('/'.join([self.file_path, self.file_name]), 'r') as file:
             return file.read()
 
-    def write_full_file(self, content):
+    def rewrite_file(self, content):
         """
-        Write file changing the whole content
+        re-write the whole file
         """
         with open('/'.join([self.file_path, self.file_name]), 'w') as file:
             return file.write(content)

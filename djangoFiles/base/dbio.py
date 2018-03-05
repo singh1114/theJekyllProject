@@ -1,4 +1,4 @@
-from django.core.exceptions import MultipleObjectsReturned, ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist
 
 
 class BaseDbIO:
@@ -16,17 +16,14 @@ class AbstractBaseDbIO(object):
     def __init__(self, model_name):
         self.model_name = model_name
 
-    def get_or_filter(self, kwargs):
+    def get_obj(self, kwargs):
         """
-        This method is used to either get or filter the
+        This method is used to get the database object
         """
         try:
             return self.model_name.objects.get(**kwargs)
-        except MultipleObjectsReturned:
-            return self.model_name.objects.filter(**kwargs)
         except ObjectDoesNotExist:
-            # FIXME This needs to be evaluated
-            return ''
+            return None
 
     def create_obj(self, kwargs):
         """
@@ -38,4 +35,6 @@ class AbstractBaseDbIO(object):
         """
         update the ORM instance
         """
-        return model_obj(**kwargs)
+        for key, value in kwargs.iteritems():
+            model_obj.key = value
+        return model_obj.save()
