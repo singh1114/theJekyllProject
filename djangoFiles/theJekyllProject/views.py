@@ -671,9 +671,7 @@ class CNameView(LoginRequiredMixin, FormView):
         """
         user = request.user
         form_field_dict = FormHandler(request,
-            self.form_class).handle_field_data(('cname',))
+            self.form_class).handle_post_fields(('cname',))
         CNameHandler().assign_cname(user, form_field_dict['cname'])
         return render(request, TemplateName.CNAME_TEMPLATE,
             {'msg': 'CNAME updated successfully.'})
-
-
