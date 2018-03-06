@@ -1,24 +1,18 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from datetime import datetime
-from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.urlresolvers import reverse
 from django.core.mail import send_mail
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.shortcuts import redirect
 from django.views import View
+
 from django.views.generic.base import TemplateView
 from django.views.generic.edit import FormView
-from django.views.generic.edit import UpdateView
-from django.views.generic.edit import DeleteView
 from django.views.generic.list import ListView
 from django.contrib.auth.models import User
-from django.contrib.auth.models import AnonymousUser
-
-from markdown2 import Markdown
 
 from theJekyllProject.forms import AddPageForm
 from theJekyllProject.forms import AddPostForm
@@ -274,7 +268,8 @@ class PostUpdateView(LoginRequiredMixin, FormView):
             comments = assign_boolean_to_comments(comments)
 
             # save stuff to the post database
-            post = save_post_database(repo, author, comments, date, time, layout, title, content, pk)
+            post = save_post_database(repo, author, comments, date, time,
+                                      layout, title, content, pk)
 
             # save stuff to the post_category database
             save_post_category_database(post, category, pk)
@@ -282,7 +277,8 @@ class PostUpdateView(LoginRequiredMixin, FormView):
             file_name = create_file_name(date, title)
 
             # Create header content for the markdown file
-            head_content = header_content(author, comments, date, time, layout, title)
+            head_content = header_content(author, comments, date, time, layout,
+                                          title)
 
             # Convert the body content to markdown
             body_content = convert_content(content)
@@ -325,7 +321,7 @@ class AddPageView(LoginRequiredMixin, FormView):
             content = request.POST['content']
 
             # save stuff to the page database
-            page = save_page_database(repo, title, permalink, content)
+            save_page_database(repo, title, permalink, content)
 
             # Create header content for the markdown file
             head_content = page_header_content(title, permalink)
@@ -334,7 +330,8 @@ class AddPageView(LoginRequiredMixin, FormView):
             body_content = convert_content(content)
 
             # Write the content into files
-            write_page_file(title.lower(), user, repo, head_content, body_content)
+            write_page_file(title.lower(), user, repo, head_content,
+                            body_content)
 
             # Push the code online
             push_online(user, repo)
@@ -388,7 +385,7 @@ class PageUpdateView(LoginRequiredMixin, FormView):
             permalink = request.POST['permalink']
             content = request.POST['content']
 
-            page = save_page_database(repo, title, permalink, content, pk)
+            save_page_database(repo, title, permalink, content, pk)
 
             # Create header content for the markdown file
             head_content = page_header_content(title, permalink)
@@ -397,7 +394,8 @@ class PageUpdateView(LoginRequiredMixin, FormView):
             body_content = convert_content(content)
 
             # Write the content into files
-            write_page_file(title.lower(), user, repo, head_content, body_content)
+            write_page_file(title.lower(), user, repo, head_content,
+                            body_content)
 
             # Push the code online
             push_online(user, repo)

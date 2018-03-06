@@ -72,9 +72,13 @@ def save_post_category_database(post, category, pk=None):
     if pk is not None:
         # FIXME use filter instead of get
         post = Post.objects.get(pk=pk)
-        post_category = PostCategory.objects.get(post=post)
-        post_category.category = category
-        post_category.save()
+        try:
+            post_category = PostCategory.objects.get(post=post)
+        except PostCategory.DoesNotExist:
+            post_category = ''
+        else:
+            post_category.category = category
+            post_category.save()
     else:
         post_category = PostCategory(
             post=post,
@@ -84,7 +88,6 @@ def save_post_category_database(post, category, pk=None):
 
 
 def create_file_name(date, title):
-    date_to_string = str(date)
     title = title.lower()
     title = title.replace(' ', '-')
     file_name = str(date) + '-' + title + '.markdown'
