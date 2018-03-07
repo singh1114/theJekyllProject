@@ -29,7 +29,7 @@ from theJekyllProject.otherforms.cname_forms import CNameForm
 from theJekyllProject.functions import (
     add_theme_name, assign_boolean_to_comments, change_site_baseurl,
     convert_content, copy_jekyll_files, create_config_file, create_file_name,
-    create_repo, get_repo_list, header_content, move_file, page_header_content,
+    create_repo, get_repo_list, header_content, page_header_content,
     push_online, run_git_script, read_all_pages, save_post_database,
     save_page_database, save_post_category_database, save_site_data,
     save_site_theme_data, save_repo_data, select_main_site, write_file,
@@ -672,6 +672,6 @@ class CNameView(LoginRequiredMixin, FormView):
         user = request.user
         form_field_dict = FormHandler(request,
             self.form_class).handle_post_fields(('cname',))
-        CNameHandler().assign_cname(user, form_field_dict['cname'])
+        CNameHandler().assign_cname(user, form_field_dict['c_name'])
         return render(request, TemplateName.CNAME_TEMPLATE,
             {'msg': 'CNAME updated successfully.'})
