@@ -35,6 +35,6 @@ class AbstractBaseDbIO(object):
         """
         update the ORM instance
         """
-        for key, value in kwargs.iteritems():
-            model_obj.key = value
+        for key, value in kwargs.items():
+            setattr(model_obj, key, value)
         return model_obj.save()

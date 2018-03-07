@@ -10,10 +10,11 @@ class FormHandler:
         """
         This function is used to post the form fields
         """
-        # FIXME something wrong with these functions
         field_dict = {}
         if(self.form_class(self.request.POST).is_valid()):
-            for field in fields:
-                field_dict[str(field)] = field
+            for key, value in self.request.POST.dict().items():
+                if key == 'csrfmiddlewaretoken':
+                    continue
+                field_dict[key] = value
 
-        return field_dict
+            return field_dict
