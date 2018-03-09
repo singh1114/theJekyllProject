@@ -54,9 +54,6 @@ class CName(models.Model):
     )
     c_name = models.CharField(max_length=200)
 
-    def __str__(self):
-        return '%s has %s' % (self.repo, self.c_name)
-
 
 class Post(models.Model):
     repo = models.ForeignKey(
@@ -77,7 +74,7 @@ class Post(models.Model):
         blank=True
     )
     title = models.CharField(max_length=2000)
-    slug = models.CharField(max_length=2000)
+    slug = models.CharField(max_length=2000, default='')
     content = RichTextField()
 
     def __str__(self):
@@ -94,16 +91,10 @@ class Page(models.Model):
     layout = models.CharField(max_length=2000)
     content = RichTextField()
 
-    def __str__(self):
-        return '%s on %s' % (self.title, self.permalink)
-
 
 class PostCategory(models.Model):
     post = models.ForeignKey(Post)
     category = models.CharField(max_length=200, null=True, blank=True)
-
-    def __str__(self):
-        return self.category
 
 
 class SiteData(models.Model):
@@ -123,9 +114,6 @@ class SiteData(models.Model):
     avatar = models.ImageField(
         upload_to='images/',
     )
-
-    def __str__(self):
-        return '%s has %s' % (self.repo, self.title)
 
 
 class SiteSocialProfile(models.Model):
