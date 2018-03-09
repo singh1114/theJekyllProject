@@ -132,20 +132,23 @@ def convert_content(content):
 
 def write_file(user, repo, file_name, head_content, body_content):
     base_dir = settings.BASE_DIR
-    file = open(base_dir + '/../JekLog/' + user.username + '/' + repo.repo + '/_posts/' + file_name, 'w+')
+    file = open(base_dir + '/../JekLog/' + user.username + '/' + repo.repo +
+                '/_posts/' + file_name, 'w+')
     file.write(head_content + body_content)
     file.close()
 
 
 def write_page_file(file_name, user, repo, head_content, body_content):
     base_dir = settings.BASE_DIR
-    file = open(base_dir + '/../JekLog/' + user.username + '/' + repo.repo + '/' + file_name + '.md', 'w+')
+    file = open(base_dir + '/../JekLog/' + user.username + '/' +
+                repo.repo + '/' + file_name + '.md', 'w+')
     file.write(head_content + body_content)
     file.close()
 
 def push_online(user, repo):
     base_dir = settings.BASE_DIR
-    subprocess.Popen(['/bin/bash', base_dir + '/../' + 'gitsendupstream.sh', user.username, repo.repo, base_dir])
+    subprocess.Popen(['/bin/bash', base_dir + '/../' + 'gitsendupstream.sh',
+                      user.username, repo.repo, base_dir])
 
 
 def save_site_data(repo, title=None, description=None, avatar=None):
