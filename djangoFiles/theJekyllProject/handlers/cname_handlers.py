@@ -1,6 +1,7 @@
 from base.handlers.file_handler import FileHandler
 
 from theJekyllProject.dbio import CNameDbIO, RepoDbIO
+from base.handlers.bash_script import BashScript
 
 from django.conf import settings
 
@@ -29,7 +30,8 @@ class CNameHandler:
             CNameDbIO().create_obj({'repo': repo, 'c_name': cname})
         else:
             CNameDbIO().update_obj(cname_obj, {'c_name': cname})
-        return self.write_to_file(user, repo.repo, cname)
+        self.write_to_file(user, repo.repo, cname)
+        BashScript().push_online(user, repo)
 
     def write_to_file(self, user, repo_name, cname):
         """
