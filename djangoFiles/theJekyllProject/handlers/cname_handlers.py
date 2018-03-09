@@ -18,6 +18,8 @@ class CNameHandler:
         Load the initials from the database
         """
         cname = CNameDbIO().get_obj({'repo': RepoDbIO().get_repo(user)})
+        if cname is None:
+            return form_class
         return form_class(initial=cname.__dict__)
 
     def assign_cname(self, user, cname):
