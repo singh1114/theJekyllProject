@@ -1,27 +1,19 @@
+# JekLog
+[JekLog](http://jeklog.com)
+
+Create Jekyll blogs and host them on GitHub pages. Post content using JekLog.
+
 [![Build Status](https://travis-ci.org/singh1114/theJekyllProject.svg?branch=master)](https://travis-ci.org/singh1114/theJekyllProject)
 [![Coverage Status](https://coveralls.io/repos/github/singh1114/theJekyllProject/badge.svg?branch=master)](https://coveralls.io/github/singh1114/theJekyllProject?branch=master)
 
 ## Talk to us
 [![Gitter chat](https://badges.gitter.im/django-jeklog/gitter.png)](https://gitter.im/django-jeklog/Lobby)
-# JekLog
-A Django project to create Jekyll blogs and GitHub pages using Content Management System.
-[JekLog](http://jeklog.com)
-
-## Usage[![Build Status](https://travis-ci.org/singh1114/theJekyllProject.svg?branch=master)](https://travis-ci.org/singh1114/theJekyllProject)
-[![Coverage Status](https://coveralls.io/repos/github/singh1114/theJekyllProject/badge.svg?branch=master)](https://coveralls.io/github/singh1114/theJekyllProject?branch=master)
-
-## Talk to us
-[![Gitter chat](https://badges.gitter.im/django-jeklog/gitter.png)](https://gitter.im/django-jeklog/Lobby)
-# JekLog
-
-A Django project to create blogs using django Content Management System.
-[JekLog](http://jeklog.com)
 
 ## Usage
 
 - Blog Tutorial:
 	[http://blog.jeklog.com/how-to-create-a-free-blog-using-github-pages-and-jekyll-with-jeklog/](http://blog.jeklog.com/how-to-create-a-free-blog-using-github-pages-and-jekyll-with-jeklog/)
-- YouTube Video:
+- GIF: 
 	![Tutorial gif](https://i.imgur.com/1utmaOM.gif)
 
 
