@@ -28,7 +28,7 @@ class CNameHandler:
         """
         repo = RepoDbIO().get_repo(user)
         cname_obj = CNameDbIO().get_obj({'repo': repo})
-        if cname is None:
+        if cname_obj is None:
             CNameDbIO().create_obj({'repo': repo, 'c_name': cname})
         else:
             CNameDbIO().update_obj(cname_obj, {'c_name': cname})
