@@ -1,0 +1,15 @@
+{% extends 'jeklog/base_error.html' %}
+{% load staticfiles %}
+
+{% block error-data %}
+	<h2 class="title" style="margin-top:30%"><strong>Server Error occured</strong></h2>
+	<h5 class="description">Server Error has occured. Please send an email to the admin or create an issue on GitHub.</h5>
+	<div class="text-center col-md-12 col-lg-8">
+    <a href="https://github.com/singh1114/theJekyllProject/issues" class="btn btn-danger btn-lg btn-round" role="button" target="_blank">
+        Browse Issues
+    </a>
+    <a href="mailto:ranvir.singh1114@gmail.com" target="_blank" class="btn btn-primary btn-lg btn-simple btn-round" role="button">
+        Email Admin
+    </a>
+</div>
+{% endblock %}
