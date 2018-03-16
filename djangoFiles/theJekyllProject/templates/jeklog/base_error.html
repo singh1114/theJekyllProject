@@ -1,0 +1,37 @@
+{% extends 'theJekyllProject/base.html' %}
+{% load staticfiles %}
+
+{% block content %}
+	<div class="section" data-background-color="black">
+		<div class="container">
+			<div class="row justify-content-md-center">
+				<div class="text-center col-md-12 col-lg-8">
+					{% block error-data %}
+					{% endblock %}
+				</div>	
+			</div>
+		</div>
+		
+	</div>
+{% endblock %}
+
+{% block footer %}
+	<footer class="footer" data-background-color="black">
+    <div class="container">
+      <nav>
+            <ul>
+                <li>
+                    <a href="http://www.jeklog.com">
+                        JekLog
+                    </a>
+                </li>
+                <li>
+                  <a href="http://blog.jeklog.com">
+                    Blog
+                  </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+	</footer>
+{% endblock %}

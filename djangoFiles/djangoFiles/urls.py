@@ -19,6 +19,7 @@ from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    #url(r'^', include('jeklog.urls')),
     url(r'^', include('theJekyllProject.urls')),
     url(r'^', include('oldrepo.urls', namespace='old')),
     url(r'^login/$', auth_views.login, name='login'),
