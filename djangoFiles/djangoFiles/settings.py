@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'theJekyllProject',
     'ckeditor',
     'social_django',
+    'startbootstrap',
 ]
 
 MIDDLEWARE = [
