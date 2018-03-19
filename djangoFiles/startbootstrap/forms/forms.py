@@ -1,3 +1,5 @@
+from django.utils import timezone
+
 from django import forms
 
 
@@ -109,8 +111,7 @@ class SettingsForm(forms.Form):
                 'name': 'markdown'
             })
     )
-    paginate = forms.PositiveIntegerField(
-        max_length=200,
+    paginate = forms.IntegerField(
         required=False,
         help_text='number of posts on one page',
         widget=forms.TextInput(attrs={
@@ -128,4 +129,47 @@ class SettingsForm(forms.Form):
                 'placeholder': '/posts/page:num/',
                 'name': 'paginate_path'
             })
+    )
+
+
+from mediumeditor.widgets import MediumEditorTextarea
+
+class PostForm(forms.Form):
+    date = forms.DateField(
+        help_text='Date of posting',
+        initial=timezone.now().date(),
+        widget=forms.TextInput(attrs={
+                'class': 'form-control',
+                'name': 'date'
+            })
+    )
+
+    time = forms.TimeField(
+        help_text='Date of posting',
+        initial=timezone.now().time(),
+        widget=forms.TextInput(attrs={
+                'class': 'form-control',
+                'name': 'time'
+            })
+    )
+
+    title = forms.CharField(
+        help_text='title of the post',
+        max_length=400,
+        widget=forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'How to make a website',
+                'name': 'title'
+            })
+    )
+
+    background = forms.ImageField(
+        widget=forms.TextInput(attrs={
+                'class': 'form-control',
+                'name': 'background image'
+            })
+    )
+
+    content = forms.CharField(
+        widget=MediumEditorTextarea()
     )
