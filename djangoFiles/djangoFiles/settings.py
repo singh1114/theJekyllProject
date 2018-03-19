@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'ckeditor',
     'social_django',
     'startbootstrap',
+    'mediumeditor',
 ]
 
 MIDDLEWARE = [

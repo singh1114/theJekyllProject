@@ -74,8 +74,10 @@ class Post(models.Model):
         blank=True
     )
     title = models.CharField(max_length=2000)
-    slug = models.CharField(max_length=2000, default='')
+    slug = models.CharField(max_length=2000, null=True, blank=True)
     content = RichTextField()
+    background = models.ImageField(upload_to='pictures/', null=True,
+                                   blank=True)
 
     def __str__(self):
         return '%s on %s' % (self.title, self.date)
