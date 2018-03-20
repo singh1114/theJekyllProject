@@ -164,12 +164,13 @@ class PostForm(forms.Form):
     )
 
     background = forms.ImageField(
-        widget=forms.TextInput(attrs={
+        widget=forms.FileInput(attrs={
                 'class': 'form-control',
                 'name': 'background image'
             })
     )
 
     content = forms.CharField(
+        # FIXME try to implement attrs
         widget=MediumEditorTextarea()
     )
