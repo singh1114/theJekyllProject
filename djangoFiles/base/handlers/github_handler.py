@@ -35,7 +35,7 @@ class GithubHandler:
         """
         return Repo.clone_from(url, path)
 
-    def change_config(self, repo):
+    def change_config(self):
         """
         We have to change the config with the user auth_token so that the push
         doesn't ask for username and password.
@@ -45,8 +45,7 @@ class GithubHandler:
         with repo.config_writer() as config:
             url = ('https://' + str(self.user.username) + ':' +
                    str(self.get_user_token()) + '@github.com/' +
-                   str(self.user.username) + '/' + repo + '.git')
-            # FIXME check the output of the repo
+                   str(self.user.username) + '/' + self.repo + '.git')
             config.set_value('remote "origin"', 'url', url)
             return config
 
