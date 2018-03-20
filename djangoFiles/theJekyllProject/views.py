@@ -119,8 +119,7 @@ class CreateRepoView(LoginRequiredMixin, FormView):
                 change_site_baseurl(user, repo)
                 run_git_script(user, repo)
             except:
-                # FIXME Give a proper error message
-                pass
+                raise AttributeError
 
         return HttpResponseRedirect(reverse('home'))
 
