@@ -179,3 +179,37 @@ SOCIAL_AUTH_GITHUB_KEY = os.environ['SOCIAL_AUTH_GITHUB_KEY']
 SOCIAL_AUTH_GITHUB_SECRET = os.environ['SOCIAL_AUTH_GITHUB_SECRET']
 
 SOCIAL_AUTH_GITHUB_SCOPE = ['repo']
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'level':
+                'INFO',
+            'class':
+                'logging.FileHandler',
+            'formatter':
+                'verbose',
+            'filename':
+                'jeklog.log'
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
+    'formatters': {
+        'verbose': {
+            'format': ('%(levelname)s %(asctime)s %(module)s %(process)d '
+                       '%(thread)d %(message)s')
+        },
+        'simple': {
+            'format':
+                '%(levelname)s %(message)s'
+        },
+    },
+}
