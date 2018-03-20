@@ -3,9 +3,11 @@ from base.handlers.path_handlers import PathHandler
 
 from startbootstrap.constants import StartBootstrap
 
+from theJekyllProject.dbio import RepoDbIO, SiteDataDbIO
+
 
 class StartBootstrapHandler:
-    def __init__(self, repo, user):
+    def __init__(self, user, repo):
         self.repo = repo
         self.user = user
         self.gh_handler = GithubHandler(user, repo)
@@ -14,12 +16,12 @@ class StartBootstrapHandler:
     def perform_initial_tasks(self):
         """
         Perform initial tasks. Tasks include:
-        * get user token
-        * create repo
-        * clone repo to the particular location
-        * change config of the git repo
-        * commit all changes
-        * push code to remote
+            * get user token
+            * create repo
+            * clone repo to the particular location
+            * change config of the git repo
+            * commit all changes
+            * push code to remote
         """
         user_token = self.gh_handler.get_user_token()
         self.gh_handler.create_remote_repo(user_token)
@@ -28,3 +30,14 @@ class StartBootstrapHandler:
         self.gh_handler.change_config()
         self.gh_handler.commit_all_changes(repo, 'Intial commit')
         self.push_code(repo)
+
+        def load_site_initials(self, user, form_class):
+            """
+            Load the initials from the database
+            """
+            site_data = SiteDataDbIO().get_obj({
+                'repo': RepoDbIO().get_repo(user)
+            })
+            if site_data is None:
+                return form_class
+            return form_class(initial=site_data.__dict__)
