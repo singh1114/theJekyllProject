@@ -2,6 +2,8 @@ from django.utils import timezone
 
 from django import forms
 
+from mediumeditor.widgets import MediumEditorTextarea
+
 
 class SiteProfileForm(forms.Form):
     title = forms.CharField(
@@ -54,7 +56,6 @@ class SiteProfileForm(forms.Form):
             }
         )
     )
-
 
 class SiteSocialForm(forms.Form):
     email = forms.EmailField(
