@@ -42,6 +42,7 @@ class RepoDbIO(BaseDbIO):
         current_repo.main = True
         current_repo.save()
 
+
 class SiteDataDbIO(BaseDbIO):
     """
     Database I/O operations are handled using this class

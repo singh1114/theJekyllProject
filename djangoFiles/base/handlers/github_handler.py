@@ -35,7 +35,7 @@ class GithubHandler:
         """
         return Repo.clone_from(url, path)
 
-    def change_config(self):
+    def change_config(self, repo):
         """
         We have to change the config with the user auth_token so that the push
         doesn't ask for username and password.
@@ -49,7 +49,8 @@ class GithubHandler:
             config.set_value('remote "origin"', 'url', url)
             return config
 
-    def commit_all_changes(self, repo, message):
+    @staticmethod
+    def commit_all_changes(repo, message):
         """
         commit all changes using this method
         repo: the repo object.
@@ -57,7 +58,8 @@ class GithubHandler:
         """
         return repo.git.commit('-am', message)
 
-    def push_code(self, repo, branch='gh-pages'):
+    @staticmethod
+    def push_code(repo, branch='gh-pages'):
         """
         push the code using this method
         repo: the git.Repo object

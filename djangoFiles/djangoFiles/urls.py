@@ -22,6 +22,7 @@ urlpatterns = [
     #url(r'^', include('jeklog.urls')),
     url(r'^', include('theJekyllProject.urls')),
     url(r'^', include('oldrepo.urls', namespace='old')),
+    url(r'^', include('startbootstrap.urls', namespace='sbs')),
     url(r'^login/$', auth_views.login, name='login'),
     url(r'^logout/$', auth_views.logout, name='logout'),
     url(r'^oauth/', include('social_django.urls', namespace='social')),
