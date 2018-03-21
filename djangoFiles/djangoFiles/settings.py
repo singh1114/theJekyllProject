@@ -64,7 +64,7 @@ ROOT_URLCONF = 'djangoFiles.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -213,3 +213,5 @@ LOGGING = {
         },
     },
 }
+
+MEDIUM_EDITOR_THEME = 'beagle'

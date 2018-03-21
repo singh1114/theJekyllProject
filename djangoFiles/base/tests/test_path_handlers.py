@@ -13,4 +13,4 @@ class TestPathHandler(TestCase):
         repo = 'ranvir'
         path = (settings.BASE_DIR + '/../' + 'JekLog' + '/' +user.username +
                 '/' +repo)
-        self.assertEqual(path, PathHandler(user, repo).create_repo_path())
+        self.assertEqual(path, PathHandler(user, repo).create_repo_path)
