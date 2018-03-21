@@ -115,8 +115,21 @@ class SiteData(models.Model):
     )
     avatar = models.ImageField(
         upload_to='images/',
+        null=True,
+        blank=True
     )
-
+    author = models.CharField(
+        max_length=2000,
+        default='Author of the site',
+        null=True,
+        blank=True
+    )
+    baseurl = models.CharField(
+        max_length=200,
+        default='/jekyllblog',
+        null=True,
+        blank=True
+    )
 
 class SiteSocialProfile(models.Model):
     repo = models.OneToOneField(
