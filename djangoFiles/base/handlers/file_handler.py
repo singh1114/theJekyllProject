@@ -19,3 +19,23 @@ class FileHandler:
         """
         with open('/'.join([self.file_path, self.file_name]), 'w') as file:
             return file.write(content)
+
+
+class YMLFileHandler(FileHandler):
+    """
+    Special handler to read YML files
+    """
+    def return_yaml(self):
+        file_content = self.read_file()
+        # Change the file content to dict and return it
+        # FIXME get the yaml
+        return file_content.yaml
+
+    def change_data(self, change_dict):
+        """
+        the particular data that you want to change in the yaml
+        :param change_dict: the dict that will change the data
+        :return: the changed dict
+        """
+        # FIXME complete this function
+        return

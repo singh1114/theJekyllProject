@@ -9,9 +9,14 @@ from django.http import HttpResponseRedirect
 from django.views import View
 from django.views.generic.edit import FormView
 
+from base.handlers.form_handler import  FormHandler
+
 from startbootstrap.constants import TemplateName
+from startbootstrap.dbio import SiteDataDbIO
 from startbootstrap.forms import SiteProfileForm
 from startbootstrap.handlers.sbs_handlers import SBSHandler
+
+from theJekyllProject.dbio import RepoDbIO
 
 
 class StartBootstrapThemeView(LoginRequiredMixin, View):
@@ -23,7 +28,7 @@ class StartBootstrapThemeView(LoginRequiredMixin, View):
         """
         Handle the post data. Ideally, reponame will be posted
         """
-        # TODO test this other wise something is going to be wrong.
+        # TODO Add the intial db filling code
         user = self.request.user
         repo = request.data.get('repo')
         start_bootstrap = SBSHandler(user, repo)
@@ -44,15 +49,25 @@ class SBSDataView(LoginRequiredMixin, FormView):
         return render(request, TemplateName.SBS_SITE_DATA, {'form': response})
 
     def post(self, request, *args, **kwargs):
-        form = self.form_class(request.POST)
-        if form.is_valid():
-            user = request.user
-            title = request.POST['title']
-            description = request.POST['description']
-            avatar = request.POST['avatar']
-            # save stuff to the database
-            repo = Repo.objects.get(user=user, main=True)
-            save_site_data(repo, title, description, avatar)
-            create_config_file(user, repo)
-            push_online(user, repo)
-            return HttpResponseRedirect(reverse('home'))
+        # TODO create the _config.yml file commit and push the changes
+        form_field_dict = FormHandler(
+            request, self.form_class).handle_post_fields((
+                'title',
+                'description',
+                'author',
+                'baseurl')
+        )
+        user = request.user
+        repo = RepoDbIO().get_repo(user)
+        site_data = SiteDataDbIO().create_obj({
+            'title': form_field_dict['title'],
+            'description': form_field_dict['description'],
+            'author': form_field_dict['author'],
+            'baseurl': form_field_dict['baseurl']
+        })
+
+
+
+
+        return render(request, TemplateName.SBS_SITE_DATA,
+                      {'msg': 'Site data updated successfully.'})
