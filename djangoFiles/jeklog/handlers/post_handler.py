@@ -5,6 +5,7 @@ from django.conf import settings
 from jeklog.handlers.scrape_files import FileScraper
 from theJekyllProject.dbio import PostDbIO, RepoDbIO
 
+
 class PostHandler(FileScraper):
     """
     Post handler will used to do all the operations related to Posts
@@ -21,10 +22,10 @@ class PostHandler(FileScraper):
         Read and parse the head/meta content of the blog
         """
         return_data = {}
-        return_data['author'] = self.find_in_content(r'author:.+|author:',
-                                                     head_content)
-        return_data['comments'] = self.find_in_content(r'comments:.+|comments:'
-                                                       , head_content)
+        return_data['author'] = self.find_in_content(
+            r'author:.+|author:', head_content)
+        return_data['comments'] = self.find_in_content(
+            r'comments:.+|comments:', head_content)
         return_data['date'] = self.find_in_content(r'date:.+|date:',
                                                    head_content)
         return_data['layout'] = self.find_in_content(r'layout:.+|layout:',

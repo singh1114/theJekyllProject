@@ -1,5 +1,6 @@
 from django.conf import settings
 
+
 class PathHandler:
     def __init__(self, user, repo):
         self.user = user

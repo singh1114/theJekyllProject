@@ -57,6 +57,7 @@ class SiteProfileForm(forms.Form):
         )
     )
 
+
 class SiteSocialForm(forms.Form):
     email = forms.EmailField(
         max_length=200,
@@ -132,8 +133,6 @@ class SettingsForm(forms.Form):
             })
     )
 
-
-from mediumeditor.widgets import MediumEditorTextarea
 
 class PostForm(forms.Form):
     date = forms.DateField(

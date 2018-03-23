@@ -16,6 +16,7 @@ from theJekyllProject.dbio import (
     SiteSocialProfileDbIO, SiteThemeDbIO
 )
 
+
 class OldRepoSetUp:
     def __init__(self, user, repo_name):
         self.user = user
@@ -196,7 +197,6 @@ class OldRepoSetUp:
         """
         RepoDbIO().change_main(self.user, repo)
         config_data = self.read_config_data()
-        #import ipdb; ipdb.set_trace()
         config_data['site_data'].update({'repo': repo})
         config_data['social_site_data'].update({'repo': repo})
         config_data['site_theme'].update({'repo': repo})
@@ -208,7 +208,6 @@ class OldRepoSetUp:
         SiteThemeDbIO().save_db_instance(config_data['site_theme'])
         SitePluginDbIO().save_db_instance(config_data['site_plugin'])
         SiteExcludeDbIO().save_db_instance(config_data['site_exclude'])
-
 
     def use_old_repo(self):
         """
