@@ -17,3 +17,14 @@ addons:
 before_script:
   - psql -c "CREATE DATABASE jeklog;" -U postgres
   - "flake8 djangoFiles/ --exclude=migrations,settings.py,lib,tests,tmp,manage.py,theJekyllProject"
+
+env:
+  global:
+    - EMAIL_HOST_USER=abc@xyz.com
+    - DB_USER=jnot
+    - DB_PASS=jnot
+    - DB_NAME=jnot
+    - EMAIL_HOST_PASSWORD=notreal
+    - SOCIAL_AUTH_GITHUB_KEY=n9n39e87gbrn939
+    - SOCIAL_AUTH_GITHUB_SECRET=mfdf84hnf4
+    - STATIC_W_R_T_BASE='/home/ranvir/'
