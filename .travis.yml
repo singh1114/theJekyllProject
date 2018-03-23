@@ -21,9 +21,9 @@ before_script:
 env:
   global:
     - EMAIL_HOST_USER=abc@xyz.com
-    - DB_USER=jnot
-    - DB_PASS=jnot
-    - DB_NAME=jnot
+    - DB_USER=jeklog
+    - DB_PASS=jeklog
+    - DB_NAME=jeklog
     - EMAIL_HOST_PASSWORD=notreal
     - SOCIAL_AUTH_GITHUB_KEY=n9n39e87gbrn939
     - SOCIAL_AUTH_GITHUB_SECRET=mfdf84hnf4
