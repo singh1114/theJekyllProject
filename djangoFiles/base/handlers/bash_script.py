@@ -12,5 +12,5 @@ class BashScript:
         path = '/'.join([base_dir, '..', 'gitsendupstream.sh'])
         task = subprocess.Popen(['/bin/bash', path, user.username, repo.repo,
                                 base_dir])
-        if task.returncode !=0:
+        if task.returncode != 0:
             raise BaseException({'message': 'push error'})
