@@ -2,6 +2,7 @@ import re
 
 from markdown2 import Markdown
 
+
 class FileScraper:
     def __init__(self, regex, file_data):
         self.regex = regex
@@ -15,10 +16,11 @@ class FileScraper:
         """
         return_dict = {}
         first_occurence = file_data.find('---')
-        second_occurence = file_data[first_occurence+3:].find('---')
-        return_dict['head'] = file_data[first_occurence:(first_occurence+
-                                        second_occurence+6)]
-        return_dict['body'] = file_data[first_occurence+second_occurence+6:]
+        second_occurence = file_data[first_occurence + 3:].find('---')
+        return_dict['head'] = file_data[first_occurence:(first_occurence +
+                                        second_occurence + 6)]
+        return_dict['body'] = file_data[(first_occurence +
+                                         second_occurence + 6)]
         return return_dict
 
     def find_in_content(self, regex, file_data):
@@ -74,7 +76,6 @@ class FileScraper:
         """
         This method is used to join to dictionaries together
         """
-        #import ipdb; ipdb.set_trace()
         main_dict = dict_one.copy()
         main_dict.update(dict_two)
         return main_dict
@@ -84,4 +85,3 @@ class FileScraper:
         Convert the read markdown to html
         """
         return Markdown().convert(content)
-

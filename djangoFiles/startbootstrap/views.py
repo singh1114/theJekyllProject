@@ -9,7 +9,7 @@ from django.http import HttpResponseRedirect
 from django.views import View
 from django.views.generic.edit import FormView
 
-from base.handlers.form_handler import  FormHandler
+from base.handlers.form_handler import FormHandler
 
 from startbootstrap.constants import TemplateName
 from startbootstrap.dbio import SiteDataDbIO
@@ -58,16 +58,13 @@ class SBSDataView(LoginRequiredMixin, FormView):
                 'baseurl')
         )
         user = request.user
-        repo = RepoDbIO().get_repo(user)
-        site_data = SiteDataDbIO().create_obj({
+        RepoDbIO().get_repo(user)
+        SiteDataDbIO().create_obj({
             'title': form_field_dict['title'],
             'description': form_field_dict['description'],
             'author': form_field_dict['author'],
             'baseurl': form_field_dict['baseurl']
         })
-
-
-
 
         return render(request, TemplateName.SBS_SITE_DATA,
                       {'msg': 'Site data updated successfully.'})

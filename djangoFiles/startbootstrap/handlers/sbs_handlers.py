@@ -43,4 +43,3 @@ class SBSHandler:
         if site_data is None:
             return form_class
         return form_class(initial=site_data.__dict__)
-

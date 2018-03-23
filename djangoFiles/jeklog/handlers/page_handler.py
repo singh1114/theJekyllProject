@@ -49,6 +49,6 @@ class PageHandler(FileScraper):
                         file_data = page_file.read()
                         # FIXME call self.handle_page_head
                         content_dict = self.page_call_scrapers(file_data)
-                        content_dict['repo'] = RepoDbIO().get_repo(self.user,
-                                                          self.repo_name)
+                        content_dict['repo'] = RepoDbIO().get_repo(
+                            self.user, self.repo_name)
                         PageDbIO().save_db_instance(content_dict)
