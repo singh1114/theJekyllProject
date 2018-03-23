@@ -46,6 +46,7 @@ class RepoDbIO(BaseDbIO):
 class SiteDataDbIO(BaseDbIO):
     """
     Database I/O operations are handled using this class
+    ** DEPRECATED: use startbootstrap.dbio.SiteDataDbIO
     """
     def __init__(self):
         self.model_name = SiteData

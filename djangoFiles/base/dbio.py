@@ -4,6 +4,7 @@ from django.core.exceptions import ObjectDoesNotExist
 class BaseDbIO:
     """
     Base database input output to setup every database I/O operations.
+    class is DEPRECATED and use of AbstractBaseDbIO is encouraged.
     """
     def save_db_instance(self, kwargs):
         """
