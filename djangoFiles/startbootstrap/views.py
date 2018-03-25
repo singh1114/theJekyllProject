@@ -12,11 +12,9 @@ from django.views.generic.edit import FormView
 from base.handlers.form_handler import FormHandler
 
 from startbootstrap.constants import TemplateName
-from startbootstrap.dbio import SiteDataDbIO
 from startbootstrap.forms import SiteProfileForm
 from startbootstrap.handlers.sbs_handlers import SBSHandler
-
-from theJekyllProject.dbio import RepoDbIO
+from startbootstrap.handlers.sbs_form_handlers import SBSFormHandler
 
 
 class StartBootstrapThemeView(LoginRequiredMixin, View):
@@ -43,7 +41,7 @@ class SBSDataView(LoginRequiredMixin, FormView):
     form_class = SiteProfileForm
 
     def get(self, request, *args, **kwargs):
-        response = SBSHandler.load_site_initials(
+        response = SBSFormHandler.load_site_initials(
             request.user, self.form_class)
 
         return render(request, TemplateName.SBS_SITE_DATA, {'form': response})
@@ -58,13 +56,7 @@ class SBSDataView(LoginRequiredMixin, FormView):
                 'baseurl')
         )
         user = request.user
-        RepoDbIO().get_repo(user)
-        SiteDataDbIO().create_obj({
-            'title': form_field_dict['title'],
-            'description': form_field_dict['description'],
-            'author': form_field_dict['author'],
-            'baseurl': form_field_dict['baseurl']
-        })
+        SBSFormHandler().post_site_data(user, form_field_dict)
 
         return render(request, TemplateName.SBS_SITE_DATA,
                       {'msg': 'Site data updated successfully.'})
