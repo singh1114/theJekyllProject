@@ -26,7 +26,6 @@ class StartBootstrapThemeView(LoginRequiredMixin, View):
         """
         Handle the post data. Ideally, reponame will be posted
         """
-        # TODO Add the intial db filling code
         user = self.request.user
         repo = request.data.get('repo')
         start_bootstrap = SBSHandler(user, repo)
