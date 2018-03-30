@@ -18,7 +18,7 @@ class SBSFormHandler:
 
     def load_site_initials(self, user, form_class):
         """
-        Load the initials from the database
+        Load the site data initials from the database
         """
         site_data = SiteDataDbIO().get_obj({
             'repo': RepoDbIO().get_repo(user)
@@ -36,6 +36,7 @@ class SBSFormHandler:
         """
         RepoDbIO().get_repo(user)
         SiteDataDbIO().create_obj(**form_field_dict)
+
         # FIXME create the _config file
         # FIXME create the config file using the poyo library
         repo = Repo(self.path)
