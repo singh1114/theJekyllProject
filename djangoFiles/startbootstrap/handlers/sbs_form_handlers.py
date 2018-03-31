@@ -2,11 +2,12 @@ import os
 
 from git import Repo
 
+from base.handlers.form_handler import FormHandler
 from base.handlers.path_handlers import PathHandler
 from base.handlers.github_handler import GithubHandler
 from base.handlers.yaml_handlers import YAMLHandler
 
-from startbootstrap.dbio import SiteDataDbIO
+from startbootstrap.dbio import SiteDataDbIO, SocialProfileDbIO
 
 from theJekyllProject.dbio import RepoDbIO
 
@@ -19,16 +20,14 @@ class SBSFormHandler:
         """
         self.path = PathHandler(user, repo).create_repo_path()
 
-    def load_site_initials(self, user, form_class):
+    def load_site_initials(self, request, form_class):
         """
         Load the site data initials from the database
         """
         site_data = SiteDataDbIO().get_obj({
-            'repo': RepoDbIO().get_repo(user)
+            'repo': RepoDbIO().get_repo(request.user)
         })
-        if site_data is None:
-            return form_class
-        return form_class(initial=site_data.__dict__)
+        return FormHandler(request, form_class).load_initials(site_data)
 
     def post_site_data(self, user, form_field_dict):
         """
@@ -37,8 +36,52 @@ class SBSFormHandler:
         :param form_field_dict: form field cleaned data
         :return:
         """
-        RepoDbIO().get_repo(user)
-        SiteDataDbIO().create_obj(**form_field_dict)
+        repo = RepoDbIO().get_repo(user)
+        form_field_dict['repo'] = repo
+        site_data = SiteDataDbIO().get_obj({'repo': repo})
+
+        if site_data:
+            SiteDataDbIO().update_obj(site_data, form_field_dict)
+        else:
+            SiteDataDbIO().create_obj(**form_field_dict)
+
+        config_path = os.path.join(self.path, '_config.yml')
+
+        # Complete all the yaml operations
+        yaml_dict = YAMLHandler().read_yaml_file(config_path, False)
+        new_yaml = YAMLHandler().change_yaml(yaml_dict, form_field_dict)
+        YAMLHandler().write_yaml(config_path, new_yaml)
+
+        # Complete all the git operations
+        repo = Repo(self.path)
+        GithubHandler.commit_all_changes(repo, 'Change site data')
+        GithubHandler.push_code(repo, 'gh-pages')
+
+    def load_social_profile_initials(self, request, form_class):
+        """
+        Load the site profile initials from the database
+        """
+        social_data = SocialProfileDbIO().get_obj({
+            'repo': RepoDbIO().get_repo(request.user)
+        })
+        return FormHandler(request, form_class).load_initials(social_data)
+
+    def post_social_profile_data(self, user, form_field_dict):
+        """
+        handle the post site data View method
+        :param user: the logged in user
+        :param form_field_dict: form field cleaned data
+        :return:
+        """
+        repo = RepoDbIO().get_repo(user)
+        form_field_dict['repo'] = repo
+        social_data = SocialProfileDbIO().get_obj({'repo': repo})
+
+        if social_data:
+            SocialProfileDbIO().update_obj(social_data, form_field_dict)
+        else:
+            SocialProfileDbIO().create_obj(**form_field_dict)
+
         config_path = os.path.join(self.path, '_config.yml')
 
         # Complete all the yaml operations

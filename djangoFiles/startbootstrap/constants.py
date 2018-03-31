@@ -4,3 +4,4 @@ class StartBootstrap:
 
 class TemplateName:
     SBS_SITE_DATA = 'startbootstrap/site-data.html'
+    SBS_SOCIAL_DATA = 'startbootstrap/social-data.html'

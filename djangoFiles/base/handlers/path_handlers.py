@@ -6,7 +6,6 @@ class PathHandler:
         self.user = user
         self.repo = repo
 
-    @property
     def create_repo_path(self):
         return '/'.join([settings.BASE_DIR, '..', 'JekLog',
                          self.user.username, self.repo])

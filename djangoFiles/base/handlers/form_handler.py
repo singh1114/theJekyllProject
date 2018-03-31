@@ -18,3 +18,11 @@ class FormHandler:
                 field_dict[key] = value
 
             return field_dict
+
+    def load_initials(self, db_data):
+        """
+        This method will be used to load initial datasets from db
+        """
+        if db_data is None:
+            return self.form_class
+        return self.form_class(initial=db_data.__dict__)
