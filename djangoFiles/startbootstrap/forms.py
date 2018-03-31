@@ -57,6 +57,19 @@ class SiteProfileForm(forms.Form):
         )
     )
 
+    url = forms.CharField(
+        max_length=2000,
+        help_text='http://blog.jeklog.com',
+        initial='http://blog.jeklog.com',
+        required=False,
+        widget=forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'http://blog.jeklog.com',
+                'name': 'url'
+            }
+        )
+    )
+
 
 class SiteSocialForm(forms.Form):
     email = forms.EmailField(

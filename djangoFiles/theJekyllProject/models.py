@@ -130,6 +130,13 @@ class SiteData(models.Model):
         null=True,
         blank=True
     )
+    url = models.CharField(
+        max_length=200,
+        default='http://blog.jeklog.com',
+        null=True,
+        blank=True
+    )
+
 
 class SiteSocialProfile(models.Model):
     repo = models.OneToOneField(
