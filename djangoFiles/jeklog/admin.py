@@ -1,12 +1,15 @@
 from django.contrib import admin
 
-from theJekyllProject.models import CName
-from theJekyllProject.models import Post
-from theJekyllProject.models import PostCategory
-from theJekyllProject.models import SiteData
-from theJekyllProject.models import SiteTheme
-from theJekyllProject.models import Page
-from theJekyllProject.models import Repo
+from theJekyllProject.models import (
+    CName,
+    Page,
+    Post,
+    PostCategory,
+    Repo,
+    SiteData,
+    SiteSocialProfile,
+    SiteTheme
+)
 
 
 class PostAdmin(admin.ModelAdmin):
@@ -25,6 +28,14 @@ class SiteDataAdmin(admin.ModelAdmin):
 
 admin.site.register(SiteData, SiteDataAdmin)
 admin.site.register(SiteTheme)
+
+
+class SocialProfileAdmin(admin.ModelAdmin):
+    search_fields = ('repo', 'email', 'facebook', 'github', 'twitter')
+    list_display = ('repo', 'email', 'facebook', 'github', 'twitter')
+
+
+admin.site.register(SiteSocialProfile, SocialProfileAdmin)
 
 
 class PageAdmin(admin.ModelAdmin):
