@@ -1,7 +1,10 @@
+import os
+
 from git import Repo
 
 from base.handlers.path_handlers import PathHandler
 from base.handlers.github_handler import GithubHandler
+from base.handlers.yaml_handlers import YAMLHandler
 
 from startbootstrap.dbio import SiteDataDbIO
 
@@ -36,9 +39,14 @@ class SBSFormHandler:
         """
         RepoDbIO().get_repo(user)
         SiteDataDbIO().create_obj(**form_field_dict)
+        config_path = os.path.join(self.path, '_config.yml')
 
-        # FIXME create the _config file
-        # FIXME create the config file using the poyo library
+        # Complete all the yaml operations
+        yaml_dict = YAMLHandler().read_yaml_file(config_path, False)
+        new_yaml = YAMLHandler().change_yaml(yaml_dict, form_field_dict)
+        YAMLHandler().write_yaml(config_path, new_yaml)
+
+        # Complete all the git operations
         repo = Repo(self.path)
         GithubHandler.commit_all_changes(repo, 'Change site data')
         GithubHandler.push_code(repo, 'gh-pages')
