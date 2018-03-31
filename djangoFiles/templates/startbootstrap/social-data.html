@@ -1,0 +1,30 @@
+{% extends 'theJekyllProject/base.html' %}
+{% load staticfiles %}
+{% block content %}
+  <div class="section section-tabs">
+    <div class="container" style="text-align:center;">
+        <div class="row" style="margin:auto">
+            <div class="col-md-12">
+                <div class="card" style="padding:10px;">
+                    <div class="card-block">
+                      <form action="" method="post">
+                        {{ form.media }}
+                        {% csrf_token %}
+                        {% for field in form %}
+                          <div class="row" style="padding-top: 15px;">
+                            <div class="col-md-3">
+                                <label style="float:left; margin-left:35px;" for="{{ field.name }}">{{ field.label }}</label>
+                            </div>
+                            <div class="col-md-9">{{ field }}</div>
+                          </div>
+                        {% endfor %}
+                        <br />
+                        <input type="submit" value="Submit" class="btn btn-primary btn-round btn-lg"/>
+                      </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  </div>
+{% endblock %}
