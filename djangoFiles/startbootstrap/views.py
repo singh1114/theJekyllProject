@@ -12,7 +12,7 @@ from django.views.generic.edit import FormView
 from base.handlers.form_handler import FormHandler
 
 from startbootstrap.constants import TemplateName
-from startbootstrap.forms import SiteProfileForm, SiteSocialForm
+from startbootstrap.forms import PostForm, SiteProfileForm, SiteSocialForm
 from startbootstrap.handlers.sbs_handlers import SBSHandler
 from startbootstrap.handlers.sbs_form_handlers import SBSFormHandler
 
@@ -48,7 +48,7 @@ class SBSSiteDataView(LoginRequiredMixin, FormView):
             request, self.form_class)
 
         return render(request,
-                      TemplateName.SBS_SITE_DATA, {'form': form_response})
+                      TemplateName.SBS_POST_DATA, {'form': form_response})
 
     def post(self, request, *args, **kwargs):
         form_field_dict = FormHandler(
@@ -56,7 +56,8 @@ class SBSSiteDataView(LoginRequiredMixin, FormView):
                 'title',
                 'description',
                 'author',
-                'baseurl')
+                'baseurl',
+                'url')
         )
         user = request.user
         repo_name = RepoDbIO().get_repo(request.user).repo
@@ -95,3 +96,37 @@ class SBSSocialDataView(LoginRequiredMixin, FormView):
 
         return render(request, TemplateName.SBS_SOCIAL_DATA,
                       {'msg': 'Social data updated successfully.'})
+
+
+# TODO Add index background in site data view.
+class SBSPostView(LoginRequiredMixin, FormView):
+    form_class = PostForm
+
+    def get(self, request, pk='', *args, **kwargs):
+        repo_name = RepoDbIO().get_repo(request.user).repo
+        form_response = SBSFormHandler(
+            request.user, repo_name).load_posts_initials(
+            request, self.form_class, pk)
+
+        return render(request,
+                      TemplateName.SBS_POST_DATA,
+                      {'form': form_response})
+
+    # TODO write the post method properly
+    def post(self, request, pk='', *args, **kwargs):
+        form_field_dict = FormHandler(
+            request, self.form_class).handle_post_fields((
+                'date',
+                'time',
+                'title',
+                'subtitle',
+                'background',
+                'content')
+        )
+        user = request.user
+        repo_name = RepoDbIO().get_repo(request.user).repo
+        SBSFormHandler(
+            user, repo_name).post_social_profile_data(user, form_field_dict)
+
+        return render(request, TemplateName.SBS_POST_DATA,
+                      {'msg': 'Post updated successfully.'})
