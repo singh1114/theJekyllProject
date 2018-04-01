@@ -176,6 +176,16 @@ class PostForm(forms.Form):
             })
     )
 
+    subtitle = forms.CharField(
+        help_text='subtitle of the post',
+        max_length=400,
+        widget=forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Websites are fairly east to make.',
+                'name': 'subtitle'
+            })
+    )
+
     background = forms.ImageField(
         widget=forms.FileInput(attrs={
                 'class': 'form-control',

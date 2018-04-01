@@ -111,11 +111,11 @@
 				</div>
 			</div>
 		</div>
-		<div class ="footer">
-      {% block footer %}
-      {% endblock %}
-		</div>
-	</div>
+  </div>
+  {% block error %}
+  {% endblock %}
+  {% block footer %}
+  {% endblock %}
 </body>
 <!--   Core JS Files   -->
 <script src="{%static 'nowui/assets/js/core/jquery.3.2.1.min.js' %}" type="text/javascript"></script>
