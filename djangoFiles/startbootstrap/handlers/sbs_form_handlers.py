@@ -2,12 +2,14 @@ import os
 
 from git import Repo
 
+from django.core.exceptions import PermissionDenied
+
 from base.handlers.form_handler import FormHandler
 from base.handlers.path_handlers import PathHandler
 from base.handlers.github_handler import GithubHandler
 from base.handlers.yaml_handlers import YAMLHandler
 
-from startbootstrap.dbio import SiteDataDbIO, SocialProfileDbIO
+from startbootstrap.dbio import PostDbIO, SiteDataDbIO, SocialProfileDbIO
 
 from theJekyllProject.dbio import RepoDbIO
 
@@ -93,3 +95,17 @@ class SBSFormHandler:
         repo = Repo(self.path)
         GithubHandler.commit_all_changes(repo, 'Change site data')
         GithubHandler.push_code(repo, 'gh-pages')
+
+    def load_posts_initials(self, request, form_class, pk):
+        """
+        Load the site profile initials from the database
+        """
+        repo = RepoDbIO().get_repo(request.user)
+        if pk:
+            post = PostDbIO().get_obj({
+                'pk': pk,
+                'repo__user': request.user,
+                'repo': repo})
+            if post is None:
+                raise PermissionDenied
+        return FormHandler(request, form_class).load_initials(post)
