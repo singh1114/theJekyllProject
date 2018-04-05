@@ -15,7 +15,7 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = os.path.join(BASE_DIR, '../media')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'social_django',
     'startbootstrap',
     'mediumeditor',
+    'sorl.thumbnail',
 ]
 
 MIDDLEWARE = [
@@ -138,7 +139,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, os.environ['STATIC_W_R_T_BASE'])
-MEDIA_URL = os.path.join(BASE_DIR, '../media/')
+MEDIA_URL = '/media/'
 CKEDITOR_JQUERY_URL = 'http://code.jquery.com/jquery-3.2.1.min.js'
 
 CKEDITOR_UPLOAD_PATH = 'uploads/'

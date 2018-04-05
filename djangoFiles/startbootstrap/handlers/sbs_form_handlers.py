@@ -70,7 +70,7 @@ class SBSFormHandler:
 
     def post_social_profile_data(self, user, form_field_dict):
         """
-        handle the post site data View method
+        handle the post social profile View method
         :param user: the logged in user
         :param form_field_dict: form field cleaned data
         :return:
@@ -108,4 +108,35 @@ class SBSFormHandler:
                 'repo': repo})
             if post is None:
                 raise PermissionDenied
-        return FormHandler(request, form_class).load_initials(post)
+        else:
+            post = None
+
+        return FormHandler(request, form_class).load_initials(post), post
+
+    def post_posts_data(self, user, form_field_dict):
+        """
+        handle the post posts View method
+        :param user: the logged in user
+        :param form_field_dict: form field cleaned data
+        :return:
+        """
+        repo = RepoDbIO().get_repo(user)
+        form_field_dict['repo'] = repo
+        social_data = SocialProfileDbIO().get_obj({'repo': repo})
+
+        if social_data:
+            SocialProfileDbIO().update_obj(social_data, form_field_dict)
+        else:
+            SocialProfileDbIO().create_obj(**form_field_dict)
+
+        config_path = os.path.join(self.path, '_config.yml')
+
+        # Complete all the yaml operations
+        yaml_dict = YAMLHandler().read_yaml_file(config_path, False)
+        new_yaml = YAMLHandler().change_yaml(yaml_dict, form_field_dict)
+        YAMLHandler().write_yaml(config_path, new_yaml)
+
+        # Complete all the git operations
+        repo = Repo(self.path)
+        GithubHandler.commit_all_changes(repo, 'Change site data')
+        GithubHandler.push_code(repo, 'gh-pages')

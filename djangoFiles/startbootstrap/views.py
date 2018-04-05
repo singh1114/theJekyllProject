@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 
 from django.shortcuts import render
 
+from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
@@ -104,13 +105,15 @@ class SBSPostView(LoginRequiredMixin, FormView):
 
     def get(self, request, pk='', *args, **kwargs):
         repo_name = RepoDbIO().get_repo(request.user).repo
-        form_response = SBSFormHandler(
+        form_response, post = SBSFormHandler(
             request.user, repo_name).load_posts_initials(
             request, self.form_class, pk)
 
-        return render(request,
-                      TemplateName.SBS_POST_DATA,
-                      {'form': form_response})
+        # import ipdb; ipdb.set_trace()
+
+        return render(request, TemplateName.SBS_POST_DATA,
+                      {'form': form_response, 'post': post,
+                       'media': settings.MEDIA_URL})
 
     # TODO write the post method properly
     def post(self, request, pk='', *args, **kwargs):
@@ -126,7 +129,7 @@ class SBSPostView(LoginRequiredMixin, FormView):
         user = request.user
         repo_name = RepoDbIO().get_repo(request.user).repo
         SBSFormHandler(
-            user, repo_name).post_social_profile_data(user, form_field_dict)
+            user, repo_name).post_posts_data(user, form_field_dict)
 
         return render(request, TemplateName.SBS_POST_DATA,
                       {'msg': 'Post updated successfully.'})
