@@ -5,6 +5,12 @@ from startbootstrap.views import (
     SBSSiteDataView,
     SBSSocialDataView
 )
+
+from django.conf import settings
+
+from django.conf.urls.static import static
+
+
 urlpatterns = [
     url(r'^sbs-site-data/$', SBSSiteDataView.as_view(), name='sbs-site-data'),
     url(r'^sbs-social-data/$', SBSSocialDataView.as_view(),
@@ -13,4 +19,4 @@ urlpatterns = [
         name='sbs-post'),
     url(r'^sbs-post/(?P<pk>\d+)/$', SBSPostView.as_view(),
         name='post-update'),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
