@@ -23,6 +23,7 @@
     <link href="{% static 'nowui/assets/css/demo.css' %}" rel="stylesheet" />
     <link href="{% static 'font-awesome/css/font-awesome.min.css' %}" rel="stylesheet" />
     <link href="{% static 'css/sidebar.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/base.css' %}" rel="stylesheet" />
     {{ form.media }}
     <script type="text/javascript" src="{% static "ckeditor/ckeditor.js" %}"></script>
 </head>
@@ -130,10 +131,6 @@
 <!-- Control Center for Now Ui Kit: parallax effects, scripts for the example pages etc -->
 <script src="{% static 'nowui/assets/js/now-ui-kit.js' %}" type="text/javascript"></script>
 <script type="text/javascript">
-    $(document).ready(function() {
-        // the body of this function is in assets/js/now-ui-kit.js
-        nowuiKit.initSliders();
-    });
 
     function scrollToDownload() {
 

@@ -99,21 +99,18 @@ class SBSSocialDataView(LoginRequiredMixin, FormView):
                       {'msg': 'Social data updated successfully.'})
 
 
-# TODO Add index background in site data view.
+# TODO Add index background in site data view. More work is required there.
 class SBSPostView(LoginRequiredMixin, FormView):
     form_class = PostForm
 
     def get(self, request, pk='', *args, **kwargs):
         repo_name = RepoDbIO().get_repo(request.user).repo
-        form_response, post = SBSFormHandler(
+        form_response = SBSFormHandler(
             request.user, repo_name).load_posts_initials(
             request, self.form_class, pk)
 
-        # import ipdb; ipdb.set_trace()
-
         return render(request, TemplateName.SBS_POST_DATA,
-                      {'form': form_response, 'post': post,
-                       'media': settings.MEDIA_URL})
+                      {'form': form_response, 'media': settings.MEDIA_URL})
 
     # TODO write the post method properly
     def post(self, request, pk='', *args, **kwargs):
