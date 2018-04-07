@@ -27,11 +27,14 @@
                               <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
                             {% endthumbnail %}
                           {% else %}
-                          <div class="row" style="padding-top: 15px;">
+                          <div class="row" style="margin-top: 15px;">
                             <div class="col-md-3">
                                 <label style="float:left; margin-left:35px;" for="{{ field.name }}">{{ field.label }}</label>
                             </div>
-                            <div class="col-md-9">{{ field }}</div>
+                            <div class="col-md-1">
+                                <a data-toggle="popover" data-container="container" data-placement="left" data-content="XCVBNBFHJFGHJFFGH" class="fa fa-question-circle-o" aria-hidden="true"></a>
+                            </div>
+                            <div class="col-md-8">{{ field }}</div>
                           </div>
                           {% endif %}
                         {% endfor %}
