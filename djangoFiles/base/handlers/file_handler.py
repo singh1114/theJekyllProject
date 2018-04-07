@@ -19,3 +19,9 @@ class FileHandler:
         """
         with open('/'.join([self.file_path, self.file_name]), 'w') as file:
             return file.write(content)
+
+    def wrap_content(self, wrapper, content):
+        """
+        This function is used to wrap content with a wrapper
+        """
+        return '\n'.join([wrapper, content, wrapper])

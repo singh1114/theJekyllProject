@@ -1,67 +1,74 @@
-*{
-	margin: 0px;
-	padding: 0px;
-	font-family: Ubuntu;
-	
-}
-#header {
-	border : none;
-	transition-duration: 0.5s;
-	margin: 0px;
-	background: #343434;
-}
-#header .navbar-brand strong{
-	font-family: Ubuntu;
-	font-size: 32px;
-    color: #FFF5B9;
-}
-.container-fluid{
-	background: #343434;
-}
-.container-fluid, .col-md-12{
-	padding: 0px;
-}
-.row{
-	margin: 0px;
-}
-#header li a strong{
-	color: #FFF5B9;
-}
-#header li a:hover{
-	border-bottom: 3px solid red;
+.box {
+  width: 20%;
+  margin: 0 auto;
+  background: rgba(255,255,255,0.2);
+  padding: 35px;
+  border: 2px solid #fff;
+  border-radius: 20px/50px;
+  background-clip: padding-box;
+  text-align: center;
 }
 
-#main-content{
-    background: white;
-    color: black;
-    padding: 48px;
-    padding-left: 128px;
+.button {
+  font-size: 1em;
+  padding: 10px;
+  color: #fff;
+  border: 2px solid orange;
+  border-radius: 20px/50px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.3s ease-out;
 }
-#main-content ul{
-    padding-left: 48px;
-    list-style: none;
-}
-.footer{
-    color: #ccc;
-    text-align: center;
-    padding: 16px;
-    position: fixed;
-    bottom: 0px;
-    width: 100%;
-    background: #343434;
-}
-.footer a {
-    text-decoration: none;
-}
-.footer a strong {
-    color: white;
+.button:hover {
+  background: orange;
 }
 
-#create_repo {
-    text-align: center;
+.overlay {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.7);
+  transition: opacity 500ms;
+  visibility: hidden;
+  opacity: 0;
+}
+.overlay:target {
+  visibility: visible;
+  opacity: 1;
 }
 
-#create_repo a {
-    color: white;
-    text-decoration: none;
+.popup {
+  margin: 70px auto;
+  padding: 20px;
+  background: #fff;
+  border-radius: 5px;
+  width: 30%;
+  position: relative;
+  transition: all 1s ease-in-out;
+	z-index: 10000;
+}
+
+.popup h2 {
+  margin-top: 0;
+  color: #333;
+  font-family: Tahoma, Arial, sans-serif;
+}
+.popup .close {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  transition: all 200ms;
+  font-size: 30px;
+  font-weight: bold;
+  text-decoration: none;
+  color: #333;
+}
+.popup .close:hover {
+  color: orange;
+}
+.popup .content {
+  max-height: 30%;
+  overflow: auto;
 }
