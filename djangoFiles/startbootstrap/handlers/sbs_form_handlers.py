@@ -4,6 +4,8 @@ from git import Repo
 
 from django.core.exceptions import PermissionDenied
 
+from base.handlers.extra_handlers import ExtraHandler
+from base.handlers.file_handler import FileHandler
 from base.handlers.form_handler import FormHandler
 from base.handlers.path_handlers import PathHandler
 from base.handlers.github_handler import GithubHandler
@@ -127,57 +129,39 @@ class SBSFormHandler:
         different files will be created.
         :return:
         """
+        # TODO image copying is not done and delete the old one.
         repo = RepoDbIO().get_repo(user)
         if pk:
             post = PostDbIO().get_obj({
                 'pk': pk,
-                'repo__user': request.user,
+                'repo__user': user,
                 'repo': repo
             })
             if pk is None:
                 raise PermissionDenied
-            # Flag used to know whether to delete the earlier file or not
-            file_delete = False
+
             if post.title is not form_field_dict['title']:
-                file_delete = True
+                file_name = ExtraHandler().file_name_f_title(post.title,
+                                                             'html')
+                FileHandler('/'.join([self.path, '_posts']),
+                            file_name).delete_file()
 
-            PostDbIO().update_obj(post, **form_field_dict)
-            yaml = YAMLHandler().create_yaml(form_field_dict)
-
+            post = PostDbIO().update_obj(post, **form_field_dict)
 
         else:
-
-            # create new post
-            pass
-
-
-
-
-
-
-        repo = RepoDbIO().get_repo(user)
-        form_field_dict['repo'] = repo
-        social_data = SocialProfileDbIO().get_obj({'repo': repo})
-
-        if social_data:
-            SocialProfileDbIO().update_obj(social_data, form_field_dict)
-        else:
-            SocialProfileDbIO().create_obj(**form_field_dict)
-
-        posts_path = os.path.join(self.path, '_posts')
-
-        # Complete all the yaml operations
-        yaml_dict = YAMLHandler().read_yaml_file(config_path, True)
-        new_yaml = YAMLHandler().change_yaml(yaml_dict, form_field_dict)
-        YAMLHandler().write_dict_yaml(config_path, new_yaml)
+            form_field_dict['repo'] = repo
+            post = PostDbIO().create_obj(**form_field_dict)
+        ExtraHandler().del_keys(form_field_dict, ('repo', 'content',))
+        yaml_content = YAMLHandler().create_yaml(form_field_dict)
+        w_yaml_content = ExtraHandler().wrap_content('---', yaml_content)
+        full_content = ExtraHandler().join_content(w_yaml_content,
+                                                   post.content)
+        file_name = ExtraHandler().file_name_f_title(post.title,
+                                                     'html')
+        FileHandler('/'.join([self.path, '_posts']),
+                    file_name).rewrite_file(full_content)
 
         # Complete all the git operations
         repo = Repo(self.path)
         GithubHandler.commit_all_changes(repo, 'Change site data')
         GithubHandler.push_code(repo, 'gh-pages')
-
-    def del_repo(self, in_dict):
-        """
-        This method is used to delete repo key from a dictionary
-        """
-        del(in_dict['repo'])

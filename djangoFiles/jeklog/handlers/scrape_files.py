@@ -27,7 +27,6 @@ class FileScraper:
         """
         Find something in the content and return things accordingly
         """
-        # FIXME try/catch this.
         try:
             data_found = re.findall(regex, file_data)
             return data_found[0].split(':')[1].strip()
