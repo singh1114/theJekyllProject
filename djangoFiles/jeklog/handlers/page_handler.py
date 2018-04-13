@@ -1,7 +1,10 @@
+import copy
+
 import os
 
 from django.conf import settings
 
+from base.handlers.yaml_handlers import YAMLHandler
 from jeklog.handlers.scrape_files import FileScraper
 
 from theJekyllProject.dbio import PageDbIO, RepoDbIO
@@ -16,7 +19,7 @@ class PageHandler(FileScraper):
 
     def handle_page_head(self, head_content):
         """
-        Handle post head and create dict with different content
+        Handle page head and create dict with different content
         """
         return_dict = {}
         return_dict['title'] = self.find_in_content(r'title:.+', head_content)
@@ -26,7 +29,7 @@ class PageHandler(FileScraper):
 
     def handle_page_body(self, body_content):
         """
-        Handle post body and create body dict
+        Handle page body and create page dict
         """
         return_dict = {}
         return_dict['content'] = self.markdown_to_html(body_content)
@@ -47,8 +50,39 @@ class PageHandler(FileScraper):
                 if str(file) is not ('README.md' or '404.md'):
                     with open(self.repo_path + file, 'r') as page_file:
                         file_data = page_file.read()
-                        # FIXME call self.handle_page_head
                         content_dict = self.page_call_scrapers(file_data)
                         content_dict['repo'] = RepoDbIO().get_repo(
                             self.user, self.repo_name)
                         PageDbIO().save_db_instance(content_dict)
+
+
+class AbstractPageHandler(PageHandler):
+    """
+    To use only the best of the earlier page handler
+    """
+    def __init__(self, repo_path):
+        self.repo_path = repo_path
+
+    def read_pages(self, repo, extension, exception_list):
+        """
+        read all files that we want at any time.
+        we have to pass the extension and exception_list.
+        exception_list will contain the list of all the files
+        that should'nt be scanned.
+        repo is the Repo db instance
+        extension: 'markdown'
+        exception_list: ('README', '404')
+        """
+        for file in os.listdir(self.path):
+            if file.endswith('.'.join(['', extension])):
+                if file not in exception_list:
+                    content = self.read_file(file)
+                    head_data, body_content = self.read_wrapped_content(
+                        content, '---')
+                    # FIXME We need to add the content to database
+                    # First convert yaml to dict.
+                    head_dict = YAMLHandler().read_yaml(head_data)
+                    full_dict = copy.deepcopy(head_dict)
+                    full_dict['content'] = body_content
+                    full_dict['repo'] = repo
+                    PageDbIO().save_db_instance(full_dict)
