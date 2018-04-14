@@ -197,3 +197,40 @@ class PostForm(forms.Form):
         # FIXME try to implement attrs
         widget=MediumEditorTextarea()
     )
+
+
+class PageForm(forms.Form):
+    title = forms.CharField(
+        help_text='title of the post',
+        max_length=400,
+        widget=forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'About',
+                'name': 'title'
+            })
+    )
+
+    description = forms.CharField(
+        max_length=2000,
+        help_text='Description of the Page',
+        initial='About page',
+        required=False,
+        widget=forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'About page',
+                'name': 'description'
+            }
+        )
+    )
+
+    content = forms.CharField(
+        # FIXME try to implement attrs
+        widget=MediumEditorTextarea()
+    )
+
+    background = forms.ImageField(
+        widget=forms.FileInput(attrs={
+                'class': 'form-control',
+                'name': 'background image'
+            })
+    )

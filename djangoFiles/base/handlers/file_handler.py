@@ -46,19 +46,3 @@ class FileHandler:
         wrapped_content = content[wrapper_len:partition - wrapper_len]
         rest_content = content[partition:]
         return wrapped_content, rest_content
-
-    def read_all(self, extension, exception_list):
-        """
-        read all files that we want at any time.
-        we have to pass the extension and exception_list.
-        exception_list will contain the list of all the files
-        that should'nt be scanned.
-        extension: 'markdown'
-        exception_list: ('README', '404')
-        """
-        for file in os.listdir(self.path):
-            if file.endswith('.'.join(['', extension])):
-                if file not in exception_list:
-                    content = self.read_file(file)
-                    head_data, body_content = self.read_wrapped_content(
-                        content, '---')

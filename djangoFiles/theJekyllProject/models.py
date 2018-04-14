@@ -91,6 +91,12 @@ class Page(models.Model):
     title = models.CharField(max_length=2000)
     permalink = models.CharField(max_length=2000)
     layout = models.CharField(max_length=2000)
+    description = models.CharField(
+        max_length=2000,
+        default='Description of the Page',
+    )
+    background = models.ImageField(upload_to='pictures/', null=True,
+                                   blank=True)
     content = RichTextField()
 
 
