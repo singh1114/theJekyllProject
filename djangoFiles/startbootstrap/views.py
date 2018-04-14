@@ -13,7 +13,12 @@ from django.views.generic.edit import FormView
 from base.handlers.form_handler import FormHandler
 
 from startbootstrap.constants import TemplateName
-from startbootstrap.forms import PostForm, SiteProfileForm, SiteSocialForm
+from startbootstrap.forms import (
+    PageForm,
+    PostForm,
+    SiteProfileForm,
+    SiteSocialForm
+)
 from startbootstrap.handlers.sbs_handlers import SBSHandler
 from startbootstrap.handlers.sbs_form_handlers import SBSFormHandler
 
@@ -129,4 +134,35 @@ class SBSPostView(LoginRequiredMixin, FormView):
             user, repo_name).post_posts_data(user, form_field_dict)
 
         return render(request, TemplateName.SBS_POST_DATA,
+                      {'msg': 'Post updated successfully.'})
+
+
+# TODO Add index background in site data view. More work is required there.
+class SBSPageView(LoginRequiredMixin, FormView):
+    form_class = PageForm
+
+    def get(self, request, pk='', *args, **kwargs):
+        repo_name = RepoDbIO().get_repo(request.user).repo
+        form_response = SBSFormHandler(
+            request.user, repo_name).load_page_initials(
+            request, self.form_class, pk)
+
+        return render(request, TemplateName.SBS_PAGE_DATA,
+                      {'form': form_response, 'media': settings.MEDIA_URL})
+
+    # TODO write the post method properly
+    def post(self, request, pk='', *args, **kwargs):
+        form_field_dict = FormHandler(
+            request, self.form_class).handle_post_fields((
+                'title',
+                'description',
+                'background',
+                'content')
+        )
+        user = request.user
+        repo_name = RepoDbIO().get_repo(request.user).repo
+        SBSFormHandler(
+            user, repo_name).post_page_data(user, form_field_dict)
+
+        return render(request, TemplateName.SBS_PAGE_DATA,
                       {'msg': 'Post updated successfully.'})

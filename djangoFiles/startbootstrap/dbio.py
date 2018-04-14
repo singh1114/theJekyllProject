@@ -1,6 +1,6 @@
 from base.dbio import AbstractBaseDbIO
 
-from theJekyllProject.models import Post, SiteData, SiteSocialProfile
+from theJekyllProject.models import Page, Post, SiteData, SiteSocialProfile
 
 
 class SiteDataDbIO(AbstractBaseDbIO):
@@ -25,3 +25,11 @@ class PostDbIO(AbstractBaseDbIO):
     """
     def __init__(self):
         self.model_name = Post
+
+
+class PageDbIO(AbstractBaseDbIO):
+    """
+    Database I/O operations are handled using this class
+    """
+    def __init__(self):
+        self.model_name = Page

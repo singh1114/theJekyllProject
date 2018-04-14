@@ -104,7 +104,7 @@ class SBSFormHandler:
 
     def load_posts_initials(self, request, form_class, pk=None):
         """
-        Load the site profile initials from the database
+        Load the posts initials from the database
         """
         repo = RepoDbIO().get_repo(request.user)
         if pk:
@@ -130,6 +130,7 @@ class SBSFormHandler:
         :return:
         """
         # TODO image copying is not done and delete the old one.
+        # TODO take care of the layout
         repo = RepoDbIO().get_repo(user)
         if pk:
             post = PostDbIO().get_obj({
@@ -151,6 +152,70 @@ class SBSFormHandler:
         else:
             form_field_dict['repo'] = repo
             post = PostDbIO().create_obj(**form_field_dict)
+        ExtraHandler().del_keys(form_field_dict, ('repo', 'content',))
+        yaml_content = YAMLHandler().create_yaml(form_field_dict)
+        w_yaml_content = ExtraHandler().wrap_content('---', yaml_content)
+        full_content = ExtraHandler().join_content(w_yaml_content,
+                                                   post.content)
+        file_name = ExtraHandler().file_name_f_title(post.title,
+                                                     'html')
+        FileHandler('/'.join([self.path, '_posts']),
+                    file_name).rewrite_file(full_content)
+
+        # Complete all the git operations
+        repo = Repo(self.path)
+        GithubHandler.commit_all_changes(repo, 'Change site data')
+        GithubHandler.push_code(repo, 'gh-pages')
+
+    def load_page_initials(self, request, form_class, pk=None):
+        """
+        Load the page initials from the database
+        """
+        repo = RepoDbIO().get_repo(request.user)
+        if pk:
+            post = PostDbIO().get_obj({
+                'pk': pk,
+                'repo__user': request.user,
+                'repo': repo
+            })
+
+        else:
+            raise PermissionDenied
+
+        return FormHandler(request, form_class).load_initials(post)
+
+    def post_page_data(self, user, form_field_dict, pk=None):
+        """
+        handle the post page View method
+        :param user: the logged in user
+        :param form_field_dict: form field cleaned data
+        We have to delete the file if the title is changed otherwise two
+        different files will be created.
+        :return:
+        """
+        # TODO image copying is not done.
+        # TODO take care of the layout
+        repo = RepoDbIO().get_repo(user)
+        if pk:
+            post = PostDbIO().get_obj({
+                'pk': pk,
+                'repo__user': user,
+                'repo': repo
+            })
+            if pk is None:
+                raise PermissionDenied
+
+            if post.title is not form_field_dict['title']:
+                file_name = ExtraHandler().file_name_f_title(post.title,
+                                                             'html')
+                FileHandler('/'.join([self.path, '_posts']),
+                            file_name).delete_file()
+
+            post = PostDbIO().update_obj(post, **form_field_dict)
+
+        else:
+            raise PermissionDenied
+
         ExtraHandler().del_keys(form_field_dict, ('repo', 'content',))
         yaml_content = YAMLHandler().create_yaml(form_field_dict)
         w_yaml_content = ExtraHandler().wrap_content('---', yaml_content)

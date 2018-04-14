@@ -1,6 +1,8 @@
 from base.handlers.github_handler import GithubHandler
 from base.handlers.path_handlers import PathHandler
 
+from jeklog.handlers.page_handler import AbstractPageHandler
+
 from startbootstrap.constants import StartBootstrap
 
 
@@ -28,3 +30,11 @@ class SBSHandler:
         self.gh_handler.change_config(repo)
         self.gh_handler.commit_all_changes(repo, 'Intial commit')
         self.gh_handler.push_code(repo)
+        self.fill_page_database()
+
+    def fill_page_database(self):
+        """
+        This method will be used to fill the page database by iterating
+        over the pages in the database.
+        """
+        AbstractPageHandler(self.path).read_pages(self.repo, 'html', [])
