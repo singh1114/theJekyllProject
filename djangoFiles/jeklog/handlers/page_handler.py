@@ -79,8 +79,6 @@ class AbstractPageHandler(PageHandler):
                     content = self.read_file(file)
                     head_data, body_content = self.read_wrapped_content(
                         content, '---')
-                    # FIXME We need to add the content to database
-                    # First convert yaml to dict.
                     head_dict = YAMLHandler().read_yaml(head_data)
                     full_dict = copy.deepcopy(head_dict)
                     full_dict['content'] = body_content
