@@ -5,6 +5,8 @@ from django.contrib.auth.models import User
 from django.db import models
 from ckeditor.fields import RichTextField
 
+from theJekyllProject.choices import BlogTemplates
+
 
 class Contact(models.Model):
     first_name = models.CharField(
@@ -38,6 +40,11 @@ class Repo(models.Model):
     )
     main = models.BooleanField(
         default=False
+    )
+    template = models.CharField(
+        max_length=1,
+        choices=BlogTemplates.choices,
+        default=BlogTemplates.JEKYLL_NOW
     )
 
     def __str__(self):

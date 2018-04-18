@@ -1,3 +1,5 @@
+import re
+
 from django import forms
 from django.utils import timezone
 
@@ -15,6 +17,16 @@ class RepoForm(forms.Form):
                 'name': 'repo-name'
             })
     )
+
+    def clean(self):
+        """
+        clean the repo name. repo name should not have special characters
+        """
+        cleaned_data = super(RepoForm, self).clean()
+        passed_repo = cleaned_data.get("repo")
+        if re.match('[\w]+|[\d]+|[\-]+', passed_repo):
+            raise forms.ValidationError(('Repo should not contain special'
+                                         ' characters or spaces'),)
 
 
 class AddPageForm(forms.Form):
@@ -101,26 +113,6 @@ class AddPostForm(forms.Form):
                 'placeholder': 'How to make a website',
                 'name': 'title'
             })
-    )
-
-    slug = forms.CharField(
-        help_text='url shown of the post',
-        max_length=400,
-        widget=forms.TextInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'how-to-make-a-website',
-                'name': 'title'
-            })
-    )
-
-    category = forms.CharField(
-        max_length=20,
-        widget=forms.TextInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'Technology',
-                'name': 'category'
-            }
-        )
     )
 
     content = forms.CharField(
