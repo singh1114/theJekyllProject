@@ -1,3 +1,16 @@
+"""
+Extra handlers are utils of this project. Whenever we want to do something
+again and again we will put those things here: All the things which are not
+related to anything else.
+"""
+
+from django.http import HttpResponseServerError
+
+from theJekyllProject.dbio import RepoDbIO
+
+from theJekyllProject.choices import BlogTemplates
+
+
 class ExtraHandler:
     def del_keys(self, main_dict, key_list):
         """
@@ -33,3 +46,16 @@ class ExtraHandler:
         title = title.lower()
         title.replace(' ', '-')
         return '.'.join([title, extension])
+
+    def main_repo_with_no_template(self, user):
+        """
+        Method to get the repo with main True and template not set
+        """
+        repo = RepoDbIO().get_obj({
+            'user': user,
+            'main': True,
+            'template': BlogTemplates.TEMPLATE_NOT_SET
+        })
+        if repo:
+            return repo.repo
+        return HttpResponseServerError

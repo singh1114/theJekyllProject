@@ -25,7 +25,7 @@ from startbootstrap.handlers.sbs_form_handlers import SBSFormHandler
 from theJekyllProject.dbio import RepoDbIO
 
 
-class StartBootstrapThemeView(LoginRequiredMixin, View):
+class SBSThemeView(LoginRequiredMixin, View):
     """
     First view that will do all preliminary operations for setting up the
     startbootstrap blog.
@@ -35,10 +35,11 @@ class StartBootstrapThemeView(LoginRequiredMixin, View):
         Handle the post data. Ideally, reponame will be posted
         """
         user = self.request.user
+        # FIXME can't do this we have to get the repo from the database.
         repo = request.data.get('repo')
         start_bootstrap = SBSHandler(user, repo)
         start_bootstrap.perform_initial_tasks()
-        return HttpResponseRedirect(reverse('site-data'))
+        return HttpResponseRedirect(reverse('sbs-site-data'))
 
 
 class SBSSiteDataView(LoginRequiredMixin, FormView):

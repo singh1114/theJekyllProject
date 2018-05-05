@@ -18,7 +18,7 @@ from django.contrib.auth.models import User
 from base.handlers.form_handler import FormHandler
 
 from theJekyllProject.constants import TemplateName
-
+from theJekyllProject.dbio import RepoDbIO
 from theJekyllProject.forms import (
     AddPageForm, AddPostForm, ContactForm, RepoForm, SiteExcludeForm,
     SitePluginForm, SiteProfileForm, SiteThemeForm, SiteSocialProfileForm
@@ -106,22 +106,43 @@ class CreateRepoView(LoginRequiredMixin, FormView):
         })
 
     def post(self, request, *args, **kwargs):
+        """
+        This will create a Repo object and and will redirect to choose_template
+        """
+        # Main is not being set for the repo.
+        form_field_dict = FormHandler(
+            request, self.form_class).handle_post_fields((
+                'repo',))
         user = request.user
-        form = self.form_class(request.POST)
-        if form.is_valid():
-            repo = request.POST['repo']
-            try:
-                create_repo(user, repo)
-                save_repo_data(user, repo)
-                copy_jekyll_files(user, repo)
-                read_all_pages(user, repo)
-                add_theme_name(user, repo)
-                change_site_baseurl(user, repo)
-                run_git_script(user, repo)
-            except:
-                raise AttributeError
+        form_field_dict['user'] = user
+        repo = RepoDbIO().create_return(form_field_dict)
+        RepoDbIO().update_obj(repo, {'main': True})
+        return HttpResponseRedirect(reverse('choose-template'))
 
-        return HttpResponseRedirect(reverse('home'))
+        # form = self.form_class(request.POST)
+        # if form.is_valid():
+        #     repo = request.POST['repo']
+        #
+        #     try:
+        #         create_repo(user, repo)
+        #         save_repo_data(user, repo)
+        #         copy_jekyll_files(user, repo)
+        #         read_all_pages(user, repo)
+        #         add_theme_name(user, repo)
+        #         change_site_baseurl(user, repo)
+        #         run_git_script(user, repo)
+        #     except Exception as error:
+        #         raise error
+        #
+        # return HttpResponseRedirect(reverse('home'))
+
+
+class ChooseTemplate(LoginRequiredMixin, TemplateView):
+    """Choose Template from the list of templates
+    """
+    def get(self, request, *args, **kwargs):
+        return render(request, 'jeklog/choose_template.html',
+                      context={'repo_list': repo_list,})
 
 
 class AddPostView(LoginRequiredMixin, FormView):
@@ -463,8 +484,10 @@ class DecideHomeView(View):
             return redirect(reverse('index'))
         user = self.request.user
         repo = Repo.objects.filter(user=user)
-        if(len(repo) is 0):
+        if repo.exists():
             return redirect(reverse('create-repo'))
+        elif repo.template is BlogTemplates.TEMPLATE_NOT_SET:
+            return redirect(reverse('choose-template'))
         else:
             return redirect(reverse('home'))
 
