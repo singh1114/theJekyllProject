@@ -44,7 +44,7 @@ class Repo(models.Model):
     template = models.CharField(
         max_length=1,
         choices=BlogTemplates.choices,
-        default=BlogTemplates.JEKYLL_NOW
+        default=BlogTemplates.TEMPLATE_NOT_SET
     )
 
     def __str__(self):

@@ -1,8 +1,10 @@
 from git import Repo
 
 from github import Github
+from github import GithubException
 
 from django.contrib.auth.models import User
+from django.core.exceptions import PermissionDenied
 
 
 class GithubHandler:
@@ -25,7 +27,12 @@ class GithubHandler:
         """
         github = Github(auth_token)
         user = github.get_user()
-        return user.create_repo(self.repo)
+        try:
+            repo = user.create_repo(self.repo)
+        except GithubException as e:
+            raise PermissionDenied(
+                (e._GithubException__data['message'] +
+                 e._GithubException__data['errors'][0]['message']))
 
     def clone_repo(self, url, path):
         """
@@ -56,7 +63,18 @@ class GithubHandler:
         repo: the repo object.
         message: message to be written in the commit
         """
-        return repo.git.commit('-am', message)
+        try:
+            return repo.git.commit('-am', message)
+        except Exception as e:
+            pass
+
+    @staticmethod
+    def gh_pages_branch(repo):
+        """
+        create gh-pages branch and checkout to it.
+        """
+        repo.git.branch('gh-pages')
+        repo.git.checkout('gh-pages')
 
     @staticmethod
     def push_code(repo, branch='gh-pages'):
