@@ -24,7 +24,7 @@ class RepoForm(forms.Form):
         """
         cleaned_data = super(RepoForm, self).clean()
         passed_repo = cleaned_data.get("repo")
-        if re.match('[\w]+|[\d]+|[\-]+', passed_repo):
+        if not re.match('[\w]+|[\d]+|[\-]+', passed_repo):
             raise forms.ValidationError(('Repo should not contain special'
                                          ' characters or spaces'),)
 

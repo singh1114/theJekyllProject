@@ -3,7 +3,12 @@
 
 {% block error-data %}
 	<h2 class="title"><strong>Forbidden</strong></h2>
-	<h5 class="description" style="padding: 25px 100px 25px 100px">You are not allowed to see this page. We will try to resolve it as soon as possible. Please post an issue on GitHub or mail directly to the maintainers of the website.</h5>
+	{% if exception %}
+	<h5 class="description">{{ exception }}</h5>
+	{% else %}
+	<h5 class="description" style="padding: 25px 100px 25px 100px">You are not allowed to see this page. We will try to resolve it as soon as possible.</h5>
+	{% endif %}
+	<h5 class="description" style="padding: 25px 100px 25px 100px">Please post an issue on GitHub or mail directly to the maintainers of the website.</h5>
 	<div class="text-center col-md-12 col-lg-12">
     <a href="https://github.com/singh1114/theJekyllProject/issues" class="btn btn-danger btn-lg btn-round" role="button" target="_blank">
         Browse Issues

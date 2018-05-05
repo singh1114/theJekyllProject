@@ -4,6 +4,7 @@ import os
 
 from django.conf import settings
 
+from base.handlers.file_handler import FileHandler
 from base.handlers.yaml_handlers import YAMLHandler
 from jeklog.handlers.scrape_files import FileScraper
 
@@ -73,14 +74,16 @@ class AbstractPageHandler(PageHandler):
         extension: 'markdown'
         exception_list: ('README', '404')
         """
-        for file in os.listdir(self.path):
+        for file in os.listdir(self.repo_path):
             if file.endswith('.'.join(['', extension])):
                 if file not in exception_list:
-                    content = self.read_file(file)
-                    head_data, body_content = self.read_wrapped_content(
+                    file_handler = FileHandler(self.repo_path, file)
+                    content = file_handler.read_file()
+                    head_data, body_content = file_handler.read_wrapped_content(
                         content, '---')
                     head_dict = YAMLHandler().read_yaml(head_data)
-                    full_dict = copy.deepcopy(head_dict)
+                    import ipdb; ipdb.set_trace()
+                    full_dict = dict(copy.deepcopy(head_dict))
                     full_dict['content'] = body_content
                     full_dict['repo'] = repo
                     PageDbIO().save_db_instance(full_dict)

@@ -24,6 +24,11 @@ from theJekyllProject.views import (
 )
 
 urlpatterns = [
+    url(r'^addpost/?', AddPostView.as_view(), name='addpost'),
+    url(r'^choosesite/?', ChooseSiteView.as_view(), name='choose-site'),
+    url(r'^choose-template/?', TemplateView.as_view(
+        template_name='jeklog/choose_template.html'),
+        name='choose-template'),
     url(r'^registration/?', TemplateView.as_view(
         template_name='theJekyllProject/registration.html'),
         name='registration'),
@@ -32,11 +37,9 @@ urlpatterns = [
     url(r'^repolist/?', RepoListView.as_view(), name='repo-list'),
     url(r'^createrepo/?', CreateRepoView.as_view(), name='create-repo'),
 
-    url(r'^choosesite/?', ChooseSiteView.as_view(), name='choose-site'),
     url(r'^selectmainsite/(?P<pk>\d+)$', SelectMainSiteView.as_view(),
         name='select-main-site'),
 
-    url(r'^addpost/?', AddPostView.as_view(), name='addpost'),
     url(r'^updatepost/(?P<pk>\d+)$', PostUpdateView.as_view(),
         name='post-update'),
 
