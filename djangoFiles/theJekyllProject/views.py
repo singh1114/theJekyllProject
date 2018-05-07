@@ -17,6 +17,10 @@ from django.contrib.auth.models import User
 
 from base.handlers.form_handler import FormHandler
 
+from jekyllnow.handlers.jn_form_handlers import InitialFormHandler
+from jekyllnow.handlers.jekyllnow_handlers import JekyllNowHandler
+
+from theJekyllProject.choices import BlogTemplates
 from theJekyllProject.constants import TemplateName
 from theJekyllProject.dbio import RepoDbIO
 from theJekyllProject.forms import (
@@ -109,7 +113,6 @@ class CreateRepoView(LoginRequiredMixin, FormView):
         """
         This will create a Repo object and and will redirect to choose_template
         """
-        # Main is not being set for the repo.
         form_field_dict = FormHandler(
             request, self.form_class).handle_post_fields((
                 'repo',))
@@ -117,6 +120,7 @@ class CreateRepoView(LoginRequiredMixin, FormView):
         form_field_dict['user'] = user
         repo = RepoDbIO().create_return(form_field_dict)
         RepoDbIO().update_obj(repo, {'main': True})
+        RepoDbIO().change_main(user, repo)
         return HttpResponseRedirect(reverse('choose-template'))
 
         # form = self.form_class(request.POST)
@@ -419,44 +423,34 @@ class SiteProfileView(LoginRequiredMixin, FormView):
     template_name = 'theJekyllProject/siteprofile.html'
     form_class = SiteProfileForm
 
-    def get_form_kwargs(self):
-        user = self.request.user
-        user = User.objects.get(username=user.username)
-        repo = Repo.objects.get(user=user, main=True)
-        try:
-            site_data = SiteData.objects.get(repo=repo)
-            title = site_data.title
-            description = site_data.description
-            avatar = site_data.avatar
-
-        except:
-            title = 'Your new site'
-            description = 'Single line description of the site'
-            # FIXME add an image initial
-            avatar = 'An image'
-
-        form_kwargs = super(SiteProfileView, self).get_form_kwargs()
-        form_kwargs.update({
-            'initial': {
-                'title': title,
-                'description': description,
-                'avatar': avatar,
-            }
-        })
-        return form_kwargs
+    def get(self, request, *args, **kwargs):
+        """
+        get will load the initials if they are present in the db.
+        """
+        form = InitialFormHandler(self.request.user,
+            self.form_class).load_jn_site_initials()
+        return render(request, self.template_name, {'form': form})
 
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST)
         if form.is_valid():
             user = request.user
-            title = request.POST['title']
+            name = request.POST['name']
             description = request.POST['description']
             avatar = request.POST['avatar']
-            # save stuff to the database
-            repo = Repo.objects.get(user=user, main=True)
-            save_site_data(repo, title, description, avatar)
-            create_config_file(user, repo)
-            push_online(user, repo)
+
+            repo = RepoDbIO().get_obj({
+                'user': self.request.user,
+                'main': True,
+            })
+            data_dict = {
+                'repo': repo,
+                'name': name,
+                'description': description,
+                'avatar': avatar
+            }
+            JekyllNowHandler(request.user, repo.repo).perform_site_data(
+                data_dict)
             return HttpResponseRedirect(reverse('home'))
 
 
@@ -483,10 +477,10 @@ class DecideHomeView(View):
         if not request.user.is_authenticated():
             return redirect(reverse('index'))
         user = self.request.user
-        repo = Repo.objects.filter(user=user)
-        if repo.exists():
+        repo = Repo.objects.filter(user=user, main=True)
+        if not repo.exists():
             return redirect(reverse('create-repo'))
-        elif repo.template is BlogTemplates.TEMPLATE_NOT_SET:
+        elif str(repo.first().template) == str(BlogTemplates.TEMPLATE_NOT_SET):
             return redirect(reverse('choose-template'))
         else:
             return redirect(reverse('home'))

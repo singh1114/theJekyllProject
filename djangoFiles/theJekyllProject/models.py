@@ -42,7 +42,7 @@ class Repo(models.Model):
         default=False
     )
     template = models.CharField(
-        max_length=1,
+        max_length=2,
         choices=BlogTemplates.choices,
         default=BlogTemplates.TEMPLATE_NOT_SET
     )
@@ -118,7 +118,7 @@ class SiteData(models.Model):
         on_delete=models.CASCADE,
         primary_key=True,
     )
-    title = models.CharField(
+    name = models.CharField(
         max_length=200,
         default='Your site title',
     )
@@ -126,8 +126,7 @@ class SiteData(models.Model):
         max_length=2000,
         default='Description of the site',
     )
-    avatar = models.ImageField(
-        upload_to='images/',
+    avatar = models.URLField(
         null=True,
         blank=True
     )
