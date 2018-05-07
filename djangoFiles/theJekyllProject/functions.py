@@ -367,6 +367,9 @@ def read_all_pages(user, repo_name):
 
 
 def change_site_baseurl(user, repo_name):
+    """
+    Deprecated: new eg: jekyllnow.handlers.jekyllnow_handlers.update_baseurl
+    """
     base_dir = settings.BASE_DIR
     with open(base_dir + '/../' +'JekLog/' + user.username + '/' + repo_name + '/' + '_config.yml', 'r') as conf_file:
         filedata = conf_file.read()

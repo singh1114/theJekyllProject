@@ -2,25 +2,43 @@
 {% load staticfiles %}
 {% block content %}
 <div class="section section-tabs">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.css">
+  <script type="text/javascript">
+  function load() {
+    // display loading image here...
+    document.getElementById('loadingImg').style.display = 'block';
+  }
+  </script>
   <div class="container" style="text-align:center;">
       <div class="row" style="margin:auto">
+          <div class="col-md-12" id="loadingImg" style="display: none; height:100%; width:100%; position:fixed; top:0; right:0; left:0; bottom:0; background:#FF3636 !important; z-index:100000;">
+            <div style="margin-top:20%; color: white;">
+              <h2><strong>Please wait!</strong></h2>
+              <br>
+              <h6><strong>We are setting it up for you! This might take 2-3 minutes. <br>Please don't refresh</strong></h6>
+              <br>
+              <div class="fa fa-spinner fa-spin" style="font-size: 32px;"></div>
+            </div>
+          </div>
           <div class="col-md-6">
               <div class="card" style="padding:10px;" data-background-color="orange">
                   <div class="card-block" style="display:inline-block">
-                    <p>Template One: Jekyll-Now</p>
-                    <img src="" alt="">
-                    <a href="{% url 'jekyllnow:jn-init' %}">Write some</a>
+                    <h6>Jekyll-Now: Simple and Fast</h6>
+                    <br>
+                    <img class="card-img-top" src="{%static 'nowui/assets/img/jekyllnow_temp.png' %}" alt="Jekyll-Now free blog template">
+                    <br>
+                    <a class="btn btn-neutral btn-round" target="blank" href="http://blog.ranvirsingh.me"><strong>check a sample</strong></a>
+                    <a class="btn btn-neutral btn-round" onclick="load()" href="{% url 'jekyllnow:jn-init' %}"><strong>Use Jekyll Now Theme</strong></a>
                   </div>
               </div>
           </div>
-          <!-- <div class="col-md-6">
+          <div class="col-md-6">
               <div class="card" style="padding:10px;">
                   <div class="card-block" style="display:inline-block">
-                    <p>Template Two: Startbootstrap</p>
-                    <img src="" alt="">
+                    <h6 style="padding: 180px 0 160px 0;">We are adding more soon!</h6>
                   </div>
               </div>
-          </div> -->
+          </div>
       </div>
   </div>
 </div>

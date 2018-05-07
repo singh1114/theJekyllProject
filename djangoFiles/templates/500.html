@@ -2,6 +2,7 @@
 {% load staticfiles %}
 
 {% block error-data %}
+<div style="300000";>
 	<h2 class="title" style="margin-top:30%"><strong>Server Error occured</strong></h2>
 	{% if error %}
 	<h5 class="description">{{ error }}</h5>
@@ -15,5 +16,6 @@
     <a href="mailto:ranvir.singh1114@gmail.com" class="btn btn-primary btn-lg btn-simple btn-round" role="button">
         Email Admin
     </a>
+	</div>
 </div>
 {% endblock %}

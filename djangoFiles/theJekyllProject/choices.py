@@ -2,6 +2,6 @@ from djchoices import DjangoChoices, ChoiceItem
 
 
 class BlogTemplates(DjangoChoices):
-    TEMPLATE_NOT_SET = ChoiceItem(0)
-    JEKYLL_NOW = ChoiceItem(1)
-    STARTBOOTSTRAP = ChoiceItem(2)
+    TEMPLATE_NOT_SET = ChoiceItem('NS')
+    JEKYLL_NOW = ChoiceItem('JN')
+    STARTBOOTSTRAP = ChoiceItem('SB')

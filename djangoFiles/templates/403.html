@@ -2,6 +2,7 @@
 {% load staticfiles %}
 
 {% block error-data %}
+<div style="z-index:300000;">
 	<h2 class="title"><strong>Forbidden</strong></h2>
 	{% if exception %}
 	<h5 class="description">{{ exception }}</h5>
@@ -16,5 +17,6 @@
     <a href="mailto:ranvir.singh1114@gmail.com" target="_blank" class="btn btn-primary btn-lg btn-simple btn-round" role="button">
         Email Admin
     </a>
+	</div>
 </div>
 {% endblock %}

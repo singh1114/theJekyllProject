@@ -4,11 +4,10 @@ again and again we will put those things here: All the things which are not
 related to anything else.
 """
 
-from django.http import HttpResponseServerError
-
-from theJekyllProject.dbio import RepoDbIO
+from django.core.exceptions import PermissionDenied
 
 from theJekyllProject.choices import BlogTemplates
+from theJekyllProject.dbio import RepoDbIO
 
 
 class ExtraHandler:
@@ -58,4 +57,4 @@ class ExtraHandler:
         })
         if repo:
             return repo.repo
-        return HttpResponseServerError
+        raise PermissionDenied

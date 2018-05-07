@@ -124,9 +124,10 @@ class AddPostForm(forms.Form):
 
 
 class SiteProfileForm(forms.Form):
-    title = forms.CharField(
+    name = forms.CharField(
         max_length=200,
         help_text='Name of the site',
+        initial='Title of your website',
         required=False,
         widget=forms.TextInput(attrs={
                 'class': 'form-control',
@@ -147,8 +148,19 @@ class SiteProfileForm(forms.Form):
             }
         )
     )
-    avatar = forms.ImageField(
+    avatar = forms.URLField(
+        max_length=3000,
+        help_text='URL of the image',
+        initial=('https://raw.githubusercontent.com/barryclark/jekyll-now/'
+                 'master/images/jekyll-logo.png'),
         required=False,
+        widget=forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': ('https://raw.githubusercontent.com/barryclark/'
+                                'jekyll-now/master/images/jekyll-logo.png'),
+                'name': 'avatar'
+            }
+        )
     )
 
 
