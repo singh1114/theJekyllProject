@@ -22,8 +22,8 @@ admin.site.register(PostCategory)
 
 
 class SiteDataAdmin(admin.ModelAdmin):
-    search_fields = ('repo', 'title')
-    list_display = ('repo', 'title', 'description')
+    search_fields = ('repo', 'name')
+    list_display = ('repo', 'name', 'description')
 
 
 admin.site.register(SiteData, SiteDataAdmin)
@@ -48,7 +48,7 @@ admin.site.register(Page, PageAdmin)
 
 class RepoAdmin(admin.ModelAdmin):
     search_fields = ('repo', 'user')
-    list_display = ('repo', 'main', 'user')
+    list_display = ('repo', 'main', 'user', 'template')
 
 
 admin.site.register(Repo, RepoAdmin)

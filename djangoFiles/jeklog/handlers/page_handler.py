@@ -72,7 +72,7 @@ class AbstractPageHandler(PageHandler):
         that should'nt be scanned.
         repo is the Repo db instance
         extension: 'markdown'
-        exception_list: ('README', '404')
+        exception_list: ('README.md', '404.md')
         """
         for file in os.listdir(self.repo_path):
             if file.endswith('.'.join(['', extension])):
@@ -82,7 +82,9 @@ class AbstractPageHandler(PageHandler):
                     head_data, body_content = file_handler.read_wrapped_content(
                         content, '---')
                     head_dict = YAMLHandler().read_yaml(head_data)
-                    import ipdb; ipdb.set_trace()
+                    # will have to intialize full_dict as the content of dict
+                    # never changes.
+                    full_dict = {}
                     full_dict = dict(copy.deepcopy(head_dict))
                     full_dict['content'] = body_content
                     full_dict['repo'] = repo

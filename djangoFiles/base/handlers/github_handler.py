@@ -1,10 +1,13 @@
 from git import Repo
+from git.exc import GitCommandError
 
 from github import Github
 from github import GithubException
 
 from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
+
+from base.constants import DIR_ALREADY_PRESENT
 
 
 class GithubHandler:
@@ -40,7 +43,10 @@ class GithubHandler:
         url: URL of the repo to be cloned
         path: path where the repo is to be cloned
         """
-        return Repo.clone_from(url, path)
+        try:
+            return Repo.clone_from(url, path)
+        except GitCommandError:
+            raise PermissionDenied(DIR_ALREADY_PRESENT)
 
     def change_config(self, repo):
         """
@@ -84,3 +90,6 @@ class GithubHandler:
         branch: the branch in which you want to push the code
         """
         return repo.remotes.origin.push(branch)
+
+    def get_repo_from_path(self, path):
+        return Repo(path)
