@@ -29,6 +29,7 @@ class BaseDbIO:
             setattr(model_obj, key, value)
         return model_obj.save()
 
+
 class AbstractBaseDbIO(object):
     def __init__(self, model_name):
         self.model_name = model_name

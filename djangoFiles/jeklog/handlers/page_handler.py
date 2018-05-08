@@ -79,8 +79,8 @@ class AbstractPageHandler(PageHandler):
                 if file not in exception_list:
                     file_handler = FileHandler(self.repo_path, file)
                     content = file_handler.read_file()
-                    head_data, body_content = file_handler.read_wrapped_content(
-                        content, '---')
+                    head_data, body_content = (
+                        file_handler.read_wrapped_content(content, '---'))
                     head_dict = YAMLHandler().read_yaml(head_data)
                     # will have to intialize full_dict as the content of dict
                     # never changes.
