@@ -1,6 +1,5 @@
-import re
-
 from django import forms
+from django.core.exceptions import PermissionDenied
 from django.utils import timezone
 
 from ckeditor.widgets import CKEditorWidget
@@ -24,9 +23,11 @@ class RepoForm(forms.Form):
         """
         cleaned_data = super(RepoForm, self).clean()
         passed_repo = cleaned_data.get("repo")
-        if not re.match('[\w]+|[\d]+|[\-]+', passed_repo):
-            raise forms.ValidationError(('Repo should not contain special'
+        if ' ' in str(passed_repo):
+            # TODO improve this function using regex
+            raise PermissionDenied(('Repo should not contain special'
                                          ' characters or spaces'),)
+        return self.cleaned_data
 
 
 class AddPageForm(forms.Form):
