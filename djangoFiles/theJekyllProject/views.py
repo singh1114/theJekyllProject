@@ -145,8 +145,7 @@ class ChooseTemplate(LoginRequiredMixin, TemplateView):
     """Choose Template from the list of templates
     """
     def get(self, request, *args, **kwargs):
-        return render(request, 'jeklog/choose_template.html',
-                      context={'repo_list': repo_list,})
+        return render(request, 'jeklog/choose_template.html')
 
 
 class AddPostView(LoginRequiredMixin, FormView):

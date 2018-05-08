@@ -1,7 +1,12 @@
 {% extends 'theJekyllProject/base.html' %}
 {% load staticfiles %}
 {% block content %}
-    <h1>Post List</h1>
+    <h3>Post List</h3>
+    <hr>
+    <a  class="btn btn-danger btn-round" href="{% url 'addpost' %}">Add Post</a>
+    <a  class="btn btn-danger btn-round" href="{% url 'siteprofile' %}">Change site data</a>
+    <a  class="btn btn-danger btn-round" href="{% url 'socialprofile' %}">Add social channels</a>
+    <a  class="btn btn-danger btn-round" href="{% url 'your-blog' %}" target="_blank">Visit your blog</a>
     <hr>
     {% if post_list %}
         {% for post in post_list %}
