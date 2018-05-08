@@ -53,8 +53,8 @@ class JekyllNowHandler:
         config_path = os.path.join(self.path, '_config.yml')
         yaml_dict = self.yaml_handler.read_yaml_file(config_path, True)
         if repo_obj.repo != (str(self.user.username) + '.github.io'):
-            new_yaml = self.yaml_handler.change_yaml(yaml_dict,
-                {'baseurl': "/{}".format(str(repo_obj.repo))})
+            new_yaml = self.yaml_handler.change_yaml(yaml_dict, {
+                'baseurl': "/{}".format(str(repo_obj.repo))})
             self.yaml_handler.write_dict_yaml(config_path, new_yaml)
 
     def update_template_name(self, repo):
@@ -68,8 +68,8 @@ class JekyllNowHandler:
         This method will be used to fill the page database by iterating
         over the pages in the database.
         """
-        AbstractPageHandler(self.path).read_pages(repo, 'md',
-            ('README.md', '404.md'))
+        AbstractPageHandler(self.path).read_pages(repo, 'md', (
+            'README.md', '404.md'))
 
     def perform_site_data(self, data_dict):
         """
@@ -92,7 +92,6 @@ class JekyllNowHandler:
         repo = self.gh_handler.get_repo_from_path(self.path)
         self.gh_handler.commit_all_changes(repo, 'Intial commit')
         self.gh_handler.push_code(repo)
-
 
     def del_key(self, dict, key):
         del dict[key]

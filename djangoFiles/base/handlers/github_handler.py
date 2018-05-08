@@ -31,7 +31,7 @@ class GithubHandler:
         github = Github(auth_token)
         user = github.get_user()
         try:
-            repo = user.create_repo(self.repo)
+            return user.create_repo(self.repo)
         except GithubException as e:
             raise PermissionDenied(
                 (e._GithubException__data['message'] +
@@ -54,7 +54,6 @@ class GithubHandler:
         doesn't ask for username and password.
         - repo: name of repo is required.
         """
-        # TODO test this function
         with repo.config_writer() as config:
             url = ('https://' + str(self.user.username) + ':' +
                    str(self.get_user_token()) + '@github.com/' +
@@ -71,7 +70,7 @@ class GithubHandler:
         """
         try:
             return repo.git.commit('-am', message)
-        except Exception as e:
+        except Exception:
             pass
 
     @staticmethod
