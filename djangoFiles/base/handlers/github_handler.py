@@ -59,6 +59,8 @@ class GithubHandler:
                    str(self.get_user_token()) + '@github.com/' +
                    str(self.user.username) + '/' + self.repo + '.git')
             config.set_value('remote "origin"', 'url', url)
+            config.set_value('user', 'email', 'ranvir.singh1114@gmail.com')
+            config.set_value('user', 'name', 'Ranvir Singh')
             return config
 
     @staticmethod

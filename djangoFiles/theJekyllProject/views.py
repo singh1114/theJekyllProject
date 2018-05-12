@@ -177,7 +177,7 @@ class AddPostView(LoginRequiredMixin, FormView):
             layout = request.POST['layout']
             title = request.POST['title']
             content = request.POST['content']
-            category = request.POST['category']
+            #category = request.POST['category']
 
             # This is a turnaround... I don't know why it happened.
             # Checkbox produces 'on' as the result when selected.
@@ -188,7 +188,7 @@ class AddPostView(LoginRequiredMixin, FormView):
                                       layout, title, content)
 
             # save stuff to the post_category database
-            save_post_category_database(post, category)
+            #save_post_category_database(post, category)
 
             # Create file name
             file_name = create_file_name(date, title)
@@ -235,8 +235,8 @@ class PostUpdateView(LoginRequiredMixin, FormView):
             title = post.title
             content = post.content
             # FIXME get is used as we can only category for now
-            post_category = PostCategory.objects.get(post=post)
-            category = post_category.category
+            #post_category = PostCategory.objects.get(post=post)
+            #category = post_category.category
         except:
             pass
 
@@ -268,7 +268,7 @@ class PostUpdateView(LoginRequiredMixin, FormView):
             layout = request.POST['layout']
             title = request.POST['title']
             content = request.POST['content']
-            category = request.POST['category']
+            #category = request.POST['category']
 
             # This is a turnaround... I don't know why it happened.
             # Checkbox produces 'on' as the result when selected.
@@ -279,7 +279,7 @@ class PostUpdateView(LoginRequiredMixin, FormView):
                                       layout, title, content, pk)
 
             # save stuff to the post_category database
-            save_post_category_database(post, category, pk)
+            #save_post_category_database(post, category, pk)
 
             file_name = create_file_name(date, title)
 
