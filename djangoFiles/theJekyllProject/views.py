@@ -201,7 +201,7 @@ class AddPostView(LoginRequiredMixin, FormView):
             body_content = convert_content(content)
 
             # Write the content into files
-	    write_file(user, repo, file_name, head_content, body_content)
+            write_file(user, repo, file_name, head_content, body_content)
             # Push the code online
             push_online(user, repo)
         return HttpResponseRedirect(reverse('home'))

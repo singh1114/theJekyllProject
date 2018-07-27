@@ -1,0 +1,41 @@
+{% extends 'admin/base_site.html' %}
+
+{% block content %}
+<style>
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
+}
+</style>
+  <p>
+    <strong>Customer name</strong>: {{ customer_name }}<br>
+    <strong>Email</strong>: {{ customer_email }}<br>
+    <strong>Mobile number </strong>: {{ mobile_number }}<br><br>
+    <p>
+      <table>
+        <tr>
+          <th><strong>Product Name</strong></th>
+          <th><strong>Quantity</strong></th>
+          <th><strong>Price</strong></th>
+        </tr>
+      {% for product in sell_products %}
+        <tr>
+        <td>{{ product.item.item_name }}</td>
+        <td>{{ product.quantity }}</td>
+        <td>{{ product.price }}</td>
+        </tr>
+      {% endfor %}
+    </p>
+  </p>
+{% endblock %}

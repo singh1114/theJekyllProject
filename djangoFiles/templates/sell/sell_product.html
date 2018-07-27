@@ -1,0 +1,20 @@
+{% extends 'admin/base_site.html' %}
+
+{% block content %}
+  {% if message%}
+    <h1><strong>{{ message }}</strong></h1>
+  {% else %}
+    <div>
+      <div>
+        <strong>Customer Name: </strong> {{ customer_name }}<br>
+        <strong>Address: </strong> {{ address }}<br><br>
+      </div>
+      <form method="post">
+        {% csrf_token %}
+        {{ form }}
+        <br><br>
+        <input type="submit" name="submit" value="Confirm order">
+      </form>
+    </div>
+  {% endif %}
+{% endblock %}
