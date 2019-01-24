@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'base',
     'jeklog',
+    'logs',
     'oldrepo',
     'theJekyllProject',
     'ckeditor',
@@ -59,6 +60,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
     'social_django.middleware.SocialAuthExceptionMiddleware',
+    'logs.middleware.AccessLogMiddleware'
 ]
 
 ROOT_URLCONF = 'djangoFiles.urls'

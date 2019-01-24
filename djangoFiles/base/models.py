@@ -1,23 +1,45 @@
 """Base models that are going to be used everywhere."""
 
+import uuid
+
+from django.contrib.auth.models import User
 from django.db import models
-
-from base.choices import (
-    QuantityType,
-    ProductType
-)
+from django.utils import timezone
 
 
-class Product(models.Model):
-    """The base item model containing fields for every item."""
+class AbstractUserModel(models.Model):
 
-    product_type = models.CharField(
-        max_length=200,
-        choices=ProductType.choices,
-        default=ProductType.VEGETABLE
+    class Meta:
+        abstract = True
+
+    created_by = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True
     )
-    quantity_type = models.CharField(
-        max_length=200,
-        choices=QuantityType.choices,
-        default=QuantityType.KILOGRAM
-    )
+
+
+class AbstractTimeModel(models.Model):
+
+    class Meta:
+        abstract = True
+
+    created_at = models.DateTimeField(default=timezone.now)
+
+
+class AbstractUUIDModel(models.Model):
+
+    class Meta:
+        abstract = True
+
+    uuid = models.UUIDField(
+        primary_key=True, editable=False, default=uuid.uuid4)
+
+
+class AbstractBaseModel(
+    AbstractUserModel, AbstractTimeModel, AbstractUUIDModel):
+
+    class Meta:
+        abstract = True
+        ordering = ('-created_at',)
