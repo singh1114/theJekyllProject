@@ -39,11 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'base',
-    'gcproduct',
     'jeklog',
+    'logs',
     'oldrepo',
-    'purchase',
-    'sell',
     'theJekyllProject',
     'ckeditor',
     'social_django',
@@ -62,6 +60,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
     'social_django.middleware.SocialAuthExceptionMiddleware',
+    'logs.middleware.AccessLogMiddleware'
 ]
 
 ROOT_URLCONF = 'djangoFiles.urls'
@@ -174,16 +173,16 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 
 # Optional SMTP authentication information for EMAIL_HOST.
-EMAIL_HOST_USER = os.environ['EMAIL_HOST_USER']
-EMAIL_HOST_PASSWORD = os.environ['EMAIL_HOST_PASSWORD']
+#EMAIL_HOST_USER = os.environ['EMAIL_HOST_USER']
+#EMAIL_HOST_PASSWORD = os.environ['EMAIL_HOST_PASSWORD']
 EMAIL_USE_TLS = True
 
 ###### For e-mail configuration ####################################
 
-SOCIAL_AUTH_GITHUB_KEY = os.environ['SOCIAL_AUTH_GITHUB_KEY']
-SOCIAL_AUTH_GITHUB_SECRET = os.environ['SOCIAL_AUTH_GITHUB_SECRET']
+#SOCIAL_AUTH_GITHUB_KEY = os.environ['SOCIAL_AUTH_GITHUB_KEY']
+#SOCIAL_AUTH_GITHUB_SECRET = os.environ['SOCIAL_AUTH_GITHUB_SECRET']
 
-SOCIAL_AUTH_GITHUB_SCOPE = ['repo']
+#SOCIAL_AUTH_GITHUB_SCOPE = ['repo']
 
 LOGGING = {
     'version': 1,
